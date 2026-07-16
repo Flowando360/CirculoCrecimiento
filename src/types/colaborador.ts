@@ -1,0 +1,95 @@
+export type RolUsuario = 'admin_th' | 'lider' | 'colaborador' | 'gerencia';
+
+export type EstadoColaborador = 'activo' | 'inactivo' | 'en_proceso_salida' | 'periodo_prueba';
+
+export type TipoContrato =
+  | 'indefinido'
+  | 'fijo'
+  | 'obra_labor'
+  | 'prestacion_servicios'
+  | 'aprendizaje'
+  | 'externo';
+
+export interface Cargo {
+  id: string;
+  empresa_id: string;
+  nombre: string;
+  proceso_area: string | null;
+  objetivo_cargo: string | null;
+  tiene_personal_a_cargo: boolean;
+  formacion_nivel:
+    | 'ninguno'
+    | 'bachillerato'
+    | 'tecnico'
+    | 'tecnologo'
+    | 'universitario'
+    | 'empirico'
+    | null;
+  formacion_titulo_especifico: string | null;
+  experiencia_minima_meses: number | null;
+}
+
+export interface CargoHabilidad {
+  id: string;
+  cargo_id: string;
+  tipo: 'funcional' | 'tecnica';
+  nombre: string;
+  nivel_esperado: 'bajo' | 'medio' | 'alto';
+}
+
+export interface Colaborador {
+  id: string;
+  empresa_id: string;
+  usuario_id: string | null;
+  cargo_id: string;
+  nombre_completo: string;
+  numero_documento: string | null;
+  email: string | null;
+  telefono: string | null;
+  foto_url: string | null;
+  lider_id: string | null;
+  es_externo: boolean;
+  fecha_ingreso: string;
+  fecha_salida: string | null;
+  estado: EstadoColaborador;
+  tipo_contrato: TipoContrato;
+}
+
+export interface ColaboradorConCargo extends Colaborador {
+  cargo: Cargo;
+  lider: Pick<Colaborador, 'id' | 'nombre_completo'> | null;
+}
+
+export type SemaforoNivel = 'alto' | 'medio' | 'bajo';
+
+export interface ResultadoEvaluacion {
+  evaluacion_id: string;
+  indice_hacer: number | null;
+  indice_deber: number | null;
+  semaforo_hacer: SemaforoNivel | null;
+  semaforo_deber: SemaforoNivel | null;
+  brecha_hacer: number | null;
+  brecha_deber: number | null;
+}
+
+export interface AlertaResumen {
+  id: string;
+  tipo: string;
+  severidad: 'info' | 'atencion' | 'critica';
+  titulo: string;
+  fecha_objetivo: string;
+  estado: 'pendiente' | 'notificada' | 'resuelta' | 'vencida' | 'descartada';
+  colaborador_id: string;
+  colaborador_nombre?: string;
+}
+
+export interface PlanDesarrolloItem {
+  id: string;
+  colaborador_id: string;
+  origen: 'hacer' | 'deber' | 'saber' | 'ser' | 'mixto';
+  brecha_detectada: string;
+  accion: string;
+  responsable_id: string | null;
+  fecha_compromiso: string | null;
+  estado: 'pendiente' | 'en_curso' | 'cumplido' | 'vencido';
+}
