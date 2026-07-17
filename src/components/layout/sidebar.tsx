@@ -19,6 +19,8 @@ import {
   Bell,
   Settings,
   Sparkles,
+  Compass,
+  FileText,
 } from 'lucide-react';
 
 interface NavItem {
@@ -71,6 +73,8 @@ const NAV: NavGroup[] = [
     items: [
       { href: '/administracion/cargos', label: 'Cargos y perfiles', icon: Sparkles, roles: ['admin_th'] },
       { href: '/administracion/organigrama', label: 'Organigrama (editar)', icon: Network, roles: ['admin_th'] },
+      { href: '/administracion/identidad', label: 'Identidad Organizacional', icon: Compass, roles: ['admin_th'] },
+      { href: '/administracion/guias-colaboradores', label: 'Guías de colaboradores', icon: FileText, roles: ['admin_th'] },
       { href: '/administracion/usuarios', label: 'Usuarios y roles', icon: Users, roles: ['admin_th'] },
       { href: '/administracion/configuracion', label: 'Configuración', icon: Settings, roles: ['admin_th'] },
     ],

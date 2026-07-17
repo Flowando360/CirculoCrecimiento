@@ -6,15 +6,21 @@ import { z } from 'zod';
 
 const RespuestaSchema = z.object({
   evaluacionTareaId: z.string().uuid(),
-  competenciaId: z.string().uuid(),
+  evaluacionItemId: z.string().uuid(),
   nota: z.number().int().min(1).max(5),
-  comentario: z.string().optional(),
+  observacion: z.string().optional(),
+  resultadoReal: z.string().optional(), // solo aplica al bloque "Roles y Funciones"
 });
 
 /**
- * Guarda (o actualiza) UNA calificación. El trigger de Postgres
- * (fn_trigger_respuesta_evaluacion) se encarga de recalcular los índices
- * de la persona evaluada en el mismo instante — no hay recálculo manual.
+ * Guarda (o actualiza) UNA calificación, ahora contra un ítem de la
+ * evaluación (evaluacion_items) en vez de directo contra el catálogo de
+ * competencias — así cada evaluación conserva sus propios ítems aunque el
+ * catálogo general cambie después, y cualquier ítem (de cualquiera de los
+ * 5 bloques) puede llevar observación.
+ *
+ * El trigger de Postgres (fn_trigger_respuesta_evaluacion) recalcula los
+ * índices de la persona evaluada en el mismo instante.
  */
 export async function guardarRespuesta(input: z.infer<typeof RespuestaSchema>) {
   const parsed = RespuestaSchema.parse(input);
@@ -23,11 +29,12 @@ export async function guardarRespuesta(input: z.infer<typeof RespuestaSchema>) {
   const { error } = await supabase.from('respuestas_evaluacion').upsert(
     {
       evaluacion_tarea_id: parsed.evaluacionTareaId,
-      competencia_id: parsed.competenciaId,
+      evaluacion_item_id: parsed.evaluacionItemId,
       nota: parsed.nota,
-      comentario: parsed.comentario ?? null,
+      observacion: parsed.observacion ?? null,
+      resultado_real: parsed.resultadoReal ?? null,
     },
-    { onConflict: 'evaluacion_tarea_id,competencia_id' }
+    { onConflict: 'evaluacion_tarea_id,evaluacion_item_id' }
   );
 
   if (error) {

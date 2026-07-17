@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
-import { FormularioEvaluacion } from '@/components/circulo-crecimiento/formulario-evaluacion';
+import { FormularioEvaluacion, type ItemEvaluacion } from '@/components/circulo-crecimiento/formulario-evaluacion';
 import { notFound } from 'next/navigation';
 
 export default async function EvaluarPage({ params }: { params: { evaluacionId: string } }) {
@@ -26,25 +26,37 @@ export default async function EvaluarPage({ params }: { params: { evaluacionId: 
 
   if (!tarea) notFound();
 
-  const { data: competencias } = await supabase
-    .from('competencias')
-    .select('id, nombre, descripcion_que_evalua, dimension, solo_con_personal_a_cargo, criterios:competencia_criterios(nivel, criterio)')
-    .eq('empresa_id', perfil.empresa_id)
+  // Los ítems reales de ESTA evaluación (ya generados al abrir el ciclo,
+  // y potencialmente ajustados por Talento Humano con el PATCH de /api/evaluaciones)
+  const { data: items } = await supabase
+    .from('evaluacion_items')
+    .select(
+      `id, bloque, titulo, descripcion,
+       competencia:competencia_id(criterios:competencia_criterios(nivel, criterio))`
+    )
+    .eq('evaluacion_id', params.evaluacionId)
     .eq('activo', true)
     .order('orden');
 
   const { data: respuestasExistentes } = await supabase
     .from('respuestas_evaluacion')
-    .select('competencia_id, nota')
+    .select('evaluacion_item_id, nota, observacion, resultado_real')
     .eq('evaluacion_tarea_id', tarea.id);
 
   const respuestasIniciales = Object.fromEntries(
-    (respuestasExistentes ?? []).map((r) => [r.competencia_id, r.nota])
+    (respuestasExistentes ?? []).map((r) => [
+      r.evaluacion_item_id,
+      { nota: r.nota, observacion: r.observacion ?? undefined, resultadoReal: r.resultado_real ?? undefined },
+    ])
   );
 
-  const competenciasAplicables = (competencias ?? []).filter(
-    (c) => !c.solo_con_personal_a_cargo || evaluacion.tenia_personal_a_cargo
-  );
+  const itemsFormateados: ItemEvaluacion[] = (items ?? []).map((i: any) => ({
+    id: i.id,
+    bloque: i.bloque,
+    titulo: i.titulo,
+    descripcion: i.descripcion,
+    criterios: i.competencia?.criterios,
+  }));
 
   const etiquetaTipo: Record<string, string> = {
     autoevaluacion: 'Autoevaluación',
@@ -64,15 +76,22 @@ export default async function EvaluarPage({ params }: { params: { evaluacionId: 
         </h1>
         <p className="text-sm text-marmol-500 mt-1">
           Evalúa comportamientos observables del período completo. Cada respuesta se guarda y
-          recalcula el resultado de inmediato.
+          recalcula el resultado de inmediato. Puedes agregar una observación en cualquier ítem.
         </p>
       </div>
 
-      <FormularioEvaluacion
-        evaluacionTareaId={tarea.id}
-        competencias={(competenciasAplicables as any) ?? []}
-        respuestasIniciales={respuestasIniciales}
-      />
+      {itemsFormateados.length === 0 ? (
+        <p className="text-sm text-marmol-400">
+          Esta evaluación todavía no tiene ítems generados. Pide a Talento Humano que la regenere
+          desde el ciclo correspondiente.
+        </p>
+      ) : (
+        <FormularioEvaluacion
+          evaluacionTareaId={tarea.id}
+          items={itemsFormateados}
+          respuestasIniciales={respuestasIniciales as any}
+        />
+      )}
     </div>
   );
 }

@@ -1,8 +1,11 @@
 import { createClient } from '@/lib/supabase/server';
+import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { SemaforoBadge } from '@/components/circulo-crecimiento/semaforo-badge';
+import { GenerarEvaluacionesPanel } from '@/components/circulo-crecimiento/generar-evaluaciones-panel';
 import { notFound } from 'next/navigation';
 
 export default async function CicloDetallePage({ params }: { params: { id: string } }) {
+  const perfil = await getPerfilActual();
   const supabase = createClient();
 
   const { data: ciclo } = await supabase
@@ -22,6 +25,18 @@ export default async function CicloDetallePage({ params }: { params: { id: strin
     )
     .eq('ciclo_id', params.id);
 
+  // Selectores del panel de generación: equipos = colaboradores que tienen gente reportándoles
+  const { data: todosColaboradores } = await supabase
+    .from('colaboradores')
+    .select('id, nombre_completo, lider_id')
+    .eq('empresa_id', perfil?.empresa_id ?? '')
+    .eq('estado', 'activo');
+
+  const idsConEquipo = new Set((todosColaboradores ?? []).filter((c) => c.lider_id).map((c) => c.lider_id));
+  const lideres = (todosColaboradores ?? [])
+    .filter((c) => idsConEquipo.has(c.id))
+    .map((c) => ({ id: c.id, nombre: c.nombre_completo }));
+
   return (
     <div className="space-y-6">
       <div>
@@ -32,6 +47,14 @@ export default async function CicloDetallePage({ params }: { params: { id: strin
           {ciclo.peso_colaboradores_con_equipo * 100}% (cargos con equipo)
         </p>
       </div>
+
+      {perfil?.rol === 'admin_th' && (
+        <GenerarEvaluacionesPanel
+          cicloId={ciclo.id}
+          lideres={lideres}
+          colaboradores={(todosColaboradores ?? []).map((c) => ({ id: c.id, nombre: c.nombre_completo }))}
+        />
+      )}
 
       <div className="card overflow-hidden">
         <table className="w-full text-sm">
