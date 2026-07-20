@@ -21,6 +21,7 @@ import {
   Sparkles,
   Compass,
   FileText,
+  FileBarChart,
 } from 'lucide-react';
 
 interface NavItem {
@@ -66,6 +67,7 @@ const NAV: NavGroup[] = [
     titulo: '',
     items: [
       { href: '/alertas', label: 'Alertas y fechas clave', icon: Bell, roles: ['admin_th', 'lider', 'colaborador'] },
+      { href: '/informes', label: 'Informes', icon: FileBarChart, roles: ['admin_th', 'lider', 'colaborador', 'gerencia'] },
     ],
   },
   {

@@ -113,4 +113,7 @@ export interface PlanDesarrolloItem {
   responsable_id: string | null;
   fecha_compromiso: string | null;
   estado: 'pendiente' | 'en_curso' | 'cumplido' | 'vencido';
+  fecha_cumplimiento: string | null;
+  evidencia_url: string | null;
+  notas: string | null;
 }
