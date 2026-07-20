@@ -1,24 +1,38 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
+import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { SemaforoBadge } from '@/components/circulo-crecimiento/semaforo-badge';
 import { formatearFecha } from '@/lib/utils';
 import { notFound } from 'next/navigation';
 import { GraduationCap, Briefcase, Sparkles, ShieldCheck, Target, Clock } from 'lucide-react';
 
 export default async function FichaColaboradorPage({ params }: { params: { id: string } }) {
+  const perfil = await getPerfilActual();
+  if (!perfil) return null;
+
   const supabase = createClient();
 
   const { data: colaborador } = await supabase
     .from('colaboradores')
     .select(
-      `id, nombre_completo, email, telefono, fecha_ingreso, estado, tipo_contrato,
+      `id, empresa_id, nombre_completo, email, telefono, fecha_ingreso, estado, tipo_contrato, lider_id,
        cargo:cargos(id, nombre, proceso_area, objetivo_cargo, tiene_personal_a_cargo),
        lider:lider_id(id, nombre_completo)`
     )
     .eq('id', params.id)
     .maybeSingle();
 
-  if (!colaborador) notFound();
+  if (!colaborador || colaborador.empresa_id !== perfil.empresa_id) notFound();
+
+  // Misma regla que ya autoriza RLS en colaboradores: admin_th y gerencia
+  // leen toda la empresa, líder solo su equipo directo, colaborador solo
+  // a sí mismo.
+  const puedeVer =
+    perfil.rol === 'admin_th' ||
+    perfil.rol === 'gerencia' ||
+    (perfil.rol === 'lider' && (colaborador.lider_id === perfil.colaborador_id || colaborador.id === perfil.colaborador_id)) ||
+    (perfil.rol === 'colaborador' && perfil.colaborador_id === colaborador.id);
+  if (!puedeVer) notFound();
 
   const [{ data: ultimoResultado }, { data: saber }, { data: ser }, { data: pdi }, { data: hojaVida }] =
     await Promise.all([
