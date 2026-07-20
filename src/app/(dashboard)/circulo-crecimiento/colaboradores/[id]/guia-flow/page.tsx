@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
+import { obtenerUrlFirmadaGuiaFlow } from '@/lib/supabase/storage';
 import { ListaAspectosSer, type AspectoConDatos } from '@/components/circulo-crecimiento/lista-aspectos-ser';
 import { BotonCrearGuiaFlow, SubirPdfGuiaFlow, ComentarioGeneralSer } from '@/components/circulo-crecimiento/panel-guia-flow';
 import { notFound } from 'next/navigation';
@@ -45,6 +46,8 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
     .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle();
+
+  const urlFirmada = await obtenerUrlFirmadaGuiaFlow(guia?.documento_pdf_url ?? null);
 
   let bloques: { titulo: string; aspectos: AspectoConDatos[] }[] = [];
   let comentarioGeneral: string | null = null;
@@ -109,9 +112,9 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
               {esAdminTh && <BotonCrearGuiaFlow colaboradorId={params.id} />}
             </div>
             {esAdminTh ? (
-              <SubirPdfGuiaFlow colaboradorId={params.id} guiaDelFlowId={guia.id} urlActual={guia.documento_pdf_url} />
-            ) : guia.documento_pdf_url ? (
-              <a href={guia.documento_pdf_url} target="_blank" rel="noreferrer" className="text-sm text-flow-600 hover:underline">
+              <SubirPdfGuiaFlow colaboradorId={params.id} guiaDelFlowId={guia.id} urlActual={urlFirmada} />
+            ) : urlFirmada ? (
+              <a href={urlFirmada} target="_blank" rel="noreferrer" className="text-sm text-flow-600 hover:underline">
                 Ver PDF de mi Guía del Flow
               </a>
             ) : (

@@ -33,11 +33,11 @@ export async function subirGuiaDelFlow(formData: FormData) {
     return { ok: false, error: `Error subiendo el archivo: ${uploadError.message}` };
   }
 
-  const { data: urlData } = supabase.storage.from('guias-flow').getPublicUrl(path);
-
+  // El bucket es privado: se guarda la ruta, no una URL pública. Quien la
+  // muestre debe generar un signed URL en el momento (ver lib/supabase/storage.ts).
   const { error: dbError } = await supabase.from('guia_del_flow').insert({
     colaborador_id: colaboradorId,
-    documento_pdf_url: urlData.publicUrl,
+    documento_pdf_url: path,
     origen_flow: origenFlow || null,
     perfil_narrativo_completo: 'Ver PDF adjunto (Guía del Flow diseñada por FlowAndo).',
   });

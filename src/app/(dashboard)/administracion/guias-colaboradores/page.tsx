@@ -1,5 +1,6 @@
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { createClient } from '@/lib/supabase/server';
+import { obtenerUrlFirmadaGuiaFlow } from '@/lib/supabase/storage';
 import { redirect } from 'next/navigation';
 import { FormularioSubirGuia } from '@/components/circulo-crecimiento/formulario-subir-guia';
 import { formatearFecha } from '@/lib/utils';
@@ -25,6 +26,13 @@ export default async function GuiasColaboradoresPage() {
       .order('fecha_aplicacion', { ascending: false }),
   ]);
 
+  const guiasConUrl = await Promise.all(
+    (guias ?? []).map(async (g: any) => ({
+      ...g,
+      urlFirmada: await obtenerUrlFirmadaGuiaFlow(g.documento_pdf_url),
+    }))
+  );
+
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
@@ -45,14 +53,14 @@ export default async function GuiasColaboradoresPage() {
           <p className="text-sm text-marmol-400">Sin guías cargadas todavía.</p>
         ) : (
           <ul className="space-y-2">
-            {guias.map((g: any) => (
+            {guiasConUrl.map((g) => (
               <li key={g.id} className="flex items-center justify-between border-b border-marmol-100 pb-2 last:border-0">
                 <div>
                   <p className="text-sm font-medium text-marmol-800">{g.colaborador?.nombre_completo}</p>
                   <p className="text-xs text-marmol-400">Cargada el {formatearFecha(g.fecha_aplicacion)}</p>
                 </div>
-                {g.documento_pdf_url && (
-                  <a href={g.documento_pdf_url} target="_blank" rel="noreferrer" className="text-xs text-flow-600 hover:underline">
+                {g.urlFirmada && (
+                  <a href={g.urlFirmada} target="_blank" rel="noreferrer" className="text-xs text-flow-600 hover:underline">
                     Ver PDF
                   </a>
                 )}

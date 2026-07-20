@@ -77,11 +77,11 @@ export async function subirPdfGuiaDelFlow(formData: FormData) {
 
   if (uploadError) return { ok: false as const, error: `Error subiendo el archivo: ${uploadError.message}` };
 
-  const { data: urlData } = supabase.storage.from('guias-flow').getPublicUrl(path);
-
+  // El bucket es privado: se guarda la ruta, no una URL pública. Quien la
+  // muestre debe generar un signed URL en el momento (ver lib/supabase/storage.ts).
   const { error: dbError } = await supabase
     .from('guia_del_flow')
-    .update({ documento_pdf_url: urlData.publicUrl })
+    .update({ documento_pdf_url: path })
     .eq('id', parsed.data.guiaDelFlowId);
 
   if (dbError) return { ok: false as const, error: dbError.message };
