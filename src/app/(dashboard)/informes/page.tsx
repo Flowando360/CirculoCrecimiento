@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
-import { Target } from 'lucide-react';
+import { Target, Users2 } from 'lucide-react';
 import type { RolUsuario } from '@/types/colaborador';
 
 interface InformeDisponible {
@@ -13,6 +13,13 @@ interface InformeDisponible {
 
 // Se va completando a medida que se construye cada informe de la Fase 2.
 const INFORMES: InformeDisponible[] = [
+  {
+    href: '/informes/360',
+    titulo: 'Evaluación 360° Integrado',
+    descripcion: 'Resultado consolidado de Ser, Saber, Hacer y Deber, con detalle de cada evaluador.',
+    icon: Users2,
+    roles: ['admin_th', 'lider', 'colaborador'],
+  },
   {
     href: '/informes/pdi',
     titulo: 'Plan de Desarrollo Individual (PDI)',
