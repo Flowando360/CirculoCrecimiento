@@ -141,7 +141,7 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
         </div>
 
         {/* Hoja de vida / formación */}
-        <div className="card p-5">
+        <Link href={`/circulo-crecimiento/colaboradores/${params.id}/hoja-vida`} className="card p-5 block hover:border-flow-300 transition">
           <h2 className="font-display font-semibold text-marmol-900 mb-3 flex items-center gap-1.5">
             <Clock size={16} /> Hoja de vida y certificaciones
           </h2>
@@ -162,7 +162,7 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
               ))}
             </ul>
           )}
-        </div>
+        </Link>
       </div>
 
       {/* Plan de Desarrollo Individual */}

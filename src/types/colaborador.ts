@@ -104,6 +104,22 @@ export interface VerificacionSaber {
   fecha_verificacion: string;
 }
 
+export type TipoHojaVida = 'academica' | 'certificacion' | 'curso' | 'experiencia_laboral';
+
+export interface HojaVidaFormacion {
+  id: string;
+  colaborador_id: string;
+  tipo: TipoHojaVida;
+  titulo: string;
+  institucion: string | null;
+  fecha_inicio: string | null;
+  fecha_fin: string | null;
+  fecha_vencimiento: string | null;
+  documento_url: string | null;
+  verificado: boolean;
+  verificado_por: string | null;
+}
+
 export interface PlanDesarrolloItem {
   id: string;
   colaborador_id: string;

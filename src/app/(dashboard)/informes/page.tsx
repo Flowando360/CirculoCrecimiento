@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
-import { Target, Users2 } from 'lucide-react';
+import { Target, Users2, ShieldCheck } from 'lucide-react';
 import type { RolUsuario } from '@/types/colaborador';
 
 interface InformeDisponible {
@@ -26,6 +26,14 @@ const INFORMES: InformeDisponible[] = [
     descripcion: 'Brechas detectadas, plan de acción y seguimiento a su cumplimiento.',
     icon: Target,
     roles: ['admin_th', 'lider', 'colaborador'],
+  },
+  {
+    href: '/informes/sst',
+    titulo: 'Cumplimiento SST',
+    descripcion: 'Certificaciones, vencimientos y alertas SST abiertas, con evidencia documental.',
+    icon: ShieldCheck,
+    // No existe todavía un rol "Líder SST" en el sistema — se apoya en los roles existentes.
+    roles: ['admin_th', 'lider', 'gerencia'],
   },
 ];
 
