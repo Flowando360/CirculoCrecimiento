@@ -2,7 +2,7 @@ import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { etiquetaRol } from '@/lib/utils';
-import { UserPlus } from 'lucide-react';
+import { FormularioCrearUsuario } from '@/components/circulo-crecimiento/formulario-crear-usuario';
 
 export default async function AdminUsuariosPage() {
   const perfil = await getPerfilActual();
@@ -10,15 +10,31 @@ export default async function AdminUsuariosPage() {
   if (perfil.rol !== 'admin_th') redirect('/inicio');
 
   const supabase = createClient();
-  const { data: usuarios } = await supabase
-    .from('perfiles_usuario')
-    .select('id, nombre_completo, email, rol, activo')
-    .eq('empresa_id', perfil.empresa_id)
-    .order('nombre_completo');
+
+  const [{ data: usuarios }, { data: sinCuentaRaw }] = await Promise.all([
+    supabase
+      .from('perfiles_usuario')
+      .select('id, nombre_completo, email, rol, activo')
+      .eq('empresa_id', perfil.empresa_id)
+      .order('nombre_completo'),
+    supabase
+      .from('colaboradores')
+      .select('id, nombre_completo, email')
+      .eq('empresa_id', perfil.empresa_id)
+      .eq('estado', 'activo')
+      .is('usuario_id', null)
+      .order('nombre_completo'),
+  ]);
+
+  // Los 10 colaboradores de demostración (correo demo.*@ejemplo.com) no
+  // necesitan cuenta real — se excluyen de la lista para invitar.
+  const colaboradoresSinCuenta = (sinCuentaRaw ?? [])
+    .filter((c) => !c.email?.startsWith('demo.'))
+    .map((c) => ({ id: c.id, nombre_completo: c.nombre_completo }));
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 className="font-display text-2xl font-semibold text-marmol-900">Usuarios y roles</h1>
           <p className="text-sm text-marmol-500 mt-1">
@@ -26,9 +42,7 @@ export default async function AdminUsuariosPage() {
             mismo · gerencia ve reportes agregados.
           </p>
         </div>
-        <button className="inline-flex items-center gap-1.5 rounded-lg bg-flow-500 hover:bg-flow-600 text-white text-sm font-medium px-3.5 py-2 transition">
-          <UserPlus size={16} /> Invitar usuario
-        </button>
+        <FormularioCrearUsuario colaboradoresSinCuenta={colaboradoresSinCuenta} />
       </div>
 
       <div className="card overflow-hidden">
