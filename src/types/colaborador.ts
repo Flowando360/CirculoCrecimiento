@@ -83,6 +83,27 @@ export interface AlertaResumen {
   colaborador_nombre?: string;
 }
 
+export type BloqueSaber =
+  | 'formacion_academica'
+  | 'habilidades_funcionales_tecnicas'
+  | 'certificaciones'
+  | 'experiencia';
+
+export type EstadoVerificacionSaber = 'cumple' | 'cumple_parcial' | 'no_cumple_pendiente';
+
+export interface VerificacionSaber {
+  id: string;
+  colaborador_id: string;
+  ciclo_id: string | null;
+  bloque: BloqueSaber;
+  item_evaluado: string;
+  estado: EstadoVerificacionSaber;
+  evidencia_url: string | null;
+  certificado_por: string | null;
+  observaciones: string | null;
+  fecha_verificacion: string;
+}
+
 export interface PlanDesarrolloItem {
   id: string;
   colaborador_id: string;

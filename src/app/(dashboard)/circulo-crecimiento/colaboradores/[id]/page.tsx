@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { SemaforoBadge } from '@/components/circulo-crecimiento/semaforo-badge';
 import { formatearFecha } from '@/lib/utils';
@@ -90,7 +91,7 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
             {ser ? 'Guía del Flow completada' : 'Pendiente por completar'}
           </p>
         </div>
-        <div className="card p-4">
+        <Link href={`/circulo-crecimiento/colaboradores/${params.id}/saber`} className="card p-4 hover:border-flow-300 transition">
           <p className="text-xs font-medium text-marmol-500 mb-2 flex items-center gap-1.5">
             <GraduationCap size={14} className="text-saber" /> SABER
           </p>
@@ -98,7 +99,7 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
             {saber?.porcentaje_cumplimiento ? `${saber.porcentaje_cumplimiento}%` : '—'}
           </p>
           <p className="text-xs text-marmol-400">cumplimiento del perfil</p>
-        </div>
+        </Link>
         <div className="card p-4">
           <p className="text-xs font-medium text-marmol-500 mb-2 flex items-center gap-1.5">
             <Briefcase size={14} className="text-hacer" /> HACER
