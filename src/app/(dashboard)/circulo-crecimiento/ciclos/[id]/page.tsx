@@ -1,8 +1,10 @@
+import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { SemaforoBadge } from '@/components/circulo-crecimiento/semaforo-badge';
 import { GenerarEvaluacionesPanel } from '@/components/circulo-crecimiento/generar-evaluaciones-panel';
 import { notFound } from 'next/navigation';
+import { FileText } from 'lucide-react';
 
 export default async function CicloDetallePage({ params }: { params: { id: string } }) {
   const perfil = await getPerfilActual();
@@ -65,6 +67,9 @@ export default async function CicloDetallePage({ params }: { params: { id: strin
               <th className="px-4 py-3 font-medium">Avance</th>
               <th className="px-4 py-3 font-medium">Hacer</th>
               <th className="px-4 py-3 font-medium">Deber</th>
+              {(perfil?.rol === 'admin_th' || perfil?.rol === 'lider') && (
+                <th className="px-4 py-3 font-medium">Brief</th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -87,6 +92,16 @@ export default async function CicloDetallePage({ params }: { params: { id: strin
                 <td className="px-4 py-3">
                   <SemaforoBadge nivel={e.resultado?.[0]?.semaforo_deber} />
                 </td>
+                {(perfil?.rol === 'admin_th' || perfil?.rol === 'lider') && (
+                  <td className="px-4 py-3">
+                    <Link
+                      href={`/circulo-crecimiento/evaluaciones/${e.id}/brief`}
+                      className="inline-flex items-center gap-1 text-xs text-flow-600 hover:text-flow-700"
+                    >
+                      <FileText size={12} /> Brief
+                    </Link>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
