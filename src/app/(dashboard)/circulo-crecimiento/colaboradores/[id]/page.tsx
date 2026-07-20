@@ -83,14 +83,14 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
 
       {/* Las cuatro dimensiones, de un vistazo */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="card p-4">
+        <Link href={`/circulo-crecimiento/colaboradores/${params.id}/guia-flow`} className="card p-4 hover:border-flow-300 transition">
           <p className="text-xs font-medium text-marmol-500 mb-2 flex items-center gap-1.5">
             <Sparkles size={14} className="text-ser" /> SER
           </p>
           <p className="text-sm text-marmol-700">
             {ser ? 'Guía del Flow completada' : 'Pendiente por completar'}
           </p>
-        </div>
+        </Link>
         <Link href={`/circulo-crecimiento/colaboradores/${params.id}/saber`} className="card p-4 hover:border-flow-300 transition">
           <p className="text-xs font-medium text-marmol-500 mb-2 flex items-center gap-1.5">
             <GraduationCap size={14} className="text-saber" /> SABER

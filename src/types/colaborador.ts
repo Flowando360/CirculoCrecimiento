@@ -120,6 +120,38 @@ export interface HojaVidaFormacion {
   verificado_por: string | null;
 }
 
+export type BloqueSer = 'esencia' | 'emociones' | 'pertenencia_compromiso' | 'desafios';
+
+export interface SerAspecto {
+  id: string;
+  bloque: BloqueSer;
+  nombre: string;
+  orden: number;
+}
+
+export interface GuiaDelFlow {
+  id: string;
+  colaborador_id: string;
+  fecha_aplicacion: string;
+  documento_pdf_url: string | null;
+  origen_flow: string | null;
+}
+
+export interface SerPuntaje {
+  id: string;
+  guia_del_flow_id: string;
+  aspecto_id: string;
+  puntaje: number;
+}
+
+export interface SerComentarioColaborador {
+  id: string;
+  guia_del_flow_id: string;
+  aspecto_id: string | null;
+  colaborador_id: string;
+  comentario: string;
+}
+
 export interface PlanDesarrolloItem {
   id: string;
   colaborador_id: string;
