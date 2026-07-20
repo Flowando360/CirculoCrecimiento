@@ -1,6 +1,9 @@
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
+import { EmptyState } from '@/components/ui/empty-state';
+import { FormularioPonderaciones } from '@/components/administracion/formulario-ponderaciones';
+import { SlidersHorizontal } from 'lucide-react';
 
 export default async function AdminConfiguracionPage() {
   const perfil = await getPerfilActual();
@@ -8,11 +11,15 @@ export default async function AdminConfiguracionPage() {
   if (perfil.rol !== 'admin_th') redirect('/inicio');
 
   const supabase = createClient();
+  // Solo se puede editar el ciclo que TODAVÍA no se ha abierto: una vez
+  // 'abierto', el trigger de recálculo lee estos pesos en vivo desde
+  // ciclos_evaluacion, así que cambiarlos ahí afectaría evaluaciones en curso.
   const { data: ciclo } = await supabase
     .from('ciclos_evaluacion')
     .select('*')
     .eq('empresa_id', perfil.empresa_id)
-    .order('fecha_apertura', { ascending: false })
+    .eq('estado', 'planeado')
+    .order('fecha_apertura', { ascending: true })
     .limit(1)
     .maybeSingle();
 
@@ -26,59 +33,24 @@ export default async function AdminConfiguracionPage() {
         </p>
       </div>
 
-      <div className="card p-5 space-y-4">
-        <h2 className="font-display font-semibold text-marmol-900">Cargos con personal a cargo</h2>
-        <div className="grid grid-cols-3 gap-3 text-sm">
-          <div>
-            <label className="block text-xs text-marmol-500 mb-1">Líder</label>
-            <input
-              type="number"
-              defaultValue={(ciclo?.peso_lider_con_equipo ?? 0.4) * 100}
-              className="w-full rounded-lg border border-marmol-200 px-2 py-1.5"
-            />
-          </div>
-          <div>
-            <label className="block text-xs text-marmol-500 mb-1">Pares</label>
-            <input
-              type="number"
-              defaultValue={(ciclo?.peso_pares_con_equipo ?? 0.3) * 100}
-              className="w-full rounded-lg border border-marmol-200 px-2 py-1.5"
-            />
-          </div>
-          <div>
-            <label className="block text-xs text-marmol-500 mb-1">Colaboradores a cargo</label>
-            <input
-              type="number"
-              defaultValue={(ciclo?.peso_colaboradores_con_equipo ?? 0.3) * 100}
-              className="w-full rounded-lg border border-marmol-200 px-2 py-1.5"
-            />
-          </div>
-        </div>
-
-        <h2 className="font-display font-semibold text-marmol-900 pt-2">Cargos sin personal a cargo</h2>
-        <div className="grid grid-cols-2 gap-3 text-sm">
-          <div>
-            <label className="block text-xs text-marmol-500 mb-1">Líder</label>
-            <input
-              type="number"
-              defaultValue={(ciclo?.peso_lider_sin_equipo ?? 0.6) * 100}
-              className="w-full rounded-lg border border-marmol-200 px-2 py-1.5"
-            />
-          </div>
-          <div>
-            <label className="block text-xs text-marmol-500 mb-1">Pares</label>
-            <input
-              type="number"
-              defaultValue={(ciclo?.peso_pares_sin_equipo ?? 0.4) * 100}
-              className="w-full rounded-lg border border-marmol-200 px-2 py-1.5"
-            />
-          </div>
-        </div>
-
-        <button className="rounded-lg bg-flow-500 hover:bg-flow-600 text-white text-sm font-medium px-4 py-2 transition">
-          Guardar cambios
-        </button>
-      </div>
+      {ciclo ? (
+        <FormularioPonderaciones
+          cicloId={ciclo.id}
+          pesosIniciales={{
+            liderConEquipo: Math.round((ciclo.peso_lider_con_equipo ?? 0.4) * 100),
+            paresConEquipo: Math.round((ciclo.peso_pares_con_equipo ?? 0.3) * 100),
+            colaboradoresConEquipo: Math.round((ciclo.peso_colaboradores_con_equipo ?? 0.3) * 100),
+            liderSinEquipo: Math.round((ciclo.peso_lider_sin_equipo ?? 0.6) * 100),
+            paresSinEquipo: Math.round((ciclo.peso_pares_sin_equipo ?? 0.4) * 100),
+          }}
+        />
+      ) : (
+        <EmptyState
+          icon={SlidersHorizontal}
+          titulo="No hay ningún ciclo planeado"
+          descripcion="Los pesos de ponderación solo se pueden editar antes de abrir un ciclo, para no afectar evaluaciones ya en curso. Actualmente no hay ninguno en estado 'planeado'."
+        />
+      )}
     </div>
   );
 }
