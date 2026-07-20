@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { subirGuiaDelFlow } from './actions';
+import { subirGuiaDelFlow } from '@/app/(dashboard)/administracion/guias-colaboradores/actions';
 import { Upload } from 'lucide-react';
 
 interface Colaborador {

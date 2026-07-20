@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { agregarElementoIdentidad, eliminarElementoIdentidad } from './actions';
+import { agregarElementoIdentidad, eliminarElementoIdentidad } from '@/app/(dashboard)/administracion/identidad/actions';
 import { Trash2, Plus } from 'lucide-react';
 
 interface Elemento {
