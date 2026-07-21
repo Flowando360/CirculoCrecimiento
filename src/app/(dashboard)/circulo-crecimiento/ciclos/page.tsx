@@ -2,8 +2,9 @@ import Link from 'next/link';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { createClient } from '@/lib/supabase/server';
 import { EmptyState } from '@/components/ui/empty-state';
+import { FormularioCrearCiclo } from '@/components/circulo-crecimiento/formulario-crear-ciclo';
 import { formatearFecha } from '@/lib/utils';
-import { CalendarClock, Plus } from 'lucide-react';
+import { CalendarClock } from 'lucide-react';
 
 const ETIQUETA_ESTADO: Record<string, string> = {
   planeado: 'Planeado',
@@ -26,25 +27,25 @@ export default async function CiclosPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between flex-wrap gap-4">
         <div>
           <h1 className="font-display text-2xl font-semibold text-marmol-900">Ciclos de evaluación</h1>
           <p className="text-sm text-marmol-500 mt-1">
             Hacer + Deber, semestral. Ser y Saber se verifican de forma continua.
           </p>
         </div>
-        {perfil.rol === 'admin_th' && (
-          <button className="inline-flex items-center gap-1.5 rounded-lg bg-flow-500 hover:bg-flow-600 text-white text-sm font-medium px-3.5 py-2 transition">
-            <Plus size={16} /> Abrir nuevo ciclo
-          </button>
-        )}
+        {perfil.rol === 'admin_th' && <FormularioCrearCiclo />}
       </div>
 
       {!ciclos || ciclos.length === 0 ? (
         <EmptyState
           icon={CalendarClock}
-          titulo="Aún no se ha abierto ningún ciclo"
-          descripcion="El primer ciclo (2026 - Semestre 1) se crea desde el seed inicial en estado 'planeado'."
+          titulo="Aún no se ha creado ningún ciclo"
+          descripcion={
+            perfil.rol === 'admin_th'
+              ? 'Usa "Abrir nuevo ciclo" arriba para crear el primero.'
+              : 'Talento Humano todavía no ha creado ningún ciclo de evaluación.'
+          }
         />
       ) : (
         <div className="grid md:grid-cols-2 gap-4">
