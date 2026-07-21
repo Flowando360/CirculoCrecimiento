@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import { etiquetaRol } from '@/lib/utils';
 import { LogOut, Bell } from 'lucide-react';
 import Link from 'next/link';
+import { CentroAyudaBoton } from '@/components/ayuda/centro-ayuda-boton';
 
 export function Header({
   nombre,
@@ -28,6 +29,7 @@ export function Header({
     <header className="h-16 border-b border-marmol-200 bg-white flex items-center justify-between px-6 sticky top-0 z-10">
       <div />
       <div className="flex items-center gap-4">
+        <CentroAyudaBoton />
         <Link
           href="/alertas"
           className="relative rounded-lg p-2 text-marmol-500 hover:bg-marmol-100 transition"
