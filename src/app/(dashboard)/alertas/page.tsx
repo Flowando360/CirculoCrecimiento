@@ -2,6 +2,7 @@ import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { createClient } from '@/lib/supabase/server';
 import { EmptyState } from '@/components/ui/empty-state';
 import { AlertaSeveridadDot, AlertaTipoBadge } from '@/components/alertas/alerta-badge';
+import { AccionesAlerta } from '@/components/alertas/acciones-alerta';
 import { formatearFecha, diasHasta } from '@/lib/utils';
 import { Bell } from 'lucide-react';
 
@@ -56,6 +57,7 @@ export default async function AlertasPage() {
                     {dias === 0 ? 'Hoy' : dias > 0 ? `En ${dias} días` : `Hace ${-dias} días`}
                   </p>
                 </div>
+                {perfil.rol === 'admin_th' && <AccionesAlerta id={a.id} />}
               </div>
             );
           })}
