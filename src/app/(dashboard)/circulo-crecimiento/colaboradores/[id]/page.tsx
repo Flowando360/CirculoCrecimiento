@@ -4,7 +4,7 @@ import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { SemaforoBadge } from '@/components/circulo-crecimiento/semaforo-badge';
 import { formatearFecha } from '@/lib/utils';
 import { notFound } from 'next/navigation';
-import { GraduationCap, Briefcase, Sparkles, ShieldCheck, Target, Clock } from 'lucide-react';
+import { GraduationCap, Briefcase, Sparkles, ShieldCheck, Target, Clock, History } from 'lucide-react';
 
 export default async function FichaColaboradorPage({ params }: { params: { id: string } }) {
   const perfil = await getPerfilActual();
@@ -33,6 +33,12 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
     (perfil.rol === 'lider' && (colaborador.lider_id === perfil.colaborador_id || colaborador.id === perfil.colaborador_id)) ||
     (perfil.rol === 'colaborador' && perfil.colaborador_id === colaborador.id);
   if (!puedeVer) notFound();
+
+  // El historial (movimientos + entrevista de salida) es de manejo exclusivo
+  // de Talento Humano y del líder directo — sin policy de RLS para gerencia
+  // ni para el propio colaborador, así que tampoco se enlaza para ellos aquí.
+  const puedeVerHistorial =
+    perfil.rol === 'admin_th' || (perfil.rol === 'lider' && colaborador.lider_id === perfil.colaborador_id);
 
   const [{ data: ultimoResultado }, { data: saber }, { data: ser }, { data: pdi }, { data: hojaVida }] =
     await Promise.all([
@@ -204,6 +210,16 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
           </div>
         )}
       </div>
+
+      {puedeVerHistorial && (
+        <Link
+          href={`/circulo-crecimiento/colaboradores/${params.id}/historial`}
+          className="card p-5 flex items-center gap-2 hover:border-flow-300 transition"
+        >
+          <History size={16} className="text-flow-600" />
+          <span className="text-sm font-medium text-marmol-800">Ver historial y línea de tiempo</span>
+        </Link>
+      )}
     </div>
   );
 }
