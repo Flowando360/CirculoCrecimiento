@@ -20,3 +20,19 @@ export async function obtenerUrlFirmadaGuiaFlow(path: string | null): Promise<st
   if (error || !data) return null;
   return data.signedUrl;
 }
+
+/**
+ * Igual que arriba pero para adjuntos del feed corporativo (bucket privado
+ * "feed-adjuntos"): documentos, video o imagen destacada de un comunicado.
+ */
+export async function obtenerUrlFirmadaFeedAdjunto(path: string | null): Promise<string | null> {
+  if (!path) return null;
+
+  const supabase = createClient();
+  const { data, error } = await supabase.storage
+    .from('feed-adjuntos')
+    .createSignedUrl(path, UNA_HORA_EN_SEGUNDOS);
+
+  if (error || !data) return null;
+  return data.signedUrl;
+}
