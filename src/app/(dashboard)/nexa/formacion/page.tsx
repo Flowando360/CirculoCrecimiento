@@ -1,6 +1,8 @@
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { createClient } from '@/lib/supabase/server';
 import { EmptyState } from '@/components/ui/empty-state';
+import { FormularioCrearCurso } from '@/components/circulo-crecimiento/formulario-crear-curso';
+import { AsignarCurso } from '@/components/circulo-crecimiento/asignar-curso';
 import { GraduationCap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -79,14 +81,35 @@ export default async function NexaFormacionPage() {
     .eq('empresa_id', perfil.empresa_id)
     .order('categoria');
 
+  const esAdminTh = perfil.rol === 'admin_th';
+  let cargos: { id: string; nombre: string }[] = [];
+  let colaboradores: { id: string; nombre_completo: string }[] = [];
+
+  if (esAdminTh) {
+    const [{ data: cargosData }, { data: colaboradoresData }] = await Promise.all([
+      supabase.from('cargos').select('id, nombre').eq('empresa_id', perfil.empresa_id).order('nombre'),
+      supabase
+        .from('colaboradores')
+        .select('id, nombre_completo')
+        .eq('empresa_id', perfil.empresa_id)
+        .eq('es_externo', false)
+        .order('nombre_completo'),
+    ]);
+    cargos = cargosData ?? [];
+    colaboradores = colaboradoresData ?? [];
+  }
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">Formación y SST</h1>
-        <p className="text-sm text-marmol-500 mt-1">
-          Catálogo de cursos gamificados. Se asignan automáticamente cuando una alerta de Saber o
-          SST se activa (integración con el Círculo de Crecimiento).
-        </p>
+      <div className="flex items-start justify-between flex-wrap gap-4">
+        <div>
+          <h1 className="font-display text-2xl font-semibold text-marmol-900">Formación y SST</h1>
+          <p className="text-sm text-marmol-500 mt-1">
+            Catálogo de cursos gamificados. Se asignan automáticamente cuando una alerta de Saber o
+            SST se activa (integración con el Círculo de Crecimiento).
+          </p>
+        </div>
+        {esAdminTh && <FormularioCrearCurso />}
       </div>
 
       {!cursos || cursos.length === 0 ? (
@@ -100,15 +123,21 @@ export default async function NexaFormacionPage() {
                 <th className="px-4 py-3 font-medium">Categoría</th>
                 <th className="px-4 py-3 font-medium">Duración</th>
                 <th className="px-4 py-3 font-medium">Puntos</th>
+                {esAdminTh && <th className="px-4 py-3 font-medium">Asignación</th>}
               </tr>
             </thead>
             <tbody>
               {cursos.map((c) => (
-                <tr key={c.id} className="border-b border-marmol-100 last:border-0">
+                <tr key={c.id} className="border-b border-marmol-100 last:border-0 align-top">
                   <td className="px-4 py-3 font-medium text-marmol-900">{c.titulo}</td>
                   <td className="px-4 py-3 text-marmol-600">{CATEGORIA_LABEL[c.categoria as string] ?? c.categoria}</td>
                   <td className="px-4 py-3 text-marmol-500">{c.duracion_minutos} min</td>
                   <td className="px-4 py-3 text-marmol-500">{c.puntos_otorgados} pts</td>
+                  {esAdminTh && (
+                    <td className="px-4 py-3">
+                      <AsignarCurso cursoId={c.id} cargos={cargos} colaboradores={colaboradores} />
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

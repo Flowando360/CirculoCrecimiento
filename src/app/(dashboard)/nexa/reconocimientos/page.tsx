@@ -1,6 +1,7 @@
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { createClient } from '@/lib/supabase/server';
 import { EmptyState } from '@/components/ui/empty-state';
+import { FormularioOtorgarReconocimiento } from '@/components/circulo-crecimiento/formulario-otorgar-reconocimiento';
 import { Award } from 'lucide-react';
 import { formatearFecha } from '@/lib/utils';
 
@@ -15,6 +16,24 @@ export default async function NexaReconocimientosPage() {
     .order('otorgado_en', { ascending: false })
     .limit(50);
 
+  const puedeOtorgar = perfil.rol === 'admin_th' || perfil.rol === 'lider';
+  let colaboradores: { id: string; nombre_completo: string }[] = [];
+  if (puedeOtorgar) {
+    let query = supabase
+      .from('colaboradores')
+      .select('id, nombre_completo')
+      .eq('empresa_id', perfil.empresa_id)
+      .eq('es_externo', false)
+      .order('nombre_completo');
+
+    if (perfil.rol === 'lider' && perfil.colaborador_id) {
+      query = query.or(`lider_id.eq.${perfil.colaborador_id},id.eq.${perfil.colaborador_id}`);
+    }
+
+    const { data } = await query;
+    colaboradores = data ?? [];
+  }
+
   // Ranking simple: suma de puntos por colaborador
   const ranking = new Map<string, { nombre: string; puntos: number }>();
   (reconocimientos ?? []).forEach((r: any) => {
@@ -27,12 +46,15 @@ export default async function NexaReconocimientosPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">Reconocimientos</h1>
-        <p className="text-sm text-marmol-500 mt-1">
-          Refuerza los resultados destacados del Círculo de Crecimiento con puntos, insignias y
-          visibilidad social.
-        </p>
+      <div className="flex items-start justify-between flex-wrap gap-4">
+        <div>
+          <h1 className="font-display text-2xl font-semibold text-marmol-900">Reconocimientos</h1>
+          <p className="text-sm text-marmol-500 mt-1">
+            Refuerza los resultados destacados del Círculo de Crecimiento con puntos, insignias y
+            visibilidad social.
+          </p>
+        </div>
+        {puedeOtorgar && <FormularioOtorgarReconocimiento colaboradores={colaboradores} />}
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">

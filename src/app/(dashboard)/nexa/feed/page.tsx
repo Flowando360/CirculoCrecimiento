@@ -1,6 +1,7 @@
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { createClient } from '@/lib/supabase/server';
 import { EmptyState } from '@/components/ui/empty-state';
+import { FormularioPublicarFeed } from '@/components/circulo-crecimiento/formulario-publicar-feed';
 import { formatearFecha } from '@/lib/utils';
 import { Rss, Pin } from 'lucide-react';
 
@@ -26,12 +27,17 @@ export default async function NexaFeedPage() {
 
   return (
     <div className="space-y-6 max-w-2xl">
-      <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">Feed corporativo</h1>
-        <p className="text-sm text-marmol-500 mt-1">
-          Difusión de políticas de seguridad, alertas de riesgo, protocolos y comunicados —
-          sostiene la cultura entre ciclos de evaluación.
-        </p>
+      <div className="flex items-start justify-between flex-wrap gap-4">
+        <div>
+          <h1 className="font-display text-2xl font-semibold text-marmol-900">Feed corporativo</h1>
+          <p className="text-sm text-marmol-500 mt-1">
+            Difusión de políticas de seguridad, alertas de riesgo, protocolos y comunicados —
+            sostiene la cultura entre ciclos de evaluación.
+          </p>
+        </div>
+        {(perfil.rol === 'admin_th' || perfil.rol === 'lider') && (
+          <FormularioPublicarFeed esAdminTh={perfil.rol === 'admin_th'} />
+        )}
       </div>
 
       {!publicaciones || publicaciones.length === 0 ? (
