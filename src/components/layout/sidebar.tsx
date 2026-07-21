@@ -22,6 +22,8 @@ import {
   Compass,
   FileText,
   FileBarChart,
+  ShieldAlert,
+  Handshake,
 } from 'lucide-react';
 
 interface NavItem {
@@ -59,7 +61,9 @@ const NAV: NavGroup[] = [
     items: [
       { href: '/nexa/feed', label: 'Feed corporativo', icon: Rss, roles: ['admin_th', 'lider', 'colaborador', 'gerencia'] },
       { href: '/nexa/formacion', label: 'Formación y SST', icon: GraduationCap, roles: ['admin_th', 'lider', 'colaborador'] },
+      { href: '/nexa/simulacros', label: 'Simulacros', icon: ShieldAlert, roles: ['admin_th', 'lider', 'colaborador'] },
       { href: '/nexa/reconocimientos', label: 'Reconocimientos', icon: Award, roles: ['admin_th', 'lider', 'colaborador', 'gerencia'] },
+      { href: '/nexa/directorio', label: 'Directorio de aliados', icon: Handshake, roles: ['admin_th', 'lider', 'gerencia'] },
       { href: '/nexa/asistente', label: 'Asistente IA', icon: Bot, roles: ['admin_th', 'lider', 'colaborador'] },
     ],
   },
