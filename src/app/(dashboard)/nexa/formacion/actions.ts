@@ -78,6 +78,38 @@ export async function asignarCursoACargo(input: z.infer<typeof AsignarCargoSchem
   return { ok: true as const };
 }
 
+const ProgresoSchema = z.object({
+  rutaId: z.string().uuid(),
+  progresoPct: z.number().min(0).max(100),
+});
+
+/** El colaborador actualiza su propio avance (o lo marca completado con 100). */
+export async function actualizarProgresoCurso(input: z.infer<typeof ProgresoSchema>) {
+  const perfil = await getPerfilActual();
+  if (!perfil || perfil.rol !== 'colaborador' || !perfil.colaborador_id) {
+    return { ok: false as const, error: 'No autorizado' };
+  }
+
+  const parsed = ProgresoSchema.safeParse(input);
+  if (!parsed.success) return { ok: false as const, error: 'Datos inválidos' };
+
+  const completado = parsed.data.progresoPct >= 100;
+  const supabase = createClient();
+  const { error } = await supabase
+    .from('nexa_rutas_formacion')
+    .update({
+      progreso_pct: parsed.data.progresoPct,
+      estado: completado ? 'completado' : parsed.data.progresoPct > 0 ? 'en_curso' : 'asignado',
+      completado_en: completado ? new Date().toISOString() : null,
+    })
+    .eq('id', parsed.data.rutaId)
+    .eq('colaborador_id', perfil.colaborador_id);
+
+  if (error) return { ok: false as const, error: error.message };
+  revalidatePath('/nexa/formacion');
+  return { ok: true as const };
+}
+
 const AsignarColaboradorSchema = z.object({
   cursoId: z.string().uuid(),
   colaboradorId: z.string().uuid(),

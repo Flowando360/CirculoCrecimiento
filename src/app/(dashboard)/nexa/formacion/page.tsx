@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { EmptyState } from '@/components/ui/empty-state';
 import { FormularioCrearCurso } from '@/components/circulo-crecimiento/formulario-crear-curso';
 import { AsignarCurso } from '@/components/circulo-crecimiento/asignar-curso';
+import { PanelAvanceCurso } from '@/components/circulo-crecimiento/panel-avance-curso';
 import { GraduationCap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -66,6 +67,11 @@ export default async function NexaFormacionPage() {
                 <div className="w-full h-1.5 rounded-full bg-marmol-100 overflow-hidden mt-3">
                   <div className="h-full bg-flow-500" style={{ width: `${r.progreso_pct}%` }} />
                 </div>
+                {r.estado === 'completado' ? (
+                  <p className="text-xs text-alto mt-2">Completado</p>
+                ) : (
+                  <PanelAvanceCurso rutaId={r.id} progresoInicial={Number(r.progreso_pct)} />
+                )}
               </div>
             ))}
           </div>
