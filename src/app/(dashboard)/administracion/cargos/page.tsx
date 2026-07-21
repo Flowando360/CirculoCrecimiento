@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
@@ -47,7 +48,11 @@ export default async function AdminCargosPage() {
             <tbody>
               {cargos.map((c: any) => (
                 <tr key={c.id} className="border-b border-marmol-100 last:border-0 hover:bg-marmol-50">
-                  <td className="px-4 py-3 font-medium text-marmol-900">{c.nombre}</td>
+                  <td className="px-4 py-3 font-medium text-marmol-900">
+                    <Link href={`/administracion/cargos/${c.id}`} className="hover:text-flow-600">
+                      {c.nombre}
+                    </Link>
+                  </td>
                   <td className="px-4 py-3 text-marmol-600">{c.proceso_area}</td>
                   <td className="px-4 py-3 text-marmol-600 capitalize">{c.formacion_nivel ?? '—'}</td>
                   <td className="px-4 py-3">{c.tiene_personal_a_cargo ? 'Sí' : 'No'}</td>
