@@ -2,6 +2,7 @@ import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { EmptyState } from '@/components/ui/empty-state';
+import { ImportadorPerfilCargo } from '@/components/circulo-crecimiento/importador-perfil-cargo';
 import { Sparkles } from 'lucide-react';
 
 export default async function AdminCargosPage() {
@@ -18,12 +19,15 @@ export default async function AdminCargosPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">Cargos y perfiles</h1>
-        <p className="text-sm text-marmol-500 mt-1">
-          Plantilla estándar de la dimensión Saber: formación, habilidades funcionales y técnicas,
-          destrezas y experiencia mínima por cargo.
-        </p>
+      <div className="flex items-start justify-between flex-wrap gap-4">
+        <div>
+          <h1 className="font-display text-2xl font-semibold text-marmol-900">Cargos y perfiles</h1>
+          <p className="text-sm text-marmol-500 mt-1">
+            Plantilla estándar de la dimensión Saber: formación, habilidades funcionales y técnicas,
+            destrezas y experiencia mínima por cargo.
+          </p>
+        </div>
+        <ImportadorPerfilCargo />
       </div>
 
       {!cargos || cargos.length === 0 ? (
