@@ -24,7 +24,7 @@ async function puedePrepararBrief(evaluacionId: string) {
 
   const colaborador = (evaluacion as any)?.colaborador;
   if (!evaluacion || !colaborador || colaborador.empresa_id !== perfil.empresa_id) {
-    return { ok: false as const, error: 'Evaluación no encontrada' };
+    return { ok: false as const, error: 'Encuentro de Crecimiento no encontrado' };
   }
 
   const autorizado =

@@ -4,7 +4,7 @@ import type { InformeSST, EstadoCertificacion } from './data';
 
 const styles = StyleSheet.create({
   page: { padding: 32, fontSize: 9, fontFamily: 'Helvetica' },
-  titulo: { fontSize: 16, fontWeight: 700, marginBottom: 2 },
+  titulo: { fontSize: 16, fontWeight: 700, marginBottom: 2, color: '#1B2A5B' },
   subtitulo: { fontSize: 9, color: '#6b7280', marginBottom: 16 },
   seccion: { marginTop: 14 },
   seccionTitulo: { fontSize: 12, fontWeight: 700, marginBottom: 6, borderBottomWidth: 1, borderBottomColor: '#e5e7eb', paddingBottom: 4 },

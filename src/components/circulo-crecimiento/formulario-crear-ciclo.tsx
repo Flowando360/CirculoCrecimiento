@@ -90,8 +90,8 @@ export function FormularioCrearCiclo() {
       </div>
 
       <p className="text-xs text-marmol-400">
-        Se crea en estado "Planeado". Desde su detalle podrás ajustar las ponderaciones y generar las
-        evaluaciones para abrirlo.
+        Se crea en estado "Planeado". Desde su detalle podrás ajustar las ponderaciones y generar los
+        Encuentros de Crecimiento para abrirlo.
       </p>
     </div>
   );

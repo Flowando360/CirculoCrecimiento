@@ -45,7 +45,7 @@ export function FormularioPonderaciones({
     <div className="card p-5 space-y-4">
       <div>
         <div className="flex items-center justify-between">
-          <h2 className="font-display font-semibold text-marmol-900">Cargos con personal a cargo</h2>
+          <h2 className="font-display font-semibold text-secundario">Cargos con personal a cargo</h2>
           <span className={cn('text-xs font-medium', sumaConEquipo === 100 ? 'text-alto' : 'text-bajo')}>
             Suma: {sumaConEquipo}%
           </span>
@@ -83,7 +83,7 @@ export function FormularioPonderaciones({
 
       <div>
         <div className="flex items-center justify-between pt-2">
-          <h2 className="font-display font-semibold text-marmol-900">Cargos sin personal a cargo</h2>
+          <h2 className="font-display font-semibold text-secundario">Cargos sin personal a cargo</h2>
           <span className={cn('text-xs font-medium', sumaSinEquipo === 100 ? 'text-alto' : 'text-bajo')}>
             Suma: {sumaSinEquipo}%
           </span>

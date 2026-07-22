@@ -55,7 +55,7 @@ export function ImportadorPerfilCargo() {
   return (
     <div className="card p-5 space-y-4 max-w-2xl">
       <div className="flex items-center justify-between">
-        <h2 className="font-display font-semibold text-marmol-900">Importar perfil de cargo (Excel FORSST 61)</h2>
+        <h2 className="font-display font-semibold text-secundario">Importar perfil de cargo (Excel FORSST 61)</h2>
         <button
           type="button"
           onClick={() => {
@@ -166,7 +166,7 @@ function Campo({ etiqueta, valor }: { etiqueta: string; valor: string | null }) 
 function Conteo({ etiqueta, cantidad }: { etiqueta: string; cantidad: number }) {
   return (
     <div className="rounded-lg bg-marmol-50 py-2">
-      <p className="text-lg font-display font-semibold text-marmol-900">{cantidad}</p>
+      <p className="text-lg font-display font-semibold text-secundario">{cantidad}</p>
       <p className="text-marmol-500">{etiqueta}</p>
     </div>
   );

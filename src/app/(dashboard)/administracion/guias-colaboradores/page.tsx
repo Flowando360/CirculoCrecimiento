@@ -36,7 +36,7 @@ export default async function GuiasColaboradoresPage() {
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">Guías de colaboradores</h1>
+        <h1 className="font-display text-2xl font-semibold text-secundario">Guías de colaboradores</h1>
         <p className="text-sm text-marmol-500 mt-1">
           Sube el PDF de la Guía del Flow de cada persona (diseñada por FlowAndo) para que quede
           disponible en su ficha y en Mi Perfil.
@@ -46,7 +46,7 @@ export default async function GuiasColaboradoresPage() {
       <FormularioSubirGuia colaboradores={(colaboradores ?? []) as any} />
 
       <div className="card p-5">
-        <h3 className="font-display font-semibold text-marmol-900 mb-3 flex items-center gap-1.5">
+        <h3 className="font-display font-semibold text-secundario mb-3 flex items-center gap-1.5">
           <FileText size={16} /> Guías ya cargadas
         </h3>
         {!guias || guias.length === 0 ? (

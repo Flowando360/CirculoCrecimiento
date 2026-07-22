@@ -4,14 +4,14 @@ export const preguntasFrecuentes: PreguntaFrecuente[] = [
   {
     pregunta: '¿Qué significan Ser, Saber, Hacer y Deber?',
     respuesta:
-      'Son las cuatro dimensiones que evalúa el Círculo de Crecimiento. Ser: quién es la persona (talentos, propósito), se explora con la Guía del Flow. Saber: si cumple lo que exige su cargo (formación, habilidades, certificaciones, experiencia). Hacer: su desempeño en comportamientos observables, evaluado por ciclo. Deber: su comportamiento cultural/actitudinal, evaluado también por ciclo.',
+      'Son las cuatro dimensiones que valora el Círculo de Crecimiento. Ser: quién es la persona (talentos, propósito), se explora con la Guía del Flow. Saber: si cumple lo que exige su cargo (formación, habilidades, certificaciones, experiencia). Hacer: su desempeño en comportamientos observables, valorado por ciclo. Deber: su comportamiento cultural/actitudinal, valorado también por ciclo.',
   },
   {
-    pregunta: '¿Con qué frecuencia se evalúan Hacer y Deber?',
-    respuesta: 'Por ciclos, normalmente semestrales, definidos por Talento Humano en Ciclos de evaluación. Ser y Saber, en cambio, se verifican de forma continua, sin depender de un ciclo.',
+    pregunta: '¿Con qué frecuencia se valoran Hacer y Deber?',
+    respuesta: 'Por ciclos, normalmente semestrales, definidos por Talento Humano en Ciclos de Crecimiento. Ser y Saber, en cambio, se verifican de forma continua, sin depender de un ciclo.',
   },
   {
-    pregunta: '¿Quién evalúa a quién?',
+    pregunta: '¿Quién acompaña a quién?',
     respuesta:
       'Se calcula automáticamente a partir del organigrama: tu líder es quien está justo arriba de ti; tus pares son quienes comparten tu mismo líder; tus colaboradores a cargo son quienes te reportan directamente a ti. Además, cada persona se autoevalúa.',
   },
@@ -35,19 +35,19 @@ export const preguntasFrecuentes: PreguntaFrecuente[] = [
   },
   {
     pregunta: '¿Qué es el Brief de retroalimentación y quién lo ve?',
-    respuesta: 'Es el material de preparación que el líder escribe antes de la reunión de retroalimentación con su colaborador. Es privado: solo lo ve quien lo escribió y Talento Humano — ni siquiera la persona evaluada lo ve.',
+    respuesta: 'Es el material de preparación que el líder escribe antes de la reunión de retroalimentación con su colaborador. Es privado: solo lo ve quien lo escribió y Talento Humano — ni siquiera el colaborador en crecimiento lo ve.',
   },
   {
     pregunta: '¿Cómo firmo el Acuerdo de crecimiento?',
-    respuesta: 'La firma es una casilla de verificación más la fecha (no una firma dibujada). Cada parte —colaborador y líder— firma la suya desde la pantalla del Acuerdo de esa evaluación.',
+    respuesta: 'La firma es una casilla de verificación más la fecha (no una firma dibujada). Cada parte —colaborador y líder— firma la suya desde la pantalla del Acuerdo de ese Encuentro de Crecimiento.',
   },
   {
-    pregunta: '¿Por qué no puedo abrir un nuevo ciclo de evaluación?',
-    respuesta: 'Solo Talento Humano (admin_th) puede crear ciclos, desde Círculo de Crecimiento → Ciclos de evaluación → "Abrir nuevo ciclo".',
+    pregunta: '¿Por qué no puedo abrir un nuevo Ciclo de Crecimiento?',
+    respuesta: 'Solo Talento Humano (admin_th) puede crear ciclos, desde Círculo de Crecimiento → Ciclos de Crecimiento → "Abrir nuevo ciclo".',
   },
   {
     pregunta: '¿Puedo cambiar las ponderaciones de un ciclo que ya está abierto?',
-    respuesta: 'No. Las ponderaciones solo se pueden editar mientras el ciclo está en estado "planeado", antes de abrirlo — así se evita afectar evaluaciones que ya están en curso.',
+    respuesta: 'No. Las ponderaciones solo se pueden editar mientras el ciclo está en estado "planeado", antes de abrirlo — así se evita afectar Encuentros de Crecimiento que ya están en curso.',
   },
   {
     pregunta: '¿Cómo marco mi avance en un curso de Formación?',

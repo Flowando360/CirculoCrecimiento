@@ -18,7 +18,7 @@ export default async function IndicadoresPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">Indicadores</h1>
+        <h1 className="font-display text-2xl font-semibold text-secundario">Indicadores</h1>
         <p className="text-sm text-marmol-500 mt-1">
           Alineación talento-rol, brechas de formación, cumplimiento y coherencia cultural — por
           organización y por equipo.
@@ -48,7 +48,7 @@ export default async function IndicadoresPage() {
       />
 
       <div className="card p-5">
-        <h2 className="font-display font-semibold text-marmol-900 mb-4">
+        <h2 className="font-display font-semibold text-secundario mb-4">
           Mapa de equipos: Hacer vs. Deber promedio
         </h2>
         <IndicadoresEquipoChart

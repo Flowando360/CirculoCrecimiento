@@ -35,13 +35,13 @@ export const moduloAdministracion: ModuloAyuda = {
       titulo: 'Editar organigrama',
       resumen: 'Define el líder directo de cada persona — la única fuente de verdad de la que se deduce automáticamente quiénes son pares y quiénes son colaboradores a cargo.',
       camposYBotones: [{ nombre: 'Selector de líder directo', explicacion: 'Por cada colaborador, elige quién es su líder (o "Sin líder" si es nivel 1).' }],
-      notas: ['Cambiar el líder aquí afecta de inmediato la arquitectura de evaluadores del próximo ciclo.'],
+      notas: ['Cambiar el líder aquí afecta de inmediato la arquitectura de acompañantes del próximo ciclo.'],
     },
     {
       slug: 'identidad-organizacional',
       ruta: '/administracion/identidad',
       titulo: 'Identidad Organizacional',
-      resumen: 'Propósito superior, declaración de creencias, visión, principios y valores de la empresa — visibles para todos y usados como referencia en evaluaciones y en el feed de Nexa.',
+      resumen: 'Propósito superior, declaración de creencias, visión, principios y valores de la empresa — visibles para todos y usados como referencia en Encuentros de Crecimiento y en el feed de Nexa.',
       camposYBotones: [
         { nombre: 'Propósito Superior / Declaración de creencias / Visión', explicacion: 'Textos libres, se guardan con el botón "Guardar".' },
         { nombre: 'Principios y Valores', explicacion: 'Listas editables por separado, se agregan/eliminan elemento por elemento.' },
@@ -74,10 +74,10 @@ export const moduloAdministracion: ModuloAyuda = {
       slug: 'configuracion',
       ruta: '/administracion/configuracion',
       titulo: 'Configuración (ponderaciones)',
-      resumen: 'Pesos de ponderación entre las distintas fuentes de evaluación (líder, pares, colaboradores a cargo), separados según si el cargo tiene personal a cargo o no.',
+      resumen: 'Pesos de ponderación entre las distintas fuentes de valoración (líder, pares, colaboradores a cargo), separados según si el cargo tiene personal a cargo o no.',
       camposYBotones: [{ nombre: 'Porcentajes por fuente', explicacion: 'Deben sumar 100% en cada grupo (con equipo / sin equipo).' }],
       notas: [
-        'Solo se puede editar el ciclo que todavía está en estado "planeado" — una vez abierto un ciclo, sus pesos ya no se pueden cambiar, para no afectar evaluaciones en curso.',
+        'Solo se puede editar el ciclo que todavía está en estado "planeado" — una vez abierto un ciclo, sus pesos ya no se pueden cambiar, para no afectar Encuentros de Crecimiento en curso.',
       ],
     },
   ],

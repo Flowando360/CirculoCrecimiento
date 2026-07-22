@@ -38,7 +38,7 @@ export default async function DetalleSimulacroPage({ params }: { params: { id: s
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">{simulacro.titulo}</h1>
+        <h1 className="font-display text-2xl font-semibold text-secundario">{simulacro.titulo}</h1>
         {simulacro.fecha && <p className="text-sm text-marmol-500 mt-1">{formatearFecha(simulacro.fecha)}</p>}
         {simulacro.descripcion && <p className="text-sm text-marmol-600 mt-2">{simulacro.descripcion}</p>}
       </div>
@@ -60,7 +60,7 @@ export default async function DetalleSimulacroPage({ params }: { params: { id: s
               <tr className="border-b border-marmol-200 text-left text-xs uppercase tracking-wide text-marmol-400">
                 <th className="px-4 py-3 font-medium">Colaborador</th>
                 <th className="px-4 py-3 font-medium">Asistió</th>
-                <th className="px-4 py-3 font-medium">Calificación</th>
+                <th className="px-4 py-3 font-medium">Valoración</th>
               </tr>
             </thead>
             <tbody>

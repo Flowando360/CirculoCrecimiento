@@ -25,7 +25,7 @@ import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 export async function POST(req: NextRequest) {
   const perfil = await getPerfilActual();
   if (!perfil || perfil.rol !== 'admin_th') {
-    return NextResponse.json({ error: 'Solo Talento Humano puede generar evaluaciones' }, { status: 403 });
+    return NextResponse.json({ error: 'Solo Talento Humano puede generar Encuentros de Crecimiento' }, { status: 403 });
   }
 
   const { cicloId, scope, liderId, colaboradorId } = await req.json();
@@ -157,7 +157,7 @@ export async function POST(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   const perfil = await getPerfilActual();
   if (!perfil || perfil.rol !== 'admin_th') {
-    return NextResponse.json({ error: 'Solo Talento Humano puede editar ítems de evaluación' }, { status: 403 });
+    return NextResponse.json({ error: 'Solo Talento Humano puede editar ítems del Encuentro de Crecimiento' }, { status: 403 });
   }
 
   const { action, evaluacionId, itemId, bloque, titulo, descripcion } = await req.json();

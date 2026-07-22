@@ -80,7 +80,7 @@ export function FormularioCrearUsuario({
   return (
     <div className="card p-5 space-y-4 max-w-lg">
       <div className="flex items-center justify-between">
-        <h2 className="font-display font-semibold text-marmol-900">Crear cuenta</h2>
+        <h2 className="font-display font-semibold text-secundario">Crear cuenta</h2>
         <button
           type="button"
           onClick={() => {

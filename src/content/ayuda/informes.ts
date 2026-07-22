@@ -17,8 +17,8 @@ export const moduloInformes: ModuloAyuda = {
     {
       slug: 'evaluacion-360',
       ruta: '/informes/360',
-      titulo: 'Evaluación 360° Integrado',
-      resumen: 'Resultado consolidado de Ser, Saber, Hacer y Deber de una persona, con el detalle de lo que respondió cada evaluador.',
+      titulo: 'Encuentro de Crecimiento 360° Integrado',
+      resumen: 'Resultado consolidado de Ser, Saber, Hacer y Deber de una persona, con el detalle de lo que respondió cada acompañante.',
       camposYBotones: [
         { nombre: 'Filtro por persona', explicacion: 'admin_th, líder y gerencia pueden elegir a quién consultar; un colaborador solo ve el suyo.' },
         { nombre: 'Exportar PDF / Exportar Excel', explicacion: 'Descarga el informe completo en el formato elegido.' },

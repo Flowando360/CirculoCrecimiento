@@ -50,7 +50,7 @@ export default async function BriefPage({ params }: { params: { evaluacionId: st
         >
           <ArrowLeft size={12} /> Volver al ciclo
         </Link>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900 flex items-center gap-2">
+        <h1 className="font-display text-2xl font-semibold text-secundario flex items-center gap-2">
           <FileText size={22} className="text-flow-600" /> Brief de retroalimentación
         </h1>
         <p className="text-sm text-marmol-500 mt-1">
@@ -62,7 +62,7 @@ export default async function BriefPage({ params }: { params: { evaluacionId: st
         <div>
           <p className="text-xs text-marmol-500 mb-1">Hacer</p>
           <div className="flex items-center gap-2">
-            <span className="font-display text-lg font-semibold text-marmol-900">
+            <span className="font-display text-lg font-semibold text-secundario">
               {resultado?.indice_hacer ?? '—'}
             </span>
             <SemaforoBadge nivel={resultado?.semaforo_hacer} />
@@ -71,7 +71,7 @@ export default async function BriefPage({ params }: { params: { evaluacionId: st
         <div>
           <p className="text-xs text-marmol-500 mb-1">Deber</p>
           <div className="flex items-center gap-2">
-            <span className="font-display text-lg font-semibold text-marmol-900">
+            <span className="font-display text-lg font-semibold text-secundario">
               {resultado?.indice_deber ?? '—'}
             </span>
             <SemaforoBadge nivel={resultado?.semaforo_deber} />

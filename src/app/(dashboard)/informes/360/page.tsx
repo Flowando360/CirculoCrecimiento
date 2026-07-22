@@ -53,11 +53,11 @@ export default async function Informe360Page({
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-marmol-900">
-            Informe de Evaluación 360° Integrado
+          <h1 className="font-display text-2xl font-semibold text-secundario">
+            Informe de Encuentro de Crecimiento 360° Integrado
           </h1>
           <p className="text-sm text-marmol-500 mt-1">
-            Resultado consolidado de Ser, Saber, Hacer y Deber, con detalle de cada evaluador.
+            Resultado consolidado de Ser, Saber, Hacer y Deber, con detalle de cada acompañante.
           </p>
         </div>
 
@@ -114,7 +114,7 @@ export default async function Informe360Page({
       ) : (
         <>
           <div className="card p-6">
-            <h2 className="font-display text-lg font-semibold text-marmol-900">{informe.colaborador.nombre_completo}</h2>
+            <h2 className="font-display text-lg font-semibold text-secundario">{informe.colaborador.nombre_completo}</h2>
             <p className="text-sm text-marmol-500">
               {informe.colaborador.cargo_nombre} · {informe.colaborador.area}
             </p>
@@ -135,7 +135,7 @@ export default async function Informe360Page({
               <p className="text-xs font-medium text-marmol-500 mb-2 flex items-center gap-1.5">
                 <GraduationCap size={14} className="text-saber" /> SABER
               </p>
-              <p className="text-2xl font-display font-semibold text-marmol-900">
+              <p className="text-2xl font-display font-semibold text-secundario">
                 {informe.saber?.porcentaje_cumplimiento ? `${informe.saber.porcentaje_cumplimiento}%` : '—'}
               </p>
             </div>
@@ -144,7 +144,7 @@ export default async function Informe360Page({
                 <Briefcase size={14} className="text-hacer" /> HACER
               </p>
               <div className="flex items-center gap-2">
-                <p className="text-2xl font-display font-semibold text-marmol-900">
+                <p className="text-2xl font-display font-semibold text-secundario">
                   {informe.resultado?.indice_hacer ?? '—'}
                 </p>
                 <SemaforoBadge nivel={informe.resultado?.semaforo_hacer as any} />
@@ -155,7 +155,7 @@ export default async function Informe360Page({
                 <ShieldCheck size={14} className="text-deber" /> DEBER
               </p>
               <div className="flex items-center gap-2">
-                <p className="text-2xl font-display font-semibold text-marmol-900">
+                <p className="text-2xl font-display font-semibold text-secundario">
                   {informe.resultado?.indice_deber ?? '—'}
                 </p>
                 <SemaforoBadge nivel={informe.resultado?.semaforo_deber as any} />
@@ -165,7 +165,7 @@ export default async function Informe360Page({
 
           <div className="grid md:grid-cols-2 gap-4">
             <div className="card p-5">
-              <h3 className="font-display font-semibold text-marmol-900 mb-3">Hacer — detalle por evaluador</h3>
+              <h3 className="font-display font-semibold text-secundario mb-3">Hacer — detalle por acompañante</h3>
               {hacer.length === 0 ? (
                 <p className="text-sm text-marmol-400">Sin respuestas registradas todavía.</p>
               ) : (
@@ -187,7 +187,7 @@ export default async function Informe360Page({
             </div>
 
             <div className="card p-5">
-              <h3 className="font-display font-semibold text-marmol-900 mb-3">Deber — detalle por evaluador</h3>
+              <h3 className="font-display font-semibold text-secundario mb-3">Deber — detalle por acompañante</h3>
               {deber.length === 0 ? (
                 <p className="text-sm text-marmol-400">Sin respuestas registradas todavía.</p>
               ) : (
@@ -211,7 +211,7 @@ export default async function Informe360Page({
 
           {informe.ser && (
             <div className="card p-5">
-              <h3 className="font-display font-semibold text-marmol-900 mb-3">Ser — Guía del Flow</h3>
+              <h3 className="font-display font-semibold text-secundario mb-3">Ser — Guía del Flow</h3>
               <dl className="space-y-2 text-sm">
                 {informe.ser.proposito && (
                   <div>

@@ -26,9 +26,9 @@ export default async function AdminConfiguracionPage() {
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">Configuración</h1>
+        <h1 className="font-display text-2xl font-semibold text-secundario">Configuración</h1>
         <p className="text-sm text-marmol-500 mt-1">
-          Pesos de ponderación entre fuentes de evaluación. Editable sin tocar fórmulas — se aplica
+          Pesos de ponderación entre fuentes de valoración. Editable sin tocar fórmulas — se aplica
           al próximo ciclo que se abra.
         </p>
       </div>
@@ -48,7 +48,7 @@ export default async function AdminConfiguracionPage() {
         <EmptyState
           icon={SlidersHorizontal}
           titulo="No hay ningún ciclo planeado"
-          descripcion="Los pesos de ponderación solo se pueden editar antes de abrir un ciclo, para no afectar evaluaciones ya en curso. Actualmente no hay ninguno en estado 'planeado'."
+          descripcion="Los pesos de ponderación solo se pueden editar antes de abrir un ciclo, para no afectar Encuentros de Crecimiento ya en curso. Actualmente no hay ninguno en estado 'planeado'."
         />
       )}
     </div>

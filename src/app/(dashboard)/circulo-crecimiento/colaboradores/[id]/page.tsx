@@ -85,7 +85,7 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
               .join('')}
           </div>
           <div>
-            <h1 className="font-display text-xl font-semibold text-marmol-900">
+            <h1 className="font-display text-xl font-semibold text-secundario">
               {colaborador.nombre_completo}
             </h1>
             <p className="text-sm text-marmol-500">
@@ -115,7 +115,7 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
           <p className="text-xs font-medium text-marmol-500 mb-2 flex items-center gap-1.5">
             <GraduationCap size={14} className="text-saber" /> SABER
           </p>
-          <p className="text-2xl font-display font-semibold text-marmol-900">
+          <p className="text-2xl font-display font-semibold text-secundario">
             {saber?.porcentaje_cumplimiento ? `${saber.porcentaje_cumplimiento}%` : '—'}
           </p>
           <p className="text-xs text-marmol-400">cumplimiento del perfil</p>
@@ -125,7 +125,7 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
             <Briefcase size={14} className="text-hacer" /> HACER
           </p>
           <div className="flex items-center gap-2">
-            <p className="text-2xl font-display font-semibold text-marmol-900">
+            <p className="text-2xl font-display font-semibold text-secundario">
               {ultimoResultado?.indice_hacer ?? '—'}
             </p>
             <SemaforoBadge nivel={ultimoResultado?.semaforo_hacer as any} />
@@ -136,7 +136,7 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
             <ShieldCheck size={14} className="text-deber" /> DEBER
           </p>
           <div className="flex items-center gap-2">
-            <p className="text-2xl font-display font-semibold text-marmol-900">
+            <p className="text-2xl font-display font-semibold text-secundario">
               {ultimoResultado?.indice_deber ?? '—'}
             </p>
             <SemaforoBadge nivel={ultimoResultado?.semaforo_deber as any} />
@@ -147,7 +147,7 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
       <div className="grid md:grid-cols-2 gap-6">
         {/* Perfil de cargo (Saber) */}
         <div className="card p-5">
-          <h2 className="font-display font-semibold text-marmol-900 mb-3">Perfil de cargo</h2>
+          <h2 className="font-display font-semibold text-secundario mb-3">Perfil de cargo</h2>
           <dl className="space-y-2 text-sm">
             <div className="flex justify-between">
               <dt className="text-marmol-500">Objetivo del cargo</dt>
@@ -162,7 +162,7 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
 
         {/* Hoja de vida / formación */}
         <Link href={`/circulo-crecimiento/colaboradores/${params.id}/hoja-vida`} className="card p-5 block hover:border-flow-300 transition">
-          <h2 className="font-display font-semibold text-marmol-900 mb-3 flex items-center gap-1.5">
+          <h2 className="font-display font-semibold text-secundario mb-3 flex items-center gap-1.5">
             <Clock size={16} /> Hoja de vida y certificaciones
           </h2>
           {!hojaVida || hojaVida.length === 0 ? (
@@ -187,7 +187,7 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
 
       {/* Plan de Desarrollo Individual */}
       <div className="card p-5">
-        <h2 className="font-display font-semibold text-marmol-900 mb-3 flex items-center gap-1.5">
+        <h2 className="font-display font-semibold text-secundario mb-3 flex items-center gap-1.5">
           <Target size={16} /> Plan de Desarrollo Individual
         </h2>
         {!pdi || pdi.length === 0 ? (

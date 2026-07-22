@@ -36,7 +36,7 @@ export default async function AdminUsuariosPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-marmol-900">Usuarios y roles</h1>
+          <h1 className="font-display text-2xl font-semibold text-secundario">Usuarios y roles</h1>
           <p className="text-sm text-marmol-500 mt-1">
             admin_th ve y edita todo · lider ve su equipo y su propia info · colaborador se ve a sí
             mismo · gerencia ve reportes agregados.

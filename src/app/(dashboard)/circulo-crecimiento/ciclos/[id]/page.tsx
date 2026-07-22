@@ -42,7 +42,7 @@ export default async function CicloDetallePage({ params }: { params: { id: strin
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">{ciclo.nombre}</h1>
+        <h1 className="font-display text-2xl font-semibold text-secundario">{ciclo.nombre}</h1>
         <p className="text-sm text-marmol-500 mt-1">
           Ponderación vigente: Líder {ciclo.peso_lider_con_equipo * 100}% / Pares{' '}
           {ciclo.peso_pares_con_equipo * 100}% / Colaboradores a cargo{' '}
@@ -83,7 +83,7 @@ export default async function CicloDetallePage({ params }: { params: { id: strin
                 <td className="px-4 py-3">
                   <div className="w-28 h-1.5 rounded-full bg-marmol-100 overflow-hidden">
                     <div
-                      className="h-full bg-flow-500"
+                      className="h-full bg-crecimiento"
                       style={{ width: `${e.porcentaje_avance ?? 0}%` }}
                     />
                   </div>

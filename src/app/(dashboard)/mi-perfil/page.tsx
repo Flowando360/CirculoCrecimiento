@@ -50,14 +50,14 @@ export default async function MiPerfilPage() {
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">Mi Perfil</h1>
+        <h1 className="font-display text-2xl font-semibold text-secundario">Mi Perfil</h1>
         <p className="text-sm text-marmol-500 mt-1">
           Tu ficha 360°: quién eres para la organización, tus resultados y tu formación.
         </p>
       </div>
 
       <div className="card p-6">
-        <h2 className="font-display font-semibold text-marmol-900">{colaborador?.nombre_completo}</h2>
+        <h2 className="font-display font-semibold text-secundario">{colaborador?.nombre_completo}</h2>
         <p className="text-sm text-marmol-500">
           {cargo?.nombre} · {cargo?.proceso_area}
         </p>
@@ -90,7 +90,7 @@ export default async function MiPerfilPage() {
 
       {ser && (
         <div className="card p-5">
-          <h3 className="font-display font-semibold text-marmol-900 mb-2">Mi Guía del Flow</h3>
+          <h3 className="font-display font-semibold text-secundario mb-2">Mi Guía del Flow</h3>
           <div className="grid sm:grid-cols-2 gap-3 text-sm text-marmol-700">
             {ser.talentos_naturales && (
               <div>

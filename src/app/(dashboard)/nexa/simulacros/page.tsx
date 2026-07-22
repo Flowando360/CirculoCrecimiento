@@ -23,7 +23,7 @@ export default async function NexaSimulacrosPage() {
     <div className="space-y-6">
       <div className="flex items-start justify-between flex-wrap gap-4">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-marmol-900">Simulacros y dinámicas en vivo</h1>
+          <h1 className="font-display text-2xl font-semibold text-secundario">Simulacros y dinámicas en vivo</h1>
           <p className="text-sm text-marmol-500 mt-1">
             Programación de simulacros de seguridad y dinámicas de cultura, con registro de asistencia y desempeño.
           </p>

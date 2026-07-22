@@ -28,7 +28,7 @@ export const moduloGeneral: ModuloAyuda = {
         'Tu propia ficha 360°: quién eres para la organización, tu cargo, tu líder, y el estado de tus cuatro dimensiones (Ser, Saber, Hacer, Deber).',
       camposYBotones: [
         { nombre: 'Encabezado', explicacion: 'Nombre, cargo, área, fecha de ingreso y líder directo.' },
-        { nombre: 'Tarjetas SER / SABER / HACER / DEBER', explicacion: 'Estado de cada dimensión: si tu Guía del Flow está completa, tu % de cumplimiento de Saber, y el semáforo (Alto/Medio/Bajo) de Hacer y Deber según tu última evaluación.' },
+        { nombre: 'Tarjetas SER / SABER / HACER / DEBER', explicacion: 'Estado de cada dimensión: si tu Guía del Flow está completa, tu % de cumplimiento de Saber, y el semáforo (Alto/Medio/Bajo) de Hacer y Deber según tu último Encuentro de Crecimiento.' },
         { nombre: 'Mi Guía del Flow', explicacion: 'Si ya se cargó tu Guía del Flow, aquí ves tus talentos naturales y tu propósito, tal como quedaron documentados.' },
       ],
       notas: [

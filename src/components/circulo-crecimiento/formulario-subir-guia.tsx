@@ -23,7 +23,7 @@ export function FormularioSubirGuia({ colaboradores }: { colaboradores: Colabora
 
   return (
     <form action={onSubmit} className="card p-5 space-y-4">
-      <h3 className="font-display font-semibold text-marmol-900">Subir Guía del Flow (PDF)</h3>
+      <h3 className="font-display font-semibold text-secundario">Subir Guía del Flow (PDF)</h3>
 
       <div>
         <label className="block text-sm font-medium text-marmol-700 mb-1">Colaborador</label>

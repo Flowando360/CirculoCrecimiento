@@ -39,11 +39,11 @@ export default async function PdiPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">
+        <h1 className="font-display text-2xl font-semibold text-secundario">
           {perfil.rol === 'colaborador' ? 'Mi Plan de Desarrollo' : 'Planes de Desarrollo Individual'}
         </h1>
         <p className="text-sm text-marmol-500 mt-1">
-          El entregable central de la evaluación: distingue si la brecha es de actitud, de
+          El entregable central del Encuentro de Crecimiento: distingue si la brecha es de actitud, de
           formación o de alineación de talento.
         </p>
       </div>
@@ -52,7 +52,7 @@ export default async function PdiPage() {
         <EmptyState
           icon={Target}
           titulo="Sin planes de desarrollo registrados"
-          descripcion="Se generan de forma asistida al cerrar cada ciclo de evaluación, cruzando brechas de Hacer/Deber con Saber y Ser."
+          descripcion="Se generan de forma asistida al cerrar cada Ciclo de Crecimiento, cruzando brechas de Hacer/Deber con Saber y Ser."
         />
       ) : (
         <div className="space-y-3">

@@ -16,9 +16,9 @@ export default async function OrganigramaPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">Organigrama</h1>
+        <h1 className="font-display text-2xl font-semibold text-secundario">Organigrama</h1>
         <p className="text-sm text-marmol-500 mt-1">
-          Regla automática de evaluadores: el líder es quien está justo arriba; los pares comparten
+          Regla automática de acompañantes: el líder es quien está justo arriba; los pares comparten
           el mismo líder; los colaboradores a cargo son quienes reportan directamente.
         </p>
       </div>

@@ -37,7 +37,7 @@ export function CentroAyudaBoton() {
           <div className="absolute inset-0 bg-black/20" onClick={() => setAbierto(false)} />
           <div className="relative w-full max-w-md h-full bg-white shadow-xl flex flex-col">
             <div className="flex items-center justify-between px-5 py-4 border-b border-marmol-100">
-              <h2 className="font-display font-semibold text-marmol-900 flex items-center gap-2">
+              <h2 className="font-display font-semibold text-secundario flex items-center gap-2">
                 <HelpCircle size={18} className="text-flow-500" /> Centro de Ayuda
               </h2>
               <button onClick={() => setAbierto(false)} className="text-marmol-400 hover:text-marmol-700">
@@ -86,7 +86,7 @@ export function CentroAyudaBoton() {
                       <p className="text-[10px] uppercase tracking-wide text-flow-600 font-medium mb-1">
                         Esta pantalla · {contextual.modulo.titulo}
                       </p>
-                      <h3 className="font-display font-semibold text-marmol-900">{contextual.pagina.titulo}</h3>
+                      <h3 className="font-display font-semibold text-secundario">{contextual.pagina.titulo}</h3>
                       <p className="text-sm text-marmol-600 mt-1">{contextual.pagina.resumen}</p>
 
                       {contextual.pagina.camposYBotones && contextual.pagina.camposYBotones.length > 0 && (

@@ -15,8 +15,8 @@ interface InformeDisponible {
 const INFORMES: InformeDisponible[] = [
   {
     href: '/informes/360',
-    titulo: 'Evaluación 360° Integrado',
-    descripcion: 'Resultado consolidado de Ser, Saber, Hacer y Deber, con detalle de cada evaluador.',
+    titulo: 'Encuentro de Crecimiento 360° Integrado',
+    descripcion: 'Resultado consolidado de Ser, Saber, Hacer y Deber, con detalle de cada acompañante.',
     icon: Users2,
     roles: ['admin_th', 'lider', 'colaborador'],
   },
@@ -53,7 +53,7 @@ export default async function InformesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">Informes</h1>
+        <h1 className="font-display text-2xl font-semibold text-secundario">Informes</h1>
         <p className="text-sm text-marmol-500 mt-1">
           Todos los informes se pueden filtrar por persona o equipo, y exportar en PDF o Excel.
         </p>
@@ -63,7 +63,7 @@ export default async function InformesPage() {
         {disponibles.map((informe) => (
           <Link key={informe.href} href={informe.href} className="card p-5 hover:border-flow-300 transition">
             <informe.icon size={20} className="text-flow-600 mb-2" />
-            <h2 className="font-display font-semibold text-marmol-900">{informe.titulo}</h2>
+            <h2 className="font-display font-semibold text-secundario">{informe.titulo}</h2>
             <p className="text-sm text-marmol-500 mt-1">{informe.descripcion}</p>
           </Link>
         ))}

@@ -41,10 +41,10 @@ export default async function NexaFeedPage() {
     <div className="space-y-6 max-w-2xl">
       <div className="flex items-start justify-between flex-wrap gap-4">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-marmol-900">Feed corporativo</h1>
+          <h1 className="font-display text-2xl font-semibold text-secundario">Feed corporativo</h1>
           <p className="text-sm text-marmol-500 mt-1">
             Difusión de políticas de seguridad, alertas de riesgo, protocolos y comunicados —
-            sostiene la cultura entre ciclos de evaluación.
+            sostiene la cultura entre Ciclos de Crecimiento.
           </p>
         </div>
         {(perfil.rol === 'admin_th' || perfil.rol === 'lider') && (
@@ -69,7 +69,7 @@ export default async function NexaFeedPage() {
                 </span>
                 <span className="text-xs text-marmol-400">{formatearFecha(p.created_at)}</span>
               </div>
-              <h3 className="font-display font-semibold text-marmol-900">{p.titulo}</h3>
+              <h3 className="font-display font-semibold text-secundario">{p.titulo}</h3>
               {p.contenido && <p className="text-sm text-marmol-600 mt-1">{p.contenido}</p>}
               <TarjetaAdjuntoFeed
                 tipoAdjunto={p.tipo_adjunto}

@@ -4,7 +4,7 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
   slug: 'circulo-crecimiento',
   titulo: 'Círculo de Crecimiento 360°',
   descripcion:
-    'El corazón del sistema: evaluación de las cuatro dimensiones (Ser, Saber, Hacer, Deber), ciclos, fichas de colaboradores y planes de desarrollo.',
+    'El corazón del sistema: valoración de las cuatro dimensiones (Ser, Saber, Hacer, Deber), ciclos, fichas de colaboradores y planes de desarrollo.',
   paginas: [
     {
       slug: 'colaboradores',
@@ -26,7 +26,7 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
       camposYBotones: [
         { nombre: 'Tarjeta SER', explicacion: 'Indica si la Guía del Flow está completa. Lleva a la pantalla de Guía del Flow.' },
         { nombre: 'Tarjeta SABER', explicacion: '% de cumplimiento del perfil de cargo (formación, habilidades, certificaciones, experiencia). Lleva a Verificación de Saber.' },
-        { nombre: 'Tarjetas HACER / DEBER', explicacion: 'Último índice calculado y su semáforo (Alto/Medio/Bajo), según la evaluación más reciente.' },
+        { nombre: 'Tarjetas HACER / DEBER', explicacion: 'Último índice calculado y su semáforo (Alto/Medio/Bajo), según el Encuentro de Crecimiento más reciente.' },
         { nombre: 'Perfil de cargo', explicacion: 'Objetivo del cargo y si tiene personal a cargo (definido en Administración → Cargos).' },
         { nombre: 'Hoja de vida y certificaciones', explicacion: 'Formación, cursos y certificaciones cargadas, con fecha de vencimiento si aplica.' },
         { nombre: 'Plan de Desarrollo Individual', explicacion: 'Las acciones de desarrollo activas de la persona, con su origen (Hacer/Deber/Saber/Ser) y estado.' },
@@ -90,9 +90,9 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
     {
       slug: 'ciclos',
       ruta: '/circulo-crecimiento/ciclos',
-      titulo: 'Ciclos de evaluación',
+      titulo: 'Ciclos de Crecimiento',
       resumen:
-        'Hacer y Deber se evalúan por ciclos (normalmente semestrales); Ser y Saber se verifican de forma continua, sin ciclo.',
+        'Hacer y Deber se valoran por ciclos (normalmente semestrales); Ser y Saber se verifican de forma continua, sin ciclo.',
       camposYBotones: [
         { nombre: 'Abrir nuevo ciclo', explicacion: 'Solo admin_th. Crea un ciclo con nombre, fechas de apertura/cierre y las ponderaciones vigentes (definidas en Administración → Configuración).' },
         { nombre: 'Tarjeta de ciclo', explicacion: 'Nombre, estado (Planeado/Abierto/En consolidación/Publicado/Cerrado) y rango de fechas. Clic para entrar al detalle.' },
@@ -103,15 +103,15 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
       ruta: '/circulo-crecimiento/ciclos/*',
       titulo: 'Detalle de un ciclo',
       resumen:
-        'Muestra las ponderaciones vigentes del ciclo y el avance de cada persona evaluada, con acceso directo a su Brief y su Acuerdo de crecimiento.',
+        'Muestra las ponderaciones vigentes del ciclo y el avance de cada colaborador en crecimiento, con acceso directo a su Brief y su Acuerdo de crecimiento.',
       camposYBotones: [
-        { nombre: 'Panel de generación de evaluaciones', explicacion: 'Solo admin_th. Genera las tareas de evaluación (autoevaluación, líder, pares, colaboradores a cargo) para todo el equipo de un líder o para personas específicas.' },
-        { nombre: 'Tabla de evaluaciones', explicacion: 'Por persona: % de avance, resultado de Hacer y Deber con semáforo, y enlaces a Brief y Acuerdo (admin_th y líder).' },
+        { nombre: 'Panel de generación de Encuentros de Crecimiento', explicacion: 'Solo admin_th. Genera las tareas de valoración (autoevaluación, líder, pares, colaboradores a cargo) para todo el equipo de un líder o para personas específicas.' },
+        { nombre: 'Tabla de Encuentros de Crecimiento', explicacion: 'Por persona: % de avance, resultado de Hacer y Deber con semáforo, y enlaces a Brief y Acuerdo (admin_th y líder).' },
       ],
       proceso: [
         'admin_th crea el ciclo desde "Abrir nuevo ciclo".',
-        'admin_th usa el panel de generación de evaluaciones para crear las tareas de cada evaluador.',
-        'Cada evaluador (autoevaluación, líder, pares, colaboradores a cargo) completa su evaluación en la pantalla "Evaluar".',
+        'admin_th usa el panel de generación de Encuentros de Crecimiento para crear las tareas de cada acompañante.',
+        'Cada acompañante (autoevaluación, líder, pares, colaboradores a cargo) completa su valoración en la pantalla "Valorar".',
         'El líder prepara el Brief antes de la retroalimentación.',
         'En la sesión de retroalimentación, se registran los compromisos en el Acuerdo de crecimiento y ambas partes firman.',
       ],
@@ -119,14 +119,14 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
     {
       slug: 'evaluar',
       ruta: '/circulo-crecimiento/evaluar/*',
-      titulo: 'Evaluar (Hacer / Deber)',
+      titulo: 'Valorar (Hacer / Deber)',
       resumen:
-        'El formulario donde cada evaluador (autoevaluación, líder, par, o colaborador a cargo) califica los comportamientos observables de la persona evaluada durante el período.',
+        'El formulario donde cada acompañante (autoevaluación, líder, par, o colaborador a cargo) valora los comportamientos observables del colaborador en crecimiento durante el período.',
       camposYBotones: [
         { nombre: 'Ítems por bloque (Hacer/Deber)', explicacion: 'Cada ítem tiene una nota y, opcionalmente, una observación en texto libre.' },
         { nombre: 'Guardado automático', explicacion: 'Cada respuesta se guarda al instante y recalcula el resultado — no hace falta un botón de "enviar todo" al final.' },
       ],
-      notas: ['Si la evaluación no tiene ítems generados, pide a Talento Humano que la regenere desde el detalle del ciclo.'],
+      notas: ['Si el Encuentro de Crecimiento no tiene ítems generados, pide a Talento Humano que la regenere desde el detalle del ciclo.'],
     },
     {
       slug: 'brief',
@@ -154,9 +154,9 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
       slug: 'organigrama-consulta',
       ruta: '/circulo-crecimiento/organigrama',
       titulo: 'Organigrama',
-      resumen: 'Vista jerárquica de la empresa, en árbol. Explica la regla automática de quién evalúa a quién.',
+      resumen: 'Vista jerárquica de la empresa, en árbol. Explica la regla automática de quién acompaña a quién.',
       notas: [
-        'Regla de evaluadores: el líder es quien está justo arriba en el organigrama; los pares comparten el mismo líder; los colaboradores a cargo son quienes reportan directamente a la persona evaluada.',
+        'Regla de acompañantes: el líder es quien está justo arriba en el organigrama; los pares comparten el mismo líder; los colaboradores a cargo son quienes reportan directamente al colaborador en crecimiento.',
       ],
     },
     {
@@ -173,7 +173,7 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
       ruta: '/circulo-crecimiento/pdi',
       titulo: 'Planes de Desarrollo Individual (PDI)',
       resumen:
-        'El entregable central de la evaluación: cada acción de desarrollo indica si la brecha viene de Hacer, Deber, Saber, Ser, o es mixta.',
+        'El entregable central del Encuentro de Crecimiento: cada acción de desarrollo indica si la brecha viene de Hacer, Deber, Saber, Ser, o es mixta.',
       camposYBotones: [
         { nombre: 'Origen', explicacion: 'De qué dimensión viene la brecha detectada (Hacer/Deber/Saber/Ser/Mixto).' },
         { nombre: 'Estado', explicacion: 'Pendiente, en curso, cumplido o vencido, con su fecha de compromiso.' },

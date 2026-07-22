@@ -85,7 +85,7 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
         >
           <ArrowLeft size={12} /> Volver a la ficha
         </Link>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900 flex items-center gap-2">
+        <h1 className="font-display text-2xl font-semibold text-secundario flex items-center gap-2">
           <Sparkles size={22} className="text-ser" /> Guía del Flow
         </h1>
         <p className="text-sm text-marmol-500 mt-1">{colaborador.nombre_completo}</p>
@@ -131,7 +131,7 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
 
           {bloques.map(({ titulo, aspectos }) => (
             <div key={titulo} className="card p-5">
-              <h2 className="font-display font-semibold text-marmol-900 mb-3">{titulo}</h2>
+              <h2 className="font-display font-semibold text-secundario mb-3">{titulo}</h2>
               <ListaAspectosSer
                 colaboradorId={params.id}
                 guiaDelFlowId={guia.id}

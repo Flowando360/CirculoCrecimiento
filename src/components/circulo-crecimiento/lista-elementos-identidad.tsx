@@ -43,7 +43,7 @@ export function ListaElementosIdentidad({
 
   return (
     <div className="card p-5">
-      <h3 className="font-display font-semibold text-marmol-900 mb-3">{titulo}</h3>
+      <h3 className="font-display font-semibold text-secundario mb-3">{titulo}</h3>
 
       <div className="space-y-2 mb-4">
         {elementos.map((e) => (

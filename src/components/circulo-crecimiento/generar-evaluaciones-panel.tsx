@@ -38,7 +38,7 @@ export function GenerarEvaluacionesPanel({
         setResultado(`Error: ${data.error}`);
       } else {
         setResultado(
-          `Listo: ${data.evaluacionesCreadas} evaluaciones, ${data.tareasCreadas} tareas de evaluador y ${data.itemsCreados} ítems generados.`
+          `Listo: ${data.evaluacionesCreadas} Encuentros de Crecimiento, ${data.tareasCreadas} tareas de acompañante y ${data.itemsCreados} ítems generados.`
         );
         router.refresh();
       }
@@ -49,7 +49,7 @@ export function GenerarEvaluacionesPanel({
 
   return (
     <div className="card p-5 space-y-4">
-      <h3 className="font-display font-semibold text-marmol-900">Generar evaluaciones</h3>
+      <h3 className="font-display font-semibold text-secundario">Generar Encuentros de Crecimiento</h3>
 
       <div className="flex gap-2">
         {(['todos', 'equipo', 'colaborador'] as const).map((s) => (
@@ -100,15 +100,15 @@ export function GenerarEvaluacionesPanel({
         disabled={cargando || (scope === 'equipo' && !liderId) || (scope === 'colaborador' && !colaboradorId)}
         className="rounded-lg bg-flow-500 hover:bg-flow-600 text-white text-sm font-medium px-4 py-2 transition disabled:opacity-50"
       >
-        {cargando ? 'Generando…' : 'Generar evaluaciones'}
+        {cargando ? 'Generando…' : 'Generar Encuentros de Crecimiento'}
       </button>
 
       {resultado && <p className="text-xs text-marmol-600">{resultado}</p>}
 
       <p className="text-xs text-marmol-400">
-        Cada evaluación se arma con los 5 bloques: Competencias Organizacionales, Funcionales,
+        Cada Encuentro de Crecimiento se arma con los 5 bloques: Competencias Organizacionales, Funcionales,
         Liderazgo (si aplica), Roles y Funciones (desde el perfil de cargo) y Cultura. Después de
-        generarla, puedes agregar o quitar ítems puntuales desde la ficha de cada evaluación.
+        generarlo, puedes agregar o quitar ítems puntuales desde la ficha de cada Encuentro de Crecimiento.
       </p>
     </div>
   );

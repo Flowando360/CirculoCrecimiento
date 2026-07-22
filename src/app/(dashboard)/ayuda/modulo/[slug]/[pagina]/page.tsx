@@ -17,13 +17,13 @@ export default function PaginaAyudaPage({ params }: { params: { slug: string; pa
         >
           <ArrowLeft size={12} /> {modulo.titulo}
         </Link>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">{pagina.titulo}</h1>
+        <h1 className="font-display text-2xl font-semibold text-secundario">{pagina.titulo}</h1>
         <p className="text-sm text-marmol-600 mt-2">{pagina.resumen}</p>
       </div>
 
       {pagina.camposYBotones && pagina.camposYBotones.length > 0 && (
         <div className="card p-5">
-          <h2 className="font-display font-semibold text-marmol-900 mb-3">Campos y botones</h2>
+          <h2 className="font-display font-semibold text-secundario mb-3">Campos y botones</h2>
           <dl className="space-y-3">
             {pagina.camposYBotones.map((c) => (
               <div key={c.nombre}>
@@ -37,7 +37,7 @@ export default function PaginaAyudaPage({ params }: { params: { slug: string; pa
 
       {pagina.proceso && pagina.proceso.length > 0 && (
         <div className="card p-5">
-          <h2 className="font-display font-semibold text-marmol-900 mb-3">Proceso paso a paso</h2>
+          <h2 className="font-display font-semibold text-secundario mb-3">Proceso paso a paso</h2>
           <ol className="list-decimal list-inside space-y-1.5 text-sm text-marmol-700">
             {pagina.proceso.map((p, i) => (
               <li key={i}>{p}</li>

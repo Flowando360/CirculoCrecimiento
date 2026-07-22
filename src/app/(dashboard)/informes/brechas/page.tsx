@@ -39,7 +39,7 @@ export default async function InformeBrechasPage({
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-marmol-900">Informe de brechas por dimensión</h1>
+          <h1 className="font-display text-2xl font-semibold text-secundario">Informe de brechas por dimensión</h1>
           <p className="text-sm text-marmol-500 mt-1">
             Comparativo de Ser, Saber, Hacer y Deber por equipo o área, para priorizar intervenciones.
           </p>

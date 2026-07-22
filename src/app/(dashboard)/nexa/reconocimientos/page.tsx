@@ -48,7 +48,7 @@ export default async function NexaReconocimientosPage() {
     <div className="space-y-6">
       <div className="flex items-start justify-between flex-wrap gap-4">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-marmol-900">Reconocimientos</h1>
+          <h1 className="font-display text-2xl font-semibold text-secundario">Reconocimientos</h1>
           <p className="text-sm text-marmol-500 mt-1">
             Refuerza los resultados destacados del Círculo de Crecimiento con puntos, insignias y
             visibilidad social.
@@ -59,7 +59,7 @@ export default async function NexaReconocimientosPage() {
 
       <div className="grid md:grid-cols-2 gap-6">
         <div className="card p-5">
-          <h2 className="font-display font-semibold text-marmol-900 mb-3">Ranking de puntos</h2>
+          <h2 className="font-display font-semibold text-secundario mb-3">Ranking de puntos</h2>
           {rankingOrdenado.length === 0 ? (
             <p className="text-sm text-marmol-400">Sin reconocimientos otorgados aún.</p>
           ) : (
@@ -70,7 +70,9 @@ export default async function NexaReconocimientosPage() {
                     <span className="text-marmol-400 mr-2">{i + 1}.</span>
                     {r.nombre}
                   </span>
-                  <span className="font-medium text-flow-600">{r.puntos} pts</span>
+                  <span className="rounded-full bg-crecimiento text-white text-xs font-medium px-2.5 py-0.5">
+                    {r.puntos} pts
+                  </span>
                 </li>
               ))}
             </ol>
@@ -78,7 +80,7 @@ export default async function NexaReconocimientosPage() {
         </div>
 
         <div className="card p-5">
-          <h2 className="font-display font-semibold text-marmol-900 mb-3">Últimos reconocimientos</h2>
+          <h2 className="font-display font-semibold text-secundario mb-3">Últimos reconocimientos</h2>
           {!reconocimientos || reconocimientos.length === 0 ? (
             <EmptyState icon={Award} titulo="Sin actividad reciente" />
           ) : (

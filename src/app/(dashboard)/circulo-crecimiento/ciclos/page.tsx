@@ -29,7 +29,7 @@ export default async function CiclosPage() {
     <div className="space-y-6">
       <div className="flex items-start justify-between flex-wrap gap-4">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-marmol-900">Ciclos de evaluación</h1>
+          <h1 className="font-display text-2xl font-semibold text-secundario">Ciclos de Crecimiento</h1>
           <p className="text-sm text-marmol-500 mt-1">
             Hacer + Deber, semestral. Ser y Saber se verifican de forma continua.
           </p>
@@ -44,7 +44,7 @@ export default async function CiclosPage() {
           descripcion={
             perfil.rol === 'admin_th'
               ? 'Usa "Abrir nuevo ciclo" arriba para crear el primero.'
-              : 'Talento Humano todavía no ha creado ningún ciclo de evaluación.'
+              : 'Talento Humano todavía no ha creado ningún Ciclo de Crecimiento.'
           }
         />
       ) : (
@@ -56,7 +56,7 @@ export default async function CiclosPage() {
               className="card p-5 hover:border-flow-300 transition"
             >
               <div className="flex items-center justify-between mb-2">
-                <h3 className="font-display font-semibold text-marmol-900">{c.nombre}</h3>
+                <h3 className="font-display font-semibold text-secundario">{c.nombre}</h3>
                 <span className="text-xs rounded-full bg-flow-50 text-flow-700 px-2.5 py-0.5 font-medium">
                   {ETIQUETA_ESTADO[c.estado] ?? c.estado}
                 </span>

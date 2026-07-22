@@ -31,7 +31,7 @@ export default async function InicioPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-marmol-900">
+          <h1 className="font-display text-2xl font-semibold text-secundario">
             Hola, {perfil.nombre_completo.split(' ')[0]}
           </h1>
           <p className="text-sm text-marmol-500 mt-1">
@@ -83,7 +83,7 @@ export default async function InicioPage() {
 
         <div className="card p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-display text-base font-semibold text-marmol-900 flex items-center gap-2">
+            <h2 className="font-display text-base font-semibold text-secundario flex items-center gap-2">
               <Bell size={16} /> Próximas alertas
             </h2>
             <Link href="/alertas" className="text-xs text-flow-600 hover:underline">
@@ -125,7 +125,7 @@ export default async function InicioPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-marmol-900">
+          <h1 className="font-display text-2xl font-semibold text-secundario">
             Hola, {perfil.nombre_completo.split(' ')[0]}
           </h1>
           <p className="text-sm text-marmol-500 mt-1">Resumen de tu equipo</p>
@@ -145,11 +145,11 @@ export default async function InicioPage() {
 
         <div className="grid md:grid-cols-2 gap-4">
           <Link href="/circulo-crecimiento/colaboradores" className="card p-5 hover:border-flow-300 transition">
-            <h3 className="font-display font-semibold text-marmol-900 mb-1">Mi equipo</h3>
-            <p className="text-sm text-marmol-500">Ver fichas, evaluaciones y Guía del Flow de cada persona.</p>
+            <h3 className="font-display font-semibold text-secundario mb-1">Mi equipo</h3>
+            <p className="text-sm text-marmol-500">Ver fichas, Encuentros de Crecimiento y Guía del Flow de cada persona.</p>
           </Link>
           <Link href="/circulo-crecimiento/pdi" className="card p-5 hover:border-flow-300 transition">
-            <h3 className="font-display font-semibold text-marmol-900 mb-1">Planes de Desarrollo</h3>
+            <h3 className="font-display font-semibold text-secundario mb-1">Planes de Desarrollo</h3>
             <p className="text-sm text-marmol-500">Seguimiento a los compromisos de cada colaborador.</p>
           </Link>
         </div>
@@ -161,7 +161,7 @@ export default async function InicioPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">
+        <h1 className="font-display text-2xl font-semibold text-secundario">
           Hola, {perfil.nombre_completo.split(' ')[0]}
         </h1>
         <p className="text-sm text-marmol-500 mt-1">Este es tu espacio de crecimiento</p>
@@ -169,22 +169,22 @@ export default async function InicioPage() {
 
       <div className="grid md:grid-cols-3 gap-4">
         <Link href="/mi-perfil" className="card p-5 hover:border-flow-300 transition">
-          <h3 className="font-display font-semibold text-marmol-900 mb-1">Mi Perfil</h3>
+          <h3 className="font-display font-semibold text-secundario mb-1">Mi Perfil</h3>
           <p className="text-sm text-marmol-500">Tu ficha, resultados y Guía del Flow.</p>
         </Link>
         <Link href="/circulo-crecimiento/pdi" className="card p-5 hover:border-flow-300 transition">
-          <h3 className="font-display font-semibold text-marmol-900 mb-1">Mi Plan de Desarrollo</h3>
+          <h3 className="font-display font-semibold text-secundario mb-1">Mi Plan de Desarrollo</h3>
           <p className="text-sm text-marmol-500">Tus compromisos y su avance.</p>
         </Link>
         <Link href="/nexa/formacion" className="card p-5 hover:border-flow-300 transition">
-          <h3 className="font-display font-semibold text-marmol-900 mb-1">Formación</h3>
+          <h3 className="font-display font-semibold text-secundario mb-1">Formación</h3>
           <p className="text-sm text-marmol-500">Tus cursos asignados y de SST.</p>
         </Link>
       </div>
 
       <EmptyState
         icon={Bell}
-        titulo="Sin evaluaciones pendientes por ahora"
+        titulo="Sin Encuentros de Crecimiento pendientes por ahora"
         descripcion="Cuando se abra un nuevo ciclo o tengas una autoevaluación pendiente, aparecerá aquí."
       />
     </div>

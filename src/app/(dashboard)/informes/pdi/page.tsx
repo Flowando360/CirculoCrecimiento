@@ -48,7 +48,7 @@ export default async function InformePdiPage({
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-marmol-900">
+          <h1 className="font-display text-2xl font-semibold text-secundario">
             Informe de Plan de Desarrollo Individual
           </h1>
           <p className="text-sm text-marmol-500 mt-1">

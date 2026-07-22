@@ -40,7 +40,7 @@ export default async function NexaFormacionPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-marmol-900">Mi formación</h1>
+          <h1 className="font-display text-2xl font-semibold text-secundario">Mi formación</h1>
           <p className="text-sm text-marmol-500 mt-1">
             Cursos asignados según tu cargo y las alertas de SST activas.
           </p>
@@ -65,7 +65,7 @@ export default async function NexaFormacionPage() {
                   {r.curso?.duracion_minutos} min · {r.curso?.puntos_otorgados} pts
                 </p>
                 <div className="w-full h-1.5 rounded-full bg-marmol-100 overflow-hidden mt-3">
-                  <div className="h-full bg-flow-500" style={{ width: `${r.progreso_pct}%` }} />
+                  <div className="h-full bg-crecimiento" style={{ width: `${r.progreso_pct}%` }} />
                 </div>
                 {r.estado === 'completado' ? (
                   <p className="text-xs text-alto mt-2">Completado</p>
@@ -109,7 +109,7 @@ export default async function NexaFormacionPage() {
     <div className="space-y-6">
       <div className="flex items-start justify-between flex-wrap gap-4">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-marmol-900">Formación y SST</h1>
+          <h1 className="font-display text-2xl font-semibold text-secundario">Formación y SST</h1>
           <p className="text-sm text-marmol-500 mt-1">
             Catálogo de cursos gamificados. Se asignan automáticamente cuando una alerta de Saber o
             SST se activa (integración con el Círculo de Crecimiento).

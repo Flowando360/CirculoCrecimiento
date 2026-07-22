@@ -15,7 +15,7 @@ export function StatCard({
   tono?: 'neutral' | 'alto' | 'medio' | 'bajo' | 'flow';
 }) {
   const tonos: Record<string, string> = {
-    neutral: 'text-marmol-900',
+    neutral: 'text-secundario',
     alto: 'text-alto',
     medio: 'text-medio',
     bajo: 'text-bajo',

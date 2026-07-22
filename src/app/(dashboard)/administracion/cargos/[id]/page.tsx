@@ -20,7 +20,7 @@ const CLASE_NIVEL: Record<string, string> = {
 function Bloque({ titulo, children }: { titulo: string; children: React.ReactNode }) {
   return (
     <div className="card p-5">
-      <h2 className="font-display font-semibold text-marmol-900 mb-3">{titulo}</h2>
+      <h2 className="font-display font-semibold text-secundario mb-3">{titulo}</h2>
       {children}
     </div>
   );
@@ -71,7 +71,7 @@ export default async function DetalleCargoPage({ params }: { params: { id: strin
         >
           <ArrowLeft size={12} /> Volver a Cargos y perfiles
         </Link>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">{cargo.nombre}</h1>
+        <h1 className="font-display text-2xl font-semibold text-secundario">{cargo.nombre}</h1>
         <p className="text-sm text-marmol-500 mt-1">
           {cargo.proceso_area}
           {cargo.codigo_documento && ` · ${cargo.codigo_documento}`}

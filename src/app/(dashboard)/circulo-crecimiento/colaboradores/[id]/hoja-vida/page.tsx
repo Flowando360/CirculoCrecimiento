@@ -43,7 +43,7 @@ export default async function HojaVidaColaboradorPage({ params }: { params: { id
         >
           <ArrowLeft size={12} /> Volver a la ficha
         </Link>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900 flex items-center gap-2">
+        <h1 className="font-display text-2xl font-semibold text-secundario flex items-center gap-2">
           <Clock size={22} className="text-flow-600" /> Hoja de vida y certificaciones
         </h1>
         <p className="text-sm text-marmol-500 mt-1">{colaborador.nombre_completo}</p>

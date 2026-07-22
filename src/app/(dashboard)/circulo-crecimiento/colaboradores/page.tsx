@@ -30,11 +30,11 @@ export default async function ColaboradoresPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-marmol-900">
+          <h1 className="font-display text-2xl font-semibold text-secundario">
             {perfil.rol === 'lider' ? 'Mi equipo' : 'Colaboradores'}
           </h1>
           <p className="text-sm text-marmol-500 mt-1">
-            Ficha 360°: perfil, hoja de vida, evaluaciones y PDI de cada persona.
+            Ficha 360°: perfil, hoja de vida, Encuentros de Crecimiento y PDI de cada persona.
           </p>
         </div>
         {perfil.rol === 'admin_th' && (

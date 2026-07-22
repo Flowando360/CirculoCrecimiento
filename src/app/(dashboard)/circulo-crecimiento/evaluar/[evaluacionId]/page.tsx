@@ -60,9 +60,9 @@ export default async function EvaluarPage({ params }: { params: { evaluacionId: 
 
   const etiquetaTipo: Record<string, string> = {
     autoevaluacion: 'Autoevaluación',
-    lider: 'Evaluación de líder',
-    par: 'Evaluación de par',
-    colaborador_a_cargo: 'Evaluación de colaborador a cargo',
+    lider: 'Valoración del líder',
+    par: 'Valoración de un par',
+    colaborador_a_cargo: 'Valoración de colaborador a cargo',
   };
 
   return (
@@ -71,18 +71,18 @@ export default async function EvaluarPage({ params }: { params: { evaluacionId: 
         <p className="text-xs font-medium text-flow-600 mb-1">
           {etiquetaTipo[tarea.tipo_evaluador] ?? tarea.tipo_evaluador}
         </p>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">
-          Evaluando a {(evaluacion.colaborador as any)?.nombre_completo}
+        <h1 className="font-display text-2xl font-semibold text-secundario">
+          Valorando a {(evaluacion.colaborador as any)?.nombre_completo}
         </h1>
         <p className="text-sm text-marmol-500 mt-1">
-          Evalúa comportamientos observables del período completo. Cada respuesta se guarda y
+          Valora comportamientos observables del período completo. Cada respuesta se guarda y
           recalcula el resultado de inmediato. Puedes agregar una observación en cualquier ítem.
         </p>
       </div>
 
       {itemsFormateados.length === 0 ? (
         <p className="text-sm text-marmol-400">
-          Esta evaluación todavía no tiene ítems generados. Pide a Talento Humano que la regenere
+          Este Encuentro de Crecimiento todavía no tiene ítems generados. Pide a Talento Humano que la regenere
           desde el ciclo correspondiente.
         </p>
       ) : (

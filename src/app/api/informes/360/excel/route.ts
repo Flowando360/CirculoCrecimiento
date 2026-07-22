@@ -47,10 +47,10 @@ export async function GET(req: NextRequest) {
     resultado: `${informe.resultado?.indice_deber ?? '—'} (${informe.resultado?.semaforo_deber ?? 'sin datos'})`,
   });
 
-  const detalle = workbook.addWorksheet('Detalle por evaluador');
+  const detalle = workbook.addWorksheet('Detalle por acompañante');
   detalle.columns = [
     { header: 'Dimensión', key: 'dimension', width: 14 },
-    { header: 'Tipo de evaluador', key: 'evaluador', width: 24 },
+    { header: 'Tipo de acompañante', key: 'evaluador', width: 24 },
     { header: 'Promedio', key: 'promedio', width: 12 },
     { header: 'Respuestas', key: 'respuestas', width: 12 },
   ];

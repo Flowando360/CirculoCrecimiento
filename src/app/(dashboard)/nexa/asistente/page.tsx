@@ -47,7 +47,7 @@ export default function AsistenteIaPage() {
   return (
     <div className="max-w-2xl mx-auto flex flex-col h-[calc(100vh-8rem)]">
       <div className="mb-4">
-        <h1 className="font-display text-2xl font-semibold text-marmol-900 flex items-center gap-2">
+        <h1 className="font-display text-2xl font-semibold text-secundario flex items-center gap-2">
           <Bot size={22} className="text-flow-500" /> Asistente IA
         </h1>
         <p className="text-sm text-marmol-500 mt-1">

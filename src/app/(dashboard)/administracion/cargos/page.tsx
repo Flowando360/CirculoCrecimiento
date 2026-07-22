@@ -22,7 +22,7 @@ export default async function AdminCargosPage() {
     <div className="space-y-6">
       <div className="flex items-start justify-between flex-wrap gap-4">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-marmol-900">Cargos y perfiles</h1>
+          <h1 className="font-display text-2xl font-semibold text-secundario">Cargos y perfiles</h1>
           <p className="text-sm text-marmol-500 mt-1">
             Plantilla estándar de la dimensión Saber: formación, habilidades funcionales y técnicas,
             destrezas y experiencia mínima por cargo.

@@ -49,7 +49,7 @@ export default async function InformeSSTPage({
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-marmol-900">Informe de cumplimiento SST</h1>
+          <h1 className="font-display text-2xl font-semibold text-secundario">Informe de cumplimiento SST</h1>
           <p className="text-sm text-marmol-500 mt-1">
             Certificaciones registradas y alertas SST abiertas. Los exámenes médicos y la dotación (EPP)
             se muestran como referencia de lo exigido por cargo — hoy no hay un registro digital de si ya
@@ -96,7 +96,7 @@ export default async function InformeSSTPage({
       </form>
 
       <div className="card p-5">
-        <h2 className="font-display font-semibold text-marmol-900 mb-3">Certificaciones</h2>
+        <h2 className="font-display font-semibold text-secundario mb-3">Certificaciones</h2>
         {!informe || informe.certificaciones.length === 0 ? (
           <EmptyState icon={ShieldCheck} titulo="Sin certificaciones registradas" />
         ) : (
@@ -134,7 +134,7 @@ export default async function InformeSSTPage({
       </div>
 
       <div className="card p-5">
-        <h2 className="font-display font-semibold text-marmol-900 mb-3">Alertas SST abiertas</h2>
+        <h2 className="font-display font-semibold text-secundario mb-3">Alertas SST abiertas</h2>
         {!informe || informe.alertas.length === 0 ? (
           <EmptyState icon={ShieldCheck} titulo="Sin alertas SST abiertas" />
         ) : (
@@ -153,7 +153,7 @@ export default async function InformeSSTPage({
       </div>
 
       <div className="card p-5">
-        <h2 className="font-display font-semibold text-marmol-900 mb-1">Exámenes médicos y EPP exigidos por cargo</h2>
+        <h2 className="font-display font-semibold text-secundario mb-1">Exámenes médicos y EPP exigidos por cargo</h2>
         <p className="text-xs text-marmol-400 mb-3">
           Lo que exige el cargo de cada persona, según su perfil. Sin pantalla de captura todavía, así que el
           estado siempre aparece como "Sin dato registrado" — no significa que no se haya hecho, sino que no

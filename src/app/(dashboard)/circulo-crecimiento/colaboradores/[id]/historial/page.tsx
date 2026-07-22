@@ -51,14 +51,14 @@ export default async function HistorialColaboradorPage({ params }: { params: { i
         >
           <ArrowLeft size={12} /> Volver a la ficha
         </Link>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900 flex items-center gap-2">
+        <h1 className="font-display text-2xl font-semibold text-secundario flex items-center gap-2">
           <History size={22} className="text-flow-600" /> Historial
         </h1>
         <p className="text-sm text-marmol-500 mt-1">{colaborador.nombre_completo}</p>
       </div>
 
       <div className="card p-5">
-        <h2 className="font-display font-semibold text-marmol-900 mb-3">Línea de tiempo</h2>
+        <h2 className="font-display font-semibold text-secundario mb-3">Línea de tiempo</h2>
         <ListaHistorialMovimientos
           colaboradorId={params.id}
           itemsIniciales={(movimientosRaw ?? []) as unknown as MovimientoItem[]}
@@ -69,7 +69,7 @@ export default async function HistorialColaboradorPage({ params }: { params: { i
 
       {esAdminTh && (
         <div className="card p-5">
-          <h2 className="font-display font-semibold text-marmol-900 mb-1">Entrevista de salida</h2>
+          <h2 className="font-display font-semibold text-secundario mb-1">Entrevista de salida</h2>
           <p className="text-xs text-marmol-400 mb-3">Solo visible para Talento Humano.</p>
           <EntrevistaSalida colaboradorId={params.id} inicial={entrevista as any} />
         </div>

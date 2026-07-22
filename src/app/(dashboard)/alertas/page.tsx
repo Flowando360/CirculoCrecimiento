@@ -27,9 +27,9 @@ export default async function AlertasPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">Alertas y fechas clave</h1>
+        <h1 className="font-display text-2xl font-semibold text-secundario">Alertas y fechas clave</h1>
         <p className="text-sm text-marmol-500 mt-1">
-          Contratos, SST (exámenes, certificaciones, EPP), formación, ciclos de evaluación y cultura
+          Contratos, SST (exámenes, certificaciones, EPP), formación, Ciclos de Crecimiento y cultura
           (cumpleaños, aniversarios).
         </p>
       </div>

@@ -13,7 +13,7 @@ export default function ModuloAyudaPage({ params }: { params: { slug: string } }
         <Link href="/ayuda" className="inline-flex items-center gap-1 text-xs text-marmol-400 hover:text-marmol-600 mb-2">
           <ArrowLeft size={12} /> Centro de Ayuda
         </Link>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">{modulo.titulo}</h1>
+        <h1 className="font-display text-2xl font-semibold text-secundario">{modulo.titulo}</h1>
         <p className="text-sm text-marmol-500 mt-1">{modulo.descripcion}</p>
       </div>
 

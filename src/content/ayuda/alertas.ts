@@ -10,7 +10,7 @@ export const moduloAlertas: ModuloAyuda = {
       ruta: '/alertas',
       titulo: 'Alertas y fechas clave',
       resumen:
-        'Lista de alertas pendientes o notificadas: vencimientos de contratos, exámenes/certificaciones/EPP de SST, formación, ciclos de evaluación y fechas de cultura (cumpleaños, aniversarios).',
+        'Lista de alertas pendientes o notificadas: vencimientos de contratos, exámenes/certificaciones/EPP de SST, formación, Ciclos de Crecimiento y fechas de cultura (cumpleaños, aniversarios).',
       camposYBotones: [
         { nombre: 'Punto de color (severidad)', explicacion: 'Informativa, atención o crítica — según qué tan cerca está el vencimiento.' },
         { nombre: 'Etiqueta de tipo', explicacion: 'Contrato, SST, formación, ciclo o cultura.' },

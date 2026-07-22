@@ -18,11 +18,11 @@ export default async function AdminOrganigramaPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">Editar organigrama</h1>
+        <h1 className="font-display text-2xl font-semibold text-secundario">Editar organigrama</h1>
         <p className="text-sm text-marmol-500 mt-1">
           El líder de cada persona es la única fuente de verdad: pares y colaboradores a cargo se
           deducen automáticamente. Cambiar el líder aquí actualiza al instante la arquitectura de
-          evaluadores del próximo ciclo.
+          acompañantes del próximo ciclo.
         </p>
       </div>
 

@@ -13,7 +13,7 @@ export default function AyudaHomePage() {
   return (
     <div className="space-y-8 max-w-3xl">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900 flex items-center gap-2">
+        <h1 className="font-display text-2xl font-semibold text-secundario flex items-center gap-2">
           <HelpCircle size={22} className="text-flow-500" /> Centro de Ayuda
         </h1>
         <p className="text-sm text-marmol-500 mt-1">
@@ -50,7 +50,7 @@ export default function AyudaHomePage() {
           <div className="grid sm:grid-cols-2 gap-4">
             {MODULOS.map((m) => (
               <Link key={m.slug} href={`/ayuda/modulo/${m.slug}`} className="card p-5 hover:border-flow-300 transition">
-                <h2 className="font-display font-semibold text-marmol-900">{m.titulo}</h2>
+                <h2 className="font-display font-semibold text-secundario">{m.titulo}</h2>
                 <p className="text-sm text-marmol-500 mt-1">{m.descripcion}</p>
                 <p className="text-xs text-marmol-400 mt-2">{m.paginas.length} pantallas documentadas</p>
               </Link>

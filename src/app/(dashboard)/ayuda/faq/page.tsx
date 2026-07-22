@@ -20,7 +20,7 @@ export default function FaqPage() {
         <Link href="/ayuda" className="inline-flex items-center gap-1 text-xs text-marmol-400 hover:text-marmol-600 mb-2">
           <ArrowLeft size={12} /> Centro de Ayuda
         </Link>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">Preguntas frecuentes</h1>
+        <h1 className="font-display text-2xl font-semibold text-secundario">Preguntas frecuentes</h1>
       </div>
 
       <div className="relative">

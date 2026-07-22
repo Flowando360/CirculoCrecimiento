@@ -39,6 +39,15 @@ const config: Config = {
         alto: '#15803d',
         medio: '#b45309',
         bajo: '#b91c1c',
+        // Paleta de marca (docs/sistema-diseno-y-lenguaje.md, sección 2)
+        // primario = flow-500, ya definido arriba. No cambiar estos HEX sin
+        // actualizar antes ese documento — es la fuente de verdad aprobada.
+        secundario: '#1B2A5B', // azul marino — encabezados, textos importantes, nav
+        acento: '#5EEAD4', // menta — logros, insignias, gamificación
+      },
+      backgroundImage: {
+        // Degradado morado → menta: hero, barras de progreso, tarjetas de logro
+        crecimiento: 'linear-gradient(90deg, #7C3AED, #5EEAD4)',
       },
       fontFamily: {
         display: ['var(--font-display)', 'system-ui', 'sans-serif'],

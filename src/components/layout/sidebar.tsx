@@ -50,7 +50,7 @@ const NAV: NavGroup[] = [
     titulo: 'Círculo de Crecimiento 360°',
     items: [
       { href: '/circulo-crecimiento/colaboradores', label: 'Colaboradores', icon: Users, roles: ['admin_th', 'lider', 'gerencia'] },
-      { href: '/circulo-crecimiento/ciclos', label: 'Ciclos de evaluación', icon: CalendarClock, roles: ['admin_th', 'lider'] },
+      { href: '/circulo-crecimiento/ciclos', label: 'Ciclos de Crecimiento', icon: CalendarClock, roles: ['admin_th', 'lider'] },
       { href: '/circulo-crecimiento/pdi', label: 'Planes de Desarrollo', icon: Target, roles: ['admin_th', 'lider', 'colaborador'] },
       { href: '/circulo-crecimiento/organigrama', label: 'Organigrama', icon: Network, roles: ['admin_th', 'lider', 'gerencia'] },
       { href: '/circulo-crecimiento/indicadores', label: 'Indicadores', icon: BarChart3, roles: ['admin_th', 'lider', 'gerencia'] },
@@ -91,17 +91,17 @@ export function Sidebar({ rol }: { rol: RolUsuario }) {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 shrink-0 h-screen sticky top-0 border-r border-marmol-200 bg-white flex flex-col">
-      <div className="px-5 py-5 border-b border-marmol-100">
+    <aside className="w-64 shrink-0 h-screen sticky top-0 bg-secundario flex flex-col">
+      <div className="px-5 py-5 border-b border-white/10">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-flow-500 flex items-center justify-center text-white font-display text-sm font-bold">
+          <div className="h-8 w-8 rounded-lg bg-crecimiento flex items-center justify-center text-white font-display text-sm font-bold">
             CC
           </div>
           <div>
-            <p className="font-display text-sm font-semibold leading-tight text-marmol-900">
+            <p className="font-display text-sm font-semibold leading-tight text-white">
               Círculo de Crecimiento
             </p>
-            <p className="text-xs text-marmol-400 leading-tight">Mármoles y Servicios</p>
+            <p className="text-xs text-white/50 leading-tight">Mármoles y Servicios</p>
           </div>
         </div>
       </div>
@@ -113,7 +113,7 @@ export function Sidebar({ rol }: { rol: RolUsuario }) {
           return (
             <div key={gi}>
               {grupo.titulo && (
-                <p className="px-2 mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-marmol-400">
+                <p className="px-2 mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-white/40">
                   {grupo.titulo}
                 </p>
               )}
@@ -128,8 +128,8 @@ export function Sidebar({ rol }: { rol: RolUsuario }) {
                       className={cn(
                         'flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm transition',
                         activo
-                          ? 'bg-flow-50 text-flow-700 font-medium'
-                          : 'text-marmol-600 hover:bg-marmol-100'
+                          ? 'bg-flow-500/25 text-white font-medium'
+                          : 'text-white/70 hover:bg-white/10 hover:text-white'
                       )}
                     >
                       <Icon size={16} strokeWidth={2} />

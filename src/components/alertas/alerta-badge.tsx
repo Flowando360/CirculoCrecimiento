@@ -8,7 +8,7 @@ const ETIQUETAS: Record<string, string> = {
   sst_induccion: 'Inducción SST',
   sst_epp: 'EPP',
   formacion_vencimiento: 'Formación',
-  ciclo_evaluacion: 'Ciclo de evaluación',
+  ciclo_evaluacion: 'Ciclo de Crecimiento',
   cumpleanos: 'Cumpleaños',
   aniversario_ingreso: 'Aniversario',
   otro: 'Otro',

@@ -69,7 +69,7 @@ export default async function SaberColaboradorPage({ params }: { params: { id: s
         >
           <ArrowLeft size={12} /> Volver a la ficha
         </Link>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900 flex items-center gap-2">
+        <h1 className="font-display text-2xl font-semibold text-secundario flex items-center gap-2">
           <GraduationCap size={22} className="text-saber" /> Verificación de Saber
         </h1>
         <p className="text-sm text-marmol-500 mt-1">{colaborador.nombre_completo}</p>
@@ -77,7 +77,7 @@ export default async function SaberColaboradorPage({ params }: { params: { id: s
 
       {BLOQUES.map(({ valor, titulo }) => (
         <div key={valor} className="card p-5 space-y-3">
-          <h2 className="font-display font-semibold text-marmol-900">{titulo}</h2>
+          <h2 className="font-display font-semibold text-secundario">{titulo}</h2>
 
           {valor === 'formacion_academica' && (
             <p className="text-xs text-marmol-500 bg-marmol-50 rounded-lg px-3 py-2">

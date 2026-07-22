@@ -33,10 +33,10 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-marmol-50 px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-flow-500 text-white font-display text-xl font-bold mb-3">
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-crecimiento text-white font-display text-xl font-bold mb-3">
             CC
           </div>
-          <h1 className="font-display text-xl font-semibold text-marmol-900">
+          <h1 className="font-display text-xl font-semibold text-secundario">
             Círculo de Crecimiento 360°
           </h1>
           <p className="text-sm text-marmol-500 mt-1">Mármoles y Servicios · by FlowAndo</p>

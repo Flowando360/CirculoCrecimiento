@@ -59,17 +59,17 @@ export const moduloNexa: ModuloAyuda = {
       resumen: 'Programación de simulacros de seguridad y dinámicas de cultura.',
       camposYBotones: [
         { nombre: 'Nuevo simulacro (admin_th)', explicacion: 'Título, descripción, fecha y número de participantes esperados.' },
-        { nombre: 'Tarjeta de simulacro', explicacion: 'Clic para entrar al detalle y registrar asistencia/calificación.' },
+        { nombre: 'Tarjeta de simulacro', explicacion: 'Clic para entrar al detalle y registrar asistencia/valoración.' },
       ],
     },
     {
       slug: 'detalle-simulacro',
       ruta: '/nexa/simulacros/*',
       titulo: 'Detalle de un simulacro',
-      resumen: 'Registro de quién asistió y su calificación de desempeño (1-5).',
+      resumen: 'Registro de quién asistió y su valoración de desempeño (1-5).',
       camposYBotones: [
         { nombre: 'Asistió (admin_th)', explicacion: 'Casilla por persona.' },
-        { nombre: 'Calificación (admin_th)', explicacion: 'De 1 a 5, opcional.' },
+        { nombre: 'Valoración (admin_th)', explicacion: 'De 1 a 5, opcional.' },
         { nombre: 'Guardar', explicacion: 'Guarda esa fila individualmente.' },
       ],
       notas: ['Líder y colaborador ven de solo lectura los participantes que la empresa permite ver (su equipo o ellos mismos).'],

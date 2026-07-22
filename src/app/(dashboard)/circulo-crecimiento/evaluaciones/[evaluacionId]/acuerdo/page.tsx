@@ -47,7 +47,7 @@ export default async function AcuerdoCrecimientoPage({ params }: { params: { eva
         >
           <ArrowLeft size={12} /> Volver al ciclo
         </Link>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900 flex items-center gap-2">
+        <h1 className="font-display text-2xl font-semibold text-secundario flex items-center gap-2">
           <HandshakeIcon size={22} className="text-flow-600" /> Acuerdo de crecimiento
         </h1>
         <p className="text-sm text-marmol-500 mt-1">Compromisos acordados con {colaborador.nombre_completo}.</p>

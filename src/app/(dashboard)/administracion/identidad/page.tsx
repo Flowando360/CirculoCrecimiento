@@ -22,10 +22,10 @@ export default async function IdentidadOrganizacionalPage() {
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-marmol-900">Identidad Organizacional</h1>
+        <h1 className="font-display text-2xl font-semibold text-secundario">Identidad Organizacional</h1>
         <p className="text-sm text-marmol-500 mt-1">
           Propósito superior, visión, principios y valores — visibles para toda la empresa, y
-          usados como referencia en las evaluaciones y en el feed de Nexa.
+          usados como referencia en los Encuentros de Crecimiento y en el feed de Nexa.
         </p>
       </div>
 

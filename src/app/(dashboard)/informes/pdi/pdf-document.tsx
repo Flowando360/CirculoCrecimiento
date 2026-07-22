@@ -4,7 +4,7 @@ import type { PlanInforme } from './data';
 
 const styles = StyleSheet.create({
   page: { padding: 32, fontSize: 9, fontFamily: 'Helvetica' },
-  titulo: { fontSize: 16, fontWeight: 700, marginBottom: 2 },
+  titulo: { fontSize: 16, fontWeight: 700, marginBottom: 2, color: '#1B2A5B' },
   subtitulo: { fontSize: 9, color: '#6b7280', marginBottom: 16 },
   fila: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#e5e7eb', paddingVertical: 6 },
   filaEncabezado: { backgroundColor: '#f3f4f6', fontWeight: 700 },

@@ -94,7 +94,7 @@ export function PanelParticipantesSimulacro({
           <tr className="border-b border-marmol-200 text-left text-xs uppercase tracking-wide text-marmol-400">
             <th className="px-4 py-3 font-medium">Colaborador</th>
             <th className="px-4 py-3 font-medium">Asistió</th>
-            <th className="px-4 py-3 font-medium">Calificación</th>
+            <th className="px-4 py-3 font-medium">Valoración</th>
             <th className="px-4 py-3 font-medium"></th>
           </tr>
         </thead>

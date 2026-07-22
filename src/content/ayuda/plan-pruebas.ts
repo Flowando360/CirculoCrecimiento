@@ -17,7 +17,7 @@ export const planPruebas: SeccionPlanPruebas[] = [
         titulo: 'El menú y las pantallas respetan el rol',
         rolNecesario: 'Un colaborador y, por separado, un líder',
         pasos: [
-          { paso: 'Inicia sesión como colaborador y revisa el menú lateral.', resultadoEsperado: 'No aparecen las secciones de Administración ni "Ciclos de evaluación".' },
+          { paso: 'Inicia sesión como colaborador y revisa el menú lateral.', resultadoEsperado: 'No aparecen las secciones de Administración ni "Ciclos de Crecimiento".' },
           { paso: 'Intenta entrar directamente a una URL de administración (ej. /administracion/usuarios) escribiéndola en el navegador.', resultadoEsperado: 'Redirige a Inicio, no muestra la pantalla.' },
           { paso: 'Inicia sesión como líder y entra a Colaboradores.', resultadoEsperado: 'Solo ve a las personas que le reportan directamente, no a toda la empresa.' },
         ],
@@ -25,24 +25,24 @@ export const planPruebas: SeccionPlanPruebas[] = [
     ],
   },
   {
-    modulo: 'Círculo de Crecimiento — ciclo completo de evaluación',
+    modulo: 'Círculo de Crecimiento — ciclo completo de Encuentros de Crecimiento',
     escenarios: [
       {
-        titulo: 'Abrir un ciclo y generar evaluaciones',
+        titulo: 'Abrir un ciclo y generar Encuentros de Crecimiento',
         rolNecesario: 'admin_th',
         pasos: [
-          { paso: 'Entra a Ciclos de evaluación → "Abrir nuevo ciclo".', resultadoEsperado: 'Formulario pide nombre y fechas.' },
+          { paso: 'Entra a Ciclos de Crecimiento → "Abrir nuevo ciclo".', resultadoEsperado: 'Formulario pide nombre y fechas.' },
           { paso: 'Completa y guarda.', resultadoEsperado: 'El nuevo ciclo aparece en la lista, en estado "Planeado" o "Abierto".' },
-          { paso: 'Entra al detalle del ciclo y usa el panel de generación de evaluaciones para un líder con equipo.', resultadoEsperado: 'Se crean las tareas de autoevaluación, líder, pares y colaboradores a cargo para ese equipo.' },
+          { paso: 'Entra al detalle del ciclo y usa el panel de generación de Encuentros de Crecimiento para un líder con equipo.', resultadoEsperado: 'Se crean las tareas de autoevaluación, líder, pares y colaboradores a cargo para ese equipo.' },
         ],
       },
       {
-        titulo: 'Responder una evaluación (Hacer/Deber)',
-        rolNecesario: 'Cualquier rol con una tarea de evaluación asignada',
+        titulo: 'Responder un Encuentro de Crecimiento (Hacer/Deber)',
+        rolNecesario: 'Cualquier rol con una tarea de valoración asignada',
         pasos: [
-          { paso: 'Entra a la evaluación pendiente (desde el detalle del ciclo o la notificación).', resultadoEsperado: 'Aparece la lista de ítems del bloque Hacer y Deber.' },
-          { paso: 'Califica un ítem y escribe una observación.', resultadoEsperado: 'Se guarda de inmediato, sin botón de "enviar todo".' },
-          { paso: 'Vuelve al detalle del ciclo.', resultadoEsperado: 'El % de avance de esa evaluación aumentó.' },
+          { paso: 'Entra al Encuentro de Crecimiento pendiente (desde el detalle del ciclo o la notificación).', resultadoEsperado: 'Aparece la lista de ítems del bloque Hacer y Deber.' },
+          { paso: 'Valora un ítem y escribe una observación.', resultadoEsperado: 'Se guarda de inmediato, sin botón de "enviar todo".' },
+          { paso: 'Vuelve al detalle del ciclo.', resultadoEsperado: 'El % de avance de ese Encuentro de Crecimiento aumentó.' },
         ],
       },
       {
@@ -50,7 +50,7 @@ export const planPruebas: SeccionPlanPruebas[] = [
         rolNecesario: 'Líder directo y admin_th',
         pasos: [
           { paso: 'Desde el detalle del ciclo, entra al Brief de un colaborador de tu equipo.', resultadoEsperado: 'Muestra el resultado de Hacer/Deber y un formulario editable.' },
-          { paso: 'Completa y guarda el Brief.', resultadoEsperado: 'Queda guardado; el colaborador evaluado NO puede verlo.' },
+          { paso: 'Completa y guarda el Brief.', resultadoEsperado: 'Queda guardado; el colaborador en crecimiento NO puede verlo.' },
           { paso: 'Entra al Acuerdo de crecimiento de la misma persona, completa los compromisos y firma.', resultadoEsperado: 'La casilla de firma queda marcada con la fecha.' },
           { paso: 'Inicia sesión como ese colaborador y firma su parte del acuerdo.', resultadoEsperado: 'Ambas firmas quedan registradas.' },
         ],
@@ -70,10 +70,10 @@ export const planPruebas: SeccionPlanPruebas[] = [
       },
       {
         titulo: 'Guía del Flow',
-        rolNecesario: 'admin_th para crear/calificar; colaborador para comentar',
+        rolNecesario: 'admin_th para crear/valorar; colaborador para comentar',
         pasos: [
           { paso: 'Como admin_th, crea una nueva aplicación de Guía del Flow para una persona sin registro previo.', resultadoEsperado: 'Aparecen los 4 bloques de aspectos, vacíos.' },
-          { paso: 'Sube el PDF de la guía y califica un aspecto (1-5).', resultadoEsperado: 'El PDF queda accesible con un link temporal; el puntaje se guarda.' },
+          { paso: 'Sube el PDF de la guía y valora un aspecto (1-5).', resultadoEsperado: 'El PDF queda accesible con un link temporal; el puntaje se guarda.' },
           { paso: 'Inicia sesión como esa persona y escribe un comentario en un aspecto.', resultadoEsperado: 'El comentario se guarda asociado a ese aspecto.' },
         ],
       },
@@ -135,7 +135,7 @@ export const planPruebas: SeccionPlanPruebas[] = [
         rolNecesario: 'admin_th',
         pasos: [
           { paso: 'Crea un nuevo simulacro con fecha y participantes esperados.', resultadoEsperado: 'Aparece en el listado.' },
-          { paso: 'Entra al detalle y marca asistencia + calificación de una persona.', resultadoEsperado: 'Queda guardado por fila.' },
+          { paso: 'Entra al detalle y marca asistencia + valoración de una persona.', resultadoEsperado: 'Queda guardado por fila.' },
         ],
       },
       {
@@ -202,7 +202,7 @@ export const planPruebas: SeccionPlanPruebas[] = [
       {
         titulo: 'Editar el organigrama',
         rolNecesario: 'admin_th',
-        pasos: [{ paso: 'Cambia el líder directo de una persona.', resultadoEsperado: 'Se refleja de inmediato en Colaboradores → Organigrama y en quién evalúa a quién.' }],
+        pasos: [{ paso: 'Cambia el líder directo de una persona.', resultadoEsperado: 'Se refleja de inmediato en Colaboradores → Organigrama y en quién acompaña a quién.' }],
       },
       {
         titulo: 'Editar la identidad organizacional',

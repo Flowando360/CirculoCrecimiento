@@ -29,7 +29,7 @@ export default async function NexaDirectorioPage() {
     <div className="space-y-6">
       <div className="flex items-start justify-between flex-wrap gap-4">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-marmol-900">Directorio de aliados</h1>
+          <h1 className="font-display text-2xl font-semibold text-secundario">Directorio de aliados</h1>
           <p className="text-sm text-marmol-500 mt-1">
             ARL, asesores SST y proveedores de formación certificada conectados con la empresa.
           </p>
