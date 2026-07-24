@@ -88,6 +88,46 @@ export const planPruebas: SeccionPlanPruebas[] = [
     ],
   },
   {
+    modulo: 'Círculo de Crecimiento — Inducción y Documentos',
+    escenarios: [
+      {
+        titulo: 'Plan de inducción al registrar un ingreso',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Registra el ingreso (o cambio de cargo) de un colaborador con un cargo que ya tiene perfil cargado.', resultadoEsperado: 'Se genera automáticamente el checklist de inducción: puntos comunes + puntos específicos del cargo.' },
+          { paso: 'Entra a la ficha de esa persona → Inducción.', resultadoEsperado: 'Ve la lista completa con la barra de avance en 0%.' },
+        ],
+      },
+      {
+        titulo: 'Marcar un punto de inducción como cumplido',
+        rolNecesario: 'Líder directo o admin_th',
+        pasos: [
+          { paso: 'Marca un punto del checklist de inducción de un colaborador de su equipo.', resultadoEsperado: 'Queda marcado con quién lo marcó y la fecha; la barra de avance sube.' },
+          { paso: 'Inicia sesión como un líder que NO es el directo de esa persona e intenta lo mismo.', resultadoEsperado: 'No puede ver ni marcar el checklist de esa persona.' },
+        ],
+      },
+      {
+        titulo: 'Cargar hoja de vida y contrato, y generar el certificado laboral',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Entra a la ficha de un colaborador → Documentos y sube el archivo de la hoja de vida.', resultadoEsperado: 'Queda disponible para descargar; se puede reemplazar por otro archivo después.' },
+          { paso: 'Guarda el contrato (archivo) junto con el salario de la persona.', resultadoEsperado: 'Queda guardado; se puede editar después sin perder el histórico de otros documentos.' },
+          { paso: 'Genera el certificado laboral sin marcar "Incluir el salario".', resultadoEsperado: 'Descarga un PDF con el logo de la empresa, cargo y fecha de ingreso, sin el dato de salario.' },
+          { paso: 'Genera el certificado laboral marcando "Incluir el salario".', resultadoEsperado: 'El PDF trae el salario tal como quedó registrado en el contrato.' },
+          { paso: 'Inicia sesión como el líder directo de esa persona y entra a su ficha.', resultadoEsperado: 'No aparece la sección de Documentos (solo admin_th y la propia persona la ven).' },
+        ],
+      },
+      {
+        titulo: 'Editar los datos de la empresa y confirmarlos en un certificado nuevo',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Entra a Administración → Configuración → "Datos de la empresa" y cambia, por ejemplo, el nombre de quien firma.', resultadoEsperado: 'Guarda correctamente.' },
+          { paso: 'Genera un certificado laboral nuevo de cualquier colaborador.', resultadoEsperado: 'El PDF ya muestra el nuevo dato guardado.' },
+        ],
+      },
+    ],
+  },
+  {
     modulo: 'Nexa — Feed corporativo',
     escenarios: [
       {
@@ -99,6 +139,14 @@ export const planPruebas: SeccionPlanPruebas[] = [
           { paso: 'Publica uno con un link externo y usa "Vista previa".', resultadoEsperado: 'Trae título/imagen/descripción del sitio (si el sitio los tiene) antes de publicar.' },
           { paso: 'Publica uno con un video o imagen destacada.', resultadoEsperado: 'Se reproduce/visualiza directo en el feed, sin necesitar descarga.' },
           { paso: 'Como admin_th, marca una publicación como "Fijar arriba del feed".', resultadoEsperado: 'Queda siempre primera en la lista.' },
+        ],
+      },
+      {
+        titulo: 'Reaccionar a una publicación',
+        rolNecesario: 'Cualquier usuario',
+        pasos: [
+          { paso: 'Presiona "Me gusta" en una publicación del feed.', resultadoEsperado: 'Sube el contador y el botón queda marcado como activo.' },
+          { paso: 'Vuelve a presionarlo.', resultadoEsperado: 'Se quita la reacción y baja el contador.' },
         ],
       },
     ],
@@ -146,6 +194,15 @@ export const planPruebas: SeccionPlanPruebas[] = [
           { paso: 'Elimínalo.', resultadoEsperado: 'Pide confirmación y luego desaparece de la lista.' },
         ],
       },
+      {
+        titulo: 'Mi cuaderno personal',
+        rolNecesario: 'Cualquier usuario',
+        pasos: [
+          { paso: 'Entra a Nexa → Mi cuaderno y crea una nota.', resultadoEsperado: 'Queda guardada y visible en la lista.' },
+          { paso: 'Edítala y luego elimínala.', resultadoEsperado: 'Los cambios y la eliminación se reflejan de inmediato.' },
+          { paso: 'Inicia sesión como admin_th y busca alguna forma de ver las notas de otra persona.', resultadoEsperado: 'No existe ninguna pantalla que las muestre — son estrictamente privadas.' },
+        ],
+      },
     ],
   },
   {
@@ -173,9 +230,19 @@ export const planPruebas: SeccionPlanPruebas[] = [
         titulo: 'Exportar cada informe',
         rolNecesario: 'admin_th, líder o gerencia según el informe',
         pasos: [
-          { paso: 'Entra a cada uno de los 4 informes (360°, PDI, SST, Brechas).', resultadoEsperado: 'Cada uno carga con datos reales, sin errores.' },
+          { paso: 'Entra a cada uno de los 4 informes exportables (360°, PDI, SST, Brechas).', resultadoEsperado: 'Cada uno carga con datos reales, sin errores.' },
           { paso: 'Presiona "Exportar PDF" en cada uno.', resultadoEsperado: 'Descarga un PDF legible con la información correspondiente.' },
           { paso: 'Presiona "Exportar Excel" en cada uno.', resultadoEsperado: 'Descarga un archivo .xlsx con la misma información en formato tabla.' },
+        ],
+      },
+      {
+        titulo: 'Los 4 informes nuevos cargan y respetan el alcance por rol',
+        rolNecesario: 'admin_th, líder o gerencia según el informe',
+        pasos: [
+          { paso: 'Entra a Informes → Formación con cualquier rol.', resultadoEsperado: 'Carga sin error, con el estado de cursos según el alcance de ese rol (equipo o toda la empresa).' },
+          { paso: 'Entra a Informes → Cultura y Engagement como admin_th, líder y gerencia.', resultadoEsperado: 'Los tres roles pueden verlo, con datos consistentes.' },
+          { paso: 'Entra a Informes → Consolidado Gerencial como líder (no admin_th ni gerencia).', resultadoEsperado: 'No tiene acceso — es exclusivo de admin_th y gerencia.' },
+          { paso: 'Entra a Informes → Histórico Comparativo.', resultadoEsperado: 'Muestra la comparación entre el ciclo actual y el anterior, igual que el widget de Inicio.' },
         ],
       },
     ],
@@ -218,6 +285,29 @@ export const planPruebas: SeccionPlanPruebas[] = [
         pasos: [
           { paso: 'Con un ciclo en estado "planeado", entra a Configuración y cambia los pesos.', resultadoEsperado: 'Guarda correctamente si los porcentajes suman 100% en cada grupo.' },
           { paso: 'Abre ese ciclo y vuelve a Configuración.', resultadoEsperado: 'Ya no aparece ese ciclo como editable (mensaje de "no hay ningún ciclo planeado" si era el único).' },
+        ],
+      },
+    ],
+  },
+  {
+    modulo: 'Comunicación — Mensajes y Notificaciones',
+    escenarios: [
+      {
+        titulo: 'Enviar y leer un mensaje directo',
+        rolNecesario: 'Cualquier usuario',
+        pasos: [
+          { paso: 'Entra a Mensajes → "Nuevo mensaje" y elige a cualquier persona de la empresa (no necesariamente de tu equipo).', resultadoEsperado: 'Se abre el hilo de conversación.' },
+          { paso: 'Escribe y envía un mensaje.', resultadoEsperado: 'Aparece en el hilo; en el otro usuario sube el contador de mensajes sin leer en el encabezado.' },
+          { paso: 'Inicia sesión como el destinatario y abre esa conversación.', resultadoEsperado: 'El mensaje queda marcado como leído automáticamente y el contador baja.' },
+        ],
+      },
+      {
+        titulo: 'Notificaciones y marcado de leídas',
+        rolNecesario: 'Cualquier usuario',
+        pasos: [
+          { paso: 'Genera una alerta próxima a vencer para una persona (o espera a que el proceso automático la cree).', resultadoEsperado: 'Aparece una notificación nueva para esa persona, con el contador en el ícono de sobre del encabezado.' },
+          { paso: 'Entra a Notificaciones y marca una como leída.', resultadoEsperado: 'Baja el contador; esa notificación ya no cuenta como pendiente.' },
+          { paso: 'Presiona "Marcar todas como leídas".', resultadoEsperado: 'El contador queda en cero.' },
         ],
       },
     ],

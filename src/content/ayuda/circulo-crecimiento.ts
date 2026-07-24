@@ -29,7 +29,9 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
         { nombre: 'Tarjetas HACER / DEBER', explicacion: 'Último índice calculado y su semáforo (Alto/Medio/Bajo), según el Encuentro de Crecimiento más reciente.' },
         { nombre: 'Perfil de cargo', explicacion: 'Objetivo del cargo y si tiene personal a cargo (definido en Administración → Cargos).' },
         { nombre: 'Hoja de vida y certificaciones', explicacion: 'Formación, cursos y certificaciones cargadas, con fecha de vencimiento si aplica.' },
+        { nombre: 'Inducción', explicacion: '% de avance del plan de inducción de la persona (comunes + específicos del cargo). Lleva al checklist completo.' },
         { nombre: 'Plan de Desarrollo Individual', explicacion: 'Las acciones de desarrollo activas de la persona, con su origen (Hacer/Deber/Saber/Ser) y estado.' },
+        { nombre: 'Documentos y certificado laboral', explicacion: 'Solo visible para admin_th y el propio colaborador. Lleva a la hoja de vida, el contrato y el generador del certificado laboral.' },
         { nombre: 'Ver historial y línea de tiempo', explicacion: 'Solo visible para admin_th y el líder directo. Lleva a movimientos de cargo y, si aplica, entrevista de salida.' },
       ],
       notas: [
@@ -85,6 +87,38 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
       ],
       notas: [
         'Acceso exclusivo: admin_th (toda la empresa) y el líder directo (su equipo, sin ver la entrevista de salida). Gerencia y el propio colaborador no tienen acceso a esta pantalla.',
+      ],
+    },
+    {
+      slug: 'induccion',
+      ruta: '/circulo-crecimiento/colaboradores/*/induccion',
+      titulo: 'Inducción',
+      resumen:
+        'Checklist de inducción de la persona: los puntos comunes a toda la empresa (propósito, visión, principios y valores) más los específicos de su cargo (funciones, riesgos SST, EPP, exámenes de ingreso, formación mínima) — generados automáticamente a partir del perfil de cargo y de la Identidad Organizacional.',
+      camposYBotones: [
+        { nombre: 'Barra de avance', explicacion: 'Muestra qué porcentaje del plan de inducción ya se cumplió.' },
+        { nombre: 'Casilla de cada punto', explicacion: 'Marca un punto como cumplido — queda registrado quién lo marcó y cuándo.' },
+      ],
+      notas: [
+        'Puede marcar puntos como cumplidos: admin_th o el líder directo de la persona. El propio colaborador y gerencia solo consultan.',
+        'Al registrar un ingreso en el Historial, se asignan automáticamente los puntos comunes + los del cargo. Al registrar un cambio de cargo, solo se agregan los puntos del cargo nuevo (no se repiten los comunes).',
+      ],
+    },
+    {
+      slug: 'documentos',
+      ruta: '/circulo-crecimiento/colaboradores/*/documentos',
+      titulo: 'Documentos y certificado laboral',
+      resumen:
+        'La hoja de vida (el archivo del CV) y el contrato de la persona, y el generador del certificado laboral en PDF. No confundir con "Hoja de vida y certificaciones", que es el registro de formación/certificaciones con fecha de vencimiento.',
+      camposYBotones: [
+        { nombre: 'Hoja de vida', explicacion: 'Sube o reemplaza el archivo (PDF/Word) de la hoja de vida de la persona.' },
+        { nombre: 'Contrato', explicacion: 'Sube o reemplaza el archivo del contrato, y registra el salario — el salario es la fuente que usa el certificado laboral. El archivo es opcional si solo quieres actualizar el salario.' },
+        { nombre: 'Incluir el salario', explicacion: 'Casilla que decide si el certificado laboral que descargues trae o no el salario.' },
+        { nombre: 'Descargar PDF (certificado laboral)', explicacion: 'Genera al momento el certificado, con el logo de la empresa y los datos configurados en Administración → Configuración.' },
+      ],
+      notas: [
+        'Sección de manejo exclusivo de Talento Humano y del propio colaborador — ni siquiera el líder directo tiene acceso, porque el contrato trae el salario.',
+        'Solo admin_th puede subir/reemplazar archivos o cambiar el salario; el colaborador solo consulta lo suyo.',
       ],
     },
     {

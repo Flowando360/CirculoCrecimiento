@@ -12,7 +12,9 @@ export const moduloGeneral: ModuloAyuda = {
       resumen:
         'La primera pantalla al entrar. Se adapta según tu rol: Talento Humano y Gerencia ven el panorama completo de la empresa; un líder ve el resumen de su equipo; un colaborador ve accesos directos a su propio espacio.',
       camposYBotones: [
+        { nombre: 'Nuestro propósito', explicacion: 'Tarjeta con el propósito superior de la empresa (definido en Identidad Organizacional), visible para todos los roles si ya está cargado.' },
         { nombre: 'Tarjetas de indicadores', explicacion: 'Colaboradores activos, promedio de Hacer y Deber, alertas críticas abiertas, cumplimiento de Saber, alineación talento-rol (visible para admin_th y gerencia).' },
+        { nombre: 'Comparativo: ciclo actual vs. anterior', explicacion: 'Para admin_th y gerencia: promedio de Hacer y Deber del último ciclo, con la variación contra el ciclo anterior. Enlace a "Ver histórico completo".' },
         { nombre: 'Próximas alertas', explicacion: 'Las alertas de vencimiento más urgentes de toda la empresa, con enlace a "Ver todas".' },
         { nombre: 'Tarjetas de acceso rápido', explicacion: 'Para líder y colaborador: atajos a Mi equipo, Planes de Desarrollo, Mi Perfil y Formación.' },
       ],

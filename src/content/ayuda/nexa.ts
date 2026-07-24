@@ -18,6 +18,7 @@ export const moduloNexa: ModuloAyuda = {
         { nombre: 'Adjunto: Documento', explicacion: 'Sube un PDF, Word o imagen; se muestra como tarjeta con nombre, tamaño y botón de descarga.' },
         { nombre: 'Adjunto: Link externo', explicacion: 'Pega una URL y el botón "Vista previa" trae automáticamente título, imagen y descripción del sitio (si los tiene).' },
         { nombre: 'Adjunto: Video o imagen', explicacion: 'Se sube y se muestra directamente dentro de la publicación, sin necesidad de descargar.' },
+        { nombre: 'Me gusta', explicacion: 'Cualquier persona puede reaccionar a una publicación. Vuelve a hacer clic para quitar tu reacción.' },
       ],
       proceso: [
         'Elige el tipo de publicación y escribe el título (el contenido es opcional).',
@@ -40,6 +41,17 @@ export const moduloNexa: ModuloAyuda = {
       ],
       notas: [
         'El estado del curso (asignado/en curso/completado) se calcula solo, según el % de avance — no hay que cambiarlo a mano.',
+      ],
+    },
+    {
+      slug: 'notebook',
+      ruta: '/nexa/notebook',
+      titulo: 'Mi cuaderno',
+      resumen: 'Espacio de apuntes personales de tu propio proceso de aprendizaje — estrictamente privado, nadie más los puede ver, ni siquiera Talento Humano.',
+      camposYBotones: [
+        { nombre: 'Nueva nota', explicacion: 'Crea una nota con título y contenido libre.' },
+        { nombre: 'Guardar', explicacion: 'Aparece cuando editas una nota existente; guarda los cambios.' },
+        { nombre: 'Ícono de basura', explicacion: 'Elimina la nota.' },
       ],
     },
     {

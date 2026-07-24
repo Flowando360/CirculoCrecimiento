@@ -26,7 +26,10 @@ export const moduloAdministracion: ModuloAyuda = {
       slug: 'detalle-cargo',
       ruta: '/administracion/cargos/*',
       titulo: 'Detalle de un cargo',
-      resumen: 'Vista de solo lectura del perfil completo del cargo importado: formación, habilidades, funciones principales, decisiones que toma, factores de riesgo, exámenes médicos requeridos y EPP.',
+      resumen: 'Vista del perfil completo del cargo importado: formación, habilidades, funciones principales, decisiones que toma, factores de riesgo, exámenes médicos requeridos, EPP, y el plan de inducción específico del cargo.',
+      camposYBotones: [
+        { nombre: 'Plan de inducción específico', explicacion: 'Editable por admin_th. Se genera automáticamente a partir del perfil del cargo (funciones, riesgos, EPP, exámenes de ingreso, formación mínima); puedes agregar o quitar puntos.' },
+      ],
       notas: ['Cada sección solo aparece si tiene datos cargados — no se muestran secciones vacías.'],
     },
     {
@@ -45,6 +48,9 @@ export const moduloAdministracion: ModuloAyuda = {
       camposYBotones: [
         { nombre: 'Propósito Superior / Declaración de creencias / Visión', explicacion: 'Textos libres, se guardan con el botón "Guardar".' },
         { nombre: 'Principios y Valores', explicacion: 'Listas editables por separado, se agregan/eliminan elemento por elemento.' },
+      ],
+      notas: [
+        'Todo lo que guardes aquí se usa automáticamente en varios lugares: el Asistente IA de Nexa lo usa como contexto para responder alineado con la empresa, aparece como tarjeta en el dashboard de Inicio, se referencia en los informes PDI y 360°, y genera los puntos comunes del Plan de inducción.',
       ],
     },
     {
@@ -73,11 +79,14 @@ export const moduloAdministracion: ModuloAyuda = {
     {
       slug: 'configuracion',
       ruta: '/administracion/configuracion',
-      titulo: 'Configuración (ponderaciones)',
-      resumen: 'Pesos de ponderación entre las distintas fuentes de valoración (líder, pares, colaboradores a cargo), separados según si el cargo tiene personal a cargo o no.',
-      camposYBotones: [{ nombre: 'Porcentajes por fuente', explicacion: 'Deben sumar 100% en cada grupo (con equipo / sin equipo).' }],
+      titulo: 'Configuración',
+      resumen: 'Datos legales de la empresa (para el certificado laboral) y los pesos de ponderación entre las distintas fuentes de valoración (líder, pares, colaboradores a cargo).',
+      camposYBotones: [
+        { nombre: 'Datos de la empresa', explicacion: 'NIT, dirección, teléfono, ciudad, y nombre/cargo de quien firma el certificado laboral. Se usan cada vez que se genera un certificado desde la ficha de un colaborador.' },
+        { nombre: 'Porcentajes por fuente', explicacion: 'Deben sumar 100% en cada grupo (con equipo / sin equipo).' },
+      ],
       notas: [
-        'Solo se puede editar el ciclo que todavía está en estado "planeado" — una vez abierto un ciclo, sus pesos ya no se pueden cambiar, para no afectar Encuentros de Crecimiento en curso.',
+        'Los porcentajes de ponderación solo se pueden editar mientras el ciclo está en estado "planeado" — una vez abierto un ciclo, sus pesos ya no se pueden cambiar, para no afectar Encuentros de Crecimiento en curso. Los datos de la empresa, en cambio, se pueden editar en cualquier momento.',
       ],
     },
   ],

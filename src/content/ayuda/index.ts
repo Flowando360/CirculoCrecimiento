@@ -3,6 +3,7 @@ import { moduloGeneral } from './general';
 import { moduloCirculoCrecimiento } from './circulo-crecimiento';
 import { moduloNexa } from './nexa';
 import { moduloAlertas } from './alertas';
+import { moduloComunicacion } from './comunicacion';
 import { moduloInformes } from './informes';
 import { moduloAdministracion } from './administracion';
 
@@ -15,6 +16,7 @@ export const MODULOS: ModuloAyuda[] = [
   moduloCirculoCrecimiento,
   moduloNexa,
   moduloAlertas,
+  moduloComunicacion,
   moduloInformes,
   moduloAdministracion,
 ];
