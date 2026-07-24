@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
+          model: 'claude-sonnet-5',
           max_tokens: 500,
           system:
             `Eres el asistente interno de Nexa para ${nombreEmpresa}. Respondes dudas sobre SST, políticas internas y procedimientos de forma breve, clara y práctica. Si no tienes información específica de la empresa, dilo y sugiere contactar a Talento Humano o al líder SST.` +
@@ -80,8 +80,16 @@ export async function POST(req: NextRequest) {
         }),
       });
       const data = await r.json();
-      respuesta = data?.content?.[0]?.text ?? 'No obtuve una respuesta, intenta de nuevo.';
-    } catch {
+      if (!r.ok) {
+        // Se deja en los logs del servidor (Vercel) para poder diagnosticar sin
+        // exponerle el detalle técnico al colaborador que usa el asistente.
+        console.error('Error de la API de Anthropic:', r.status, JSON.stringify(data));
+        respuesta = 'Hubo un problema consultando el asistente. Ya quedó registrado para revisión.';
+      } else {
+        respuesta = data?.content?.[0]?.text ?? 'No obtuve una respuesta, intenta de nuevo.';
+      }
+    } catch (e) {
+      console.error('Error de red consultando Anthropic:', e);
       respuesta = 'Hubo un error al consultar el asistente. Intenta de nuevo en un momento.';
     }
   }
