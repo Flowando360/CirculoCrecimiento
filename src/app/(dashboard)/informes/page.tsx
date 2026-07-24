@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
-import { Target, Users2, ShieldCheck, BarChart3 } from 'lucide-react';
+import { Target, Users2, ShieldCheck, BarChart3, GraduationCap, Heart, TrendingUp } from 'lucide-react';
 import type { RolUsuario } from '@/types/colaborador';
 
 interface InformeDisponible {
@@ -40,6 +40,34 @@ const INFORMES: InformeDisponible[] = [
     titulo: 'Brechas por dimensión',
     descripcion: 'Comparativo de Ser, Saber, Hacer y Deber por equipo o área, para priorizar intervenciones.',
     icon: BarChart3,
+    roles: ['admin_th', 'lider', 'gerencia'],
+  },
+  {
+    href: '/informes/formacion',
+    titulo: 'Formación',
+    descripcion: 'Cursos y rutas de aprendizaje asignados en Nexa, con su estado y avance.',
+    icon: GraduationCap,
+    roles: ['admin_th', 'lider', 'gerencia', 'colaborador'],
+  },
+  {
+    href: '/informes/cultura',
+    titulo: 'Cultura y Engagement',
+    descripcion: 'Reconocimientos, participación en el feed y formación de cultura completada.',
+    icon: Heart,
+    roles: ['admin_th', 'lider', 'gerencia'],
+  },
+  {
+    href: '/informes/consolidado',
+    titulo: 'Consolidado Gerencial',
+    descripcion: 'Panorama completo de la empresa, con desglose por área — listo para presentar.',
+    icon: BarChart3,
+    roles: ['admin_th', 'gerencia'],
+  },
+  {
+    href: '/informes/historico',
+    titulo: 'Histórico Comparativo entre Ciclos',
+    descripcion: 'Evolución del promedio de Hacer y Deber de un ciclo de evaluación al siguiente.',
+    icon: TrendingUp,
     roles: ['admin_th', 'lider', 'gerencia'],
   },
 ];
