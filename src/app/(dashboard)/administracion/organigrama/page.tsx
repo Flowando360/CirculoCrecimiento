@@ -1,6 +1,7 @@
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
+import { SelectorLiderDirecto } from '@/components/circulo-crecimiento/selector-lider-directo';
 
 export default async function AdminOrganigramaPage() {
   const perfil = await getPerfilActual();
@@ -41,29 +42,19 @@ export default async function AdminOrganigramaPage() {
                 <td className="px-4 py-3 font-medium text-marmol-900">{c.nombre_completo}</td>
                 <td className="px-4 py-3 text-marmol-600">{c.cargo?.nombre}</td>
                 <td className="px-4 py-3">
-                  <select
-                    defaultValue={c.lider_id ?? ''}
-                    className="rounded-lg border border-marmol-200 px-2 py-1 text-sm bg-white"
-                  >
-                    <option value="">— Sin líder (nivel 1) —</option>
-                    {(colaboradores ?? [])
+                  <SelectorLiderDirecto
+                    colaboradorId={c.id}
+                    liderIdInicial={c.lider_id}
+                    opciones={(colaboradores ?? [])
                       .filter((l: any) => l.id !== c.id)
-                      .map((l: any) => (
-                        <option key={l.id} value={l.id}>
-                          {l.nombre_completo}
-                        </option>
-                      ))}
-                  </select>
+                      .map((l: any) => ({ id: l.id, nombre_completo: l.nombre_completo }))}
+                  />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <p className="text-xs text-marmol-400">
-        Nota: este selector queda listo para conectarse a una Server Action de actualización
-        (`UPDATE colaboradores SET lider_id = ...`); se deja como siguiente paso de implementación.
-      </p>
     </div>
   );
 }
