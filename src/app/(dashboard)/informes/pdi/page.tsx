@@ -4,6 +4,7 @@ import { EmptyState } from '@/components/ui/empty-state';
 import { Target, FileDown, FileSpreadsheet } from 'lucide-react';
 import { formatearFecha, cn } from '@/lib/utils';
 import { obtenerPlanesInforme } from './data';
+import { IdentidadReferencia } from '@/components/circulo-crecimiento/identidad-referencia';
 
 const ESTADO_COLOR: Record<string, string> = {
   pendiente: 'bg-marmol-100 text-marmol-600',
@@ -71,6 +72,8 @@ export default async function InformePdiPage({
           </a>
         </div>
       </div>
+
+      <IdentidadReferencia empresaId={perfil.empresa_id} />
 
       {puedeFiltrar && colaboradoresFiltrables.length > 0 && (
         <form className="card p-3 flex items-center gap-3">

@@ -5,13 +5,33 @@ import { StatCard } from '@/components/ui/stat-card';
 import { EmptyState } from '@/components/ui/empty-state';
 import { AlertaSeveridadDot, AlertaTipoBadge } from '@/components/alertas/alerta-badge';
 import { formatearFecha } from '@/lib/utils';
-import { Users, Target, ShieldAlert, TrendingUp, Bell } from 'lucide-react';
+import { Users, Target, ShieldAlert, TrendingUp, Bell, Compass } from 'lucide-react';
 
 export default async function InicioPage() {
   const perfil = await getPerfilActual();
   if (!perfil) return null;
 
   const supabase = createClient();
+
+  const { data: identidad } = await supabase
+    .from('empresa_identidad')
+    .select('proposito_superior')
+    .eq('empresa_id', perfil.empresa_id)
+    .maybeSingle();
+
+  const tarjetaProposito = identidad?.proposito_superior ? (
+    <div className="rounded-xl border border-secundario/15 bg-secundario/5 px-4 py-3 flex items-start gap-2.5">
+      <Compass size={16} className="text-secundario mt-0.5 shrink-0" />
+      <p className="text-sm text-marmol-700">
+        <span className="font-medium text-secundario">Nuestro propósito: </span>
+        {identidad.proposito_superior}
+      </p>
+    </div>
+  ) : perfil.rol === 'admin_th' ? (
+    <Link href="/administracion/identidad" className="block text-xs text-marmol-400 hover:text-flow-600 underline">
+      Agrega el propósito superior de la empresa para que aparezca aquí
+    </Link>
+  ) : null;
 
   // ── Vista para Talento Humano y Gerencia: panorama completo de la empresa ──
   if (perfil.rol === 'admin_th' || perfil.rol === 'gerencia') {
@@ -38,6 +58,8 @@ export default async function InicioPage() {
             Panorama general de Mármoles y Servicios — Círculo de Crecimiento 360°
           </p>
         </div>
+
+        {tarjetaProposito}
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <StatCard
@@ -131,6 +153,8 @@ export default async function InicioPage() {
           <p className="text-sm text-marmol-500 mt-1">Resumen de tu equipo</p>
         </div>
 
+        {tarjetaProposito}
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <StatCard label="Tamaño del equipo" value={equipo?.tamano_equipo ?? 0} icon={Users} />
           <StatCard label="Hacer (promedio equipo)" value={equipo?.promedio_hacer ?? '—'} tono="flow" />
@@ -166,6 +190,8 @@ export default async function InicioPage() {
         </h1>
         <p className="text-sm text-marmol-500 mt-1">Este es tu espacio de crecimiento</p>
       </div>
+
+      {tarjetaProposito}
 
       <div className="grid md:grid-cols-3 gap-4">
         <Link href="/mi-perfil" className="card p-5 hover:border-flow-300 transition">

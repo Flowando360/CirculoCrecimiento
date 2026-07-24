@@ -6,6 +6,7 @@ import { SemaforoBadge } from '@/components/circulo-crecimiento/semaforo-badge';
 import { Sparkles, GraduationCap, Briefcase, ShieldCheck, FileDown, FileSpreadsheet, Users2 } from 'lucide-react';
 import { formatearFecha } from '@/lib/utils';
 import { obtenerInforme360 } from './data';
+import { IdentidadReferencia } from '@/components/circulo-crecimiento/identidad-referencia';
 
 const ETIQUETA_EVALUADOR: Record<string, string> = {
   autoevaluacion: 'Autoevaluación',
@@ -78,6 +79,8 @@ export default async function Informe360Page({
           </div>
         )}
       </div>
+
+      <IdentidadReferencia empresaId={perfil.empresa_id} />
 
       {perfil.rol !== 'colaborador' && colaboradoresFiltrables.length > 0 && (
         <form className="card p-3 flex items-center gap-3">
