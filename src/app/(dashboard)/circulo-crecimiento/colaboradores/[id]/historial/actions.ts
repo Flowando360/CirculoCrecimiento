@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
+import { asignarItemsInduccion } from '@/lib/induccion/asignar';
 
 const TIPOS = [
   'ingreso',
@@ -34,6 +35,7 @@ async function esAdminThDeEsteColaborador(colaboradorId: string) {
 function revalidar(colaboradorId: string) {
   revalidatePath(`/circulo-crecimiento/colaboradores/${colaboradorId}/historial`);
   revalidatePath(`/circulo-crecimiento/colaboradores/${colaboradorId}`);
+  revalidatePath(`/circulo-crecimiento/colaboradores/${colaboradorId}/induccion`);
 }
 
 const MovimientoSchema = z.object({
@@ -81,12 +83,24 @@ export async function agregarMovimiento(input: z.infer<typeof MovimientoSchema>)
 
   if (error) return { ok: false as const, error: error.message };
 
-  // Si el movimiento implica un cargo nuevo, se actualiza también la ficha.
+  // Si el movimiento implica un cargo nuevo, se actualiza también la ficha
+  // y se le asigna el plan de inducción correspondiente: si es un ingreso,
+  // la parte común (Identidad Organizacional) + la específica del cargo; si
+  // es un cambio de cargo interno, solo la específica del cargo nuevo (ya
+  // pasó por la parte común la primera vez). No duplica puntos ya asignados.
   if (parsed.data.cargoNuevoId) {
     await supabase
       .from('colaboradores')
       .update({ cargo_id: parsed.data.cargoNuevoId })
       .eq('id', parsed.data.colaboradorId);
+
+    await asignarItemsInduccion(
+      supabase,
+      parsed.data.colaboradorId,
+      perfil.empresa_id,
+      parsed.data.cargoNuevoId,
+      parsed.data.tipo === 'ingreso'
+    );
   }
 
   revalidar(parsed.data.colaboradorId);

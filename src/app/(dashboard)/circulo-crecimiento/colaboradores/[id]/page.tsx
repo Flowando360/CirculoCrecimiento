@@ -40,7 +40,7 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
   const puedeVerHistorial =
     perfil.rol === 'admin_th' || (perfil.rol === 'lider' && colaborador.lider_id === perfil.colaborador_id);
 
-  const [{ data: ultimoResultado }, { data: saber }, { data: ser }, { data: pdi }, { data: hojaVida }] =
+  const [{ data: ultimoResultado }, { data: saber }, { data: ser }, { data: pdi }, { data: hojaVida }, { data: induccionItems }] =
     await Promise.all([
       supabase
         .from('resultados_evaluacion')
@@ -67,10 +67,14 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
         .select('*')
         .eq('colaborador_id', params.id)
         .order('fecha_inicio', { ascending: false }),
+      supabase.from('colaborador_induccion_items').select('completado').eq('colaborador_id', params.id),
     ]);
 
   const cargo = colaborador.cargo as any;
   const lider = colaborador.lider as any;
+  const totalInduccion = induccionItems?.length ?? 0;
+  const completadosInduccion = induccionItems?.filter((i) => i.completado).length ?? 0;
+  const pctInduccion = totalInduccion > 0 ? Math.round((completadosInduccion / totalInduccion) * 100) : null;
 
   return (
     <div className="space-y-6">
@@ -159,6 +163,30 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
             </div>
           </dl>
         </div>
+
+        {/* Inducción */}
+        <Link href={`/circulo-crecimiento/colaboradores/${params.id}/induccion`} className="card p-5 block hover:border-flow-300 transition">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-display font-semibold text-secundario flex items-center gap-1.5">
+              <GraduationCap size={16} /> Inducción
+            </h2>
+            {pctInduccion !== null && (
+              <span className="text-sm font-semibold text-secundario">{pctInduccion}%</span>
+            )}
+          </div>
+          {totalInduccion === 0 ? (
+            <p className="text-sm text-marmol-400">Sin plan de inducción asignado todavía.</p>
+          ) : (
+            <>
+              <div className="h-2 rounded-full bg-marmol-100 overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-flow-500 to-acento rounded-full" style={{ width: `${pctInduccion}%` }} />
+              </div>
+              <p className="text-xs text-marmol-400 mt-1.5">
+                {completadosInduccion} de {totalInduccion} puntos cumplidos
+              </p>
+            </>
+          )}
+        </Link>
 
         {/* Hoja de vida / formación */}
         <Link href={`/circulo-crecimiento/colaboradores/${params.id}/hoja-vida`} className="card p-5 block hover:border-flow-300 transition">

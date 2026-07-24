@@ -4,6 +4,7 @@ import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { redirect, notFound } from 'next/navigation';
 import { formatearFecha, cn } from '@/lib/utils';
 import { ArrowLeft } from 'lucide-react';
+import { PlanInduccionCargo } from '@/components/circulo-crecimiento/plan-induccion-cargo';
 
 const ETIQUETA_MOMENTO: Record<string, string> = {
   ingreso: 'Ingreso',
@@ -45,7 +46,7 @@ export default async function DetalleCargoPage({ params }: { params: { id: strin
   const { data: cargo } = await supabase.from('cargos').select('*').eq('id', params.id).maybeSingle();
   if (!cargo || cargo.empresa_id !== perfil.empresa_id) notFound();
 
-  const [{ data: habilidades }, { data: funciones }, { data: decisiones }, { data: riesgos }, { data: examenes }, { data: epp }] =
+  const [{ data: habilidades }, { data: funciones }, { data: decisiones }, { data: riesgos }, { data: examenes }, { data: epp }, { data: induccionItems }] =
     await Promise.all([
       supabase.from('cargo_habilidades').select('*').eq('cargo_id', params.id).order('orden'),
       supabase.from('cargo_funciones_principales').select('*').eq('cargo_id', params.id).order('orden'),
@@ -53,6 +54,7 @@ export default async function DetalleCargoPage({ params }: { params: { id: strin
       supabase.from('cargo_factores_riesgo').select('*').eq('cargo_id', params.id).order('orden'),
       supabase.from('cargo_examenes_medicos').select('*').eq('cargo_id', params.id).order('orden'),
       supabase.from('cargo_epp').select('*').eq('cargo_id', params.id).order('orden'),
+      supabase.from('induccion_items').select('id, categoria, titulo, descripcion').eq('cargo_id', params.id).order('orden'),
     ]);
 
   const habilidadesFuncionales = (habilidades ?? []).filter((h) => h.tipo === 'funcional');
@@ -291,6 +293,8 @@ export default async function DetalleCargoPage({ params }: { params: { id: strin
           </div>
         </Bloque>
       )}
+
+      <PlanInduccionCargo cargoId={params.id} itemsIniciales={(induccionItems ?? []) as any} />
 
       {((epp && epp.length > 0) || cargo.recursos_seleccion) && (
         <Bloque titulo="EPP y recursos de selección">
