@@ -9,7 +9,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   if (!perfil) redirect('/login');
 
   const supabase = createClient();
-  const [{ count }, { count: countNotificaciones }] = await Promise.all([
+  const [{ count }, { count: countNotificaciones }, { count: countMensajes }] = await Promise.all([
     supabase
       .from('alertas')
       .select('*', { count: 'exact', head: true })
@@ -19,6 +19,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
       .from('notificaciones')
       .select('*', { count: 'exact', head: true })
       .eq('destinatario_usuario_id', perfil.usuario_id)
+      .eq('leido', false),
+    supabase
+      .from('mensajes_directos')
+      .select('*', { count: 'exact', head: true })
+      .eq('destinatario_id', perfil.usuario_id)
       .eq('leido', false),
   ]);
 
@@ -31,6 +36,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
           rol={perfil.rol}
           alertasPendientes={count ?? 0}
           notificacionesNoLeidas={countNotificaciones ?? 0}
+          mensajesNoLeidos={countMensajes ?? 0}
         />
         <main className="flex-1 p-6 max-w-[1400px] w-full mx-auto">{children}</main>
       </div>

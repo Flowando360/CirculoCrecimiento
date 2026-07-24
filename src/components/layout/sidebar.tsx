@@ -24,6 +24,7 @@ import {
   FileBarChart,
   ShieldAlert,
   Handshake,
+  MessageCircle,
 } from 'lucide-react';
 
 interface NavItem {
@@ -70,6 +71,7 @@ const NAV: NavGroup[] = [
   {
     titulo: '',
     items: [
+      { href: '/mensajes', label: 'Mensajes', icon: MessageCircle, roles: ['admin_th', 'lider', 'colaborador', 'gerencia'] },
       { href: '/alertas', label: 'Alertas y fechas clave', icon: Bell, roles: ['admin_th', 'lider', 'colaborador'] },
       { href: '/informes', label: 'Informes', icon: FileBarChart, roles: ['admin_th', 'lider', 'colaborador', 'gerencia'] },
     ],
