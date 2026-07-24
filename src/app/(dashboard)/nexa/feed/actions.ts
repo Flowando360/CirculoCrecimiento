@@ -26,6 +26,40 @@ const PublicacionSchema = z.object({
   linkPreviewDescripcion: z.string().optional(),
 });
 
+/**
+ * Alterna el "me gusta" del usuario actual sobre una publicación: si ya
+ * había reaccionado, lo quita; si no, lo agrega. Cualquier persona de la
+ * empresa puede reaccionar (misma regla que RLS: usuario_id = auth.uid()).
+ */
+export async function alternarReaccion(publicacionId: string) {
+  const perfil = await getPerfilActual();
+  if (!perfil) return { ok: false as const, error: 'No autorizado' };
+
+  const supabase = createClient();
+
+  const { data: existente } = await supabase
+    .from('nexa_feed_reacciones')
+    .select('id')
+    .eq('publicacion_id', publicacionId)
+    .eq('usuario_id', perfil.usuario_id)
+    .maybeSingle();
+
+  if (existente) {
+    const { error } = await supabase.from('nexa_feed_reacciones').delete().eq('id', existente.id);
+    if (error) return { ok: false as const, error: error.message };
+    revalidatePath('/nexa/feed');
+    return { ok: true as const, reacciono: false };
+  }
+
+  const { error } = await supabase
+    .from('nexa_feed_reacciones')
+    .insert({ publicacion_id: publicacionId, usuario_id: perfil.usuario_id, tipo: 'like' });
+  if (error) return { ok: false as const, error: error.message };
+
+  revalidatePath('/nexa/feed');
+  return { ok: true as const, reacciono: true };
+}
+
 /** Publica en el feed corporativo (admin_th o líder, misma regla que RLS). */
 export async function publicarEnFeed(input: z.infer<typeof PublicacionSchema>) {
   const perfil = await getPerfilActual();

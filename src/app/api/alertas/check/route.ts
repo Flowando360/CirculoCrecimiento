@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/server';
+import { asignarFormacionPorAlerta } from '@/lib/nexa/asignar-formacion-por-alerta';
+import { enviarEmail } from '@/lib/email/resend';
 
 /**
  * Job programado (Vercel Cron o llamado manualmente) que:
@@ -37,30 +39,57 @@ export async function GET(req: NextRequest) {
     .eq('estado', 'pendiente');
 
   let notificacionesCreadas = 0;
+  let correosEnviados = 0;
+  let cursosAsignados = 0;
   for (const alerta of proximas ?? []) {
     const { data: colaborador } = await supabase
       .from('colaboradores')
-      .select('usuario_id')
+      .select('usuario_id, usuario:usuario_id(email)')
       .eq('id', alerta.colaborador_id)
       .maybeSingle();
 
     if (colaborador?.usuario_id) {
+      const asunto = `Recordatorio: ${alerta.titulo}`;
+      const cuerpo = `Tienes una fecha próxima (${alerta.fecha_objetivo}): ${alerta.titulo}.`;
+      const emailDestino = (colaborador.usuario as any)?.email as string | undefined;
+
+      const envio = emailDestino
+        ? await enviarEmail({
+            to: emailDestino,
+            subject: asunto,
+            html: `<p>${cuerpo}</p><p style="color:#6b7280;font-size:12px">Círculo de Crecimiento — Mármoles y Servicios</p>`,
+          })
+        : { ok: false as const, motivo: 'sin correo registrado' };
+
       await supabase.from('notificaciones').insert({
         destinatario_usuario_id: colaborador.usuario_id,
         alerta_id: alerta.id,
         canal: 'email',
-        asunto: `Recordatorio: ${alerta.titulo}`,
-        cuerpo: `Tienes una fecha próxima (${alerta.fecha_objetivo}): ${alerta.titulo}.`,
+        asunto,
+        cuerpo,
+        enviado: envio.ok,
+        enviado_en: envio.ok ? new Date().toISOString() : null,
       });
       notificacionesCreadas++;
+      if (envio.ok) correosEnviados++;
     }
 
     await supabase.from('alertas').update({ estado: 'notificada' }).eq('id', alerta.id);
+
+    // Puente automático Círculo → Nexa: si la alerta es de un tipo que
+    // dispara formación (SST, vencimientos), asigna de una vez los cursos
+    // de esa categoría que tenga configurados el cargo de la persona.
+    const resultado = await asignarFormacionPorAlerta(alerta.id);
+    if (resultado.ok && resultado.accion === 'curso_asignado') {
+      cursosAsignados += resultado.cursosAsignados ?? 0;
+    }
   }
 
   return NextResponse.json({
     ok: true,
     alertas_vencidas: vencidas?.length ?? 0,
     notificaciones_creadas: notificacionesCreadas,
+    correos_enviados: correosEnviados,
+    cursos_asignados_automaticamente: cursosAsignados,
   });
 }

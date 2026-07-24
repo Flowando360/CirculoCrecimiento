@@ -9,17 +9,29 @@ export default async function DashboardLayout({ children }: { children: React.Re
   if (!perfil) redirect('/login');
 
   const supabase = createClient();
-  const { count } = await supabase
-    .from('alertas')
-    .select('*', { count: 'exact', head: true })
-    .eq('colaborador_id', perfil.colaborador_id ?? '')
-    .in('estado', ['pendiente', 'notificada']);
+  const [{ count }, { count: countNotificaciones }] = await Promise.all([
+    supabase
+      .from('alertas')
+      .select('*', { count: 'exact', head: true })
+      .eq('colaborador_id', perfil.colaborador_id ?? '')
+      .in('estado', ['pendiente', 'notificada']),
+    supabase
+      .from('notificaciones')
+      .select('*', { count: 'exact', head: true })
+      .eq('destinatario_usuario_id', perfil.usuario_id)
+      .eq('leido', false),
+  ]);
 
   return (
     <div className="flex min-h-screen bg-marmol-50">
       <Sidebar rol={perfil.rol} />
       <div className="flex-1 flex flex-col min-w-0">
-        <Header nombre={perfil.nombre_completo} rol={perfil.rol} alertasPendientes={count ?? 0} />
+        <Header
+          nombre={perfil.nombre_completo}
+          rol={perfil.rol}
+          alertasPendientes={count ?? 0}
+          notificacionesNoLeidas={countNotificaciones ?? 0}
+        />
         <main className="flex-1 p-6 max-w-[1400px] w-full mx-auto">{children}</main>
       </div>
     </div>

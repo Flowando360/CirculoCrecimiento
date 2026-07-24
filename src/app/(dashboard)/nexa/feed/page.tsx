@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { EmptyState } from '@/components/ui/empty-state';
 import { FormularioPublicarFeed } from '@/components/circulo-crecimiento/formulario-publicar-feed';
 import { TarjetaAdjuntoFeed } from '@/components/circulo-crecimiento/tarjeta-adjunto-feed';
+import { BotonReaccion } from '@/components/circulo-crecimiento/boton-reaccion';
 import { obtenerUrlFirmadaFeedAdjunto } from '@/lib/supabase/storage';
 import { formatearFecha } from '@/lib/utils';
 import { Rss, Pin } from 'lucide-react';
@@ -29,12 +30,22 @@ export default async function NexaFeedPage() {
     .order('fijado', { ascending: false })
     .order('created_at', { ascending: false });
 
+  const idsPublicaciones = (publicaciones ?? []).map((p: any) => p.id);
+  const { data: reacciones } = idsPublicaciones.length
+    ? await supabase.from('nexa_feed_reacciones').select('publicacion_id, usuario_id').in('publicacion_id', idsPublicaciones)
+    : { data: [] as { publicacion_id: string; usuario_id: string }[] };
+
   const publicacionesConAdjunto = await Promise.all(
-    (publicaciones ?? []).map(async (p: any) => ({
-      ...p,
-      archivoUrlFirmada:
-        p.tipo_adjunto !== 'ninguno' && p.tipo_adjunto !== 'link' ? await obtenerUrlFirmadaFeedAdjunto(p.archivo_url) : null,
-    }))
+    (publicaciones ?? []).map(async (p: any) => {
+      const reaccionesDeEsta = (reacciones ?? []).filter((r) => r.publicacion_id === p.id);
+      return {
+        ...p,
+        archivoUrlFirmada:
+          p.tipo_adjunto !== 'ninguno' && p.tipo_adjunto !== 'link' ? await obtenerUrlFirmadaFeedAdjunto(p.archivo_url) : null,
+        totalReacciones: reaccionesDeEsta.length,
+        yaReacciono: reaccionesDeEsta.some((r) => r.usuario_id === perfil.usuario_id),
+      };
+    })
   );
 
   return (
@@ -81,7 +92,10 @@ export default async function NexaFeedPage() {
                 linkPreviewImagen={p.link_preview_imagen}
                 linkPreviewDescripcion={p.link_preview_descripcion}
               />
-              <p className="text-xs text-marmol-400 mt-2">Publicado por {p.autor?.nombre_completo ?? 'Nexa'}</p>
+              <div className="flex items-center justify-between mt-2">
+                <p className="text-xs text-marmol-400">Publicado por {p.autor?.nombre_completo ?? 'Nexa'}</p>
+                <BotonReaccion publicacionId={p.id} totalInicial={p.totalReacciones} yaReaccionoInicial={p.yaReacciono} />
+              </div>
             </div>
           ))}
         </div>

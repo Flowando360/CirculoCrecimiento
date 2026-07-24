@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { etiquetaRol } from '@/lib/utils';
-import { LogOut, Bell } from 'lucide-react';
+import { LogOut, Bell, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { CentroAyudaBoton } from '@/components/ayuda/centro-ayuda-boton';
 
@@ -11,10 +11,12 @@ export function Header({
   nombre,
   rol,
   alertasPendientes = 0,
+  notificacionesNoLeidas = 0,
 }: {
   nombre: string;
   rol: string;
   alertasPendientes?: number;
+  notificacionesNoLeidas?: number;
 }) {
   const router = useRouter();
   const supabase = createClient();
@@ -33,11 +35,24 @@ export function Header({
         <Link
           href="/alertas"
           className="relative rounded-lg p-2 text-marmol-500 hover:bg-marmol-100 transition"
+          title="Alertas de fechas clave"
         >
           <Bell size={18} />
           {alertasPendientes > 0 && (
             <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 rounded-full bg-bajo text-white text-[10px] flex items-center justify-center px-1">
               {alertasPendientes}
+            </span>
+          )}
+        </Link>
+        <Link
+          href="/notificaciones"
+          className="relative rounded-lg p-2 text-marmol-500 hover:bg-marmol-100 transition"
+          title="Notificaciones"
+        >
+          <Mail size={18} />
+          {notificacionesNoLeidas > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 rounded-full bg-bajo text-white text-[10px] flex items-center justify-center px-1">
+              {notificacionesNoLeidas}
             </span>
           )}
         </Link>
