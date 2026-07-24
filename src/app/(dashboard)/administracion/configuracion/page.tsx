@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { EmptyState } from '@/components/ui/empty-state';
 import { FormularioPonderaciones } from '@/components/administracion/formulario-ponderaciones';
+import { FormularioDatosEmpresa } from '@/components/administracion/formulario-datos-empresa';
 import { SlidersHorizontal } from 'lucide-react';
 
 export default async function AdminConfiguracionPage() {
@@ -11,6 +12,13 @@ export default async function AdminConfiguracionPage() {
   if (perfil.rol !== 'admin_th') redirect('/inicio');
 
   const supabase = createClient();
+
+  const { data: empresa } = await supabase
+    .from('empresas')
+    .select('nit, direccion, telefono, ciudad, firmante_nombre, firmante_cargo')
+    .eq('id', perfil.empresa_id)
+    .maybeSingle();
+
   // Solo se puede editar el ciclo que TODAVÍA no se ha abierto: una vez
   // 'abierto', el trigger de recálculo lee estos pesos en vivo desde
   // ciclos_evaluacion, así que cambiarlos ahí afectaría evaluaciones en curso.
@@ -32,6 +40,17 @@ export default async function AdminConfiguracionPage() {
           al próximo ciclo que se abra.
         </p>
       </div>
+
+      <FormularioDatosEmpresa
+        inicial={{
+          nit: empresa?.nit ?? '',
+          direccion: empresa?.direccion ?? '',
+          telefono: empresa?.telefono ?? '',
+          ciudad: empresa?.ciudad ?? '',
+          firmanteNombre: empresa?.firmante_nombre ?? '',
+          firmanteCargo: empresa?.firmante_cargo ?? '',
+        }}
+      />
 
       {ciclo ? (
         <FormularioPonderaciones

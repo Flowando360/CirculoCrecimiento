@@ -68,3 +68,42 @@ export async function guardarPonderaciones(input: z.infer<typeof PonderacionesSc
   revalidatePath('/administracion/configuracion');
   return { ok: true };
 }
+
+const DatosEmpresaSchema = z.object({
+  nit: z.string().trim().optional(),
+  direccion: z.string().trim().optional(),
+  telefono: z.string().trim().optional(),
+  ciudad: z.string().trim().optional(),
+  firmanteNombre: z.string().trim().optional(),
+  firmanteCargo: z.string().trim().optional(),
+});
+
+/**
+ * Guarda los datos legales de la empresa que usa el certificado laboral
+ * (NIT, dirección, teléfono, ciudad y quién lo firma).
+ */
+export async function guardarDatosEmpresa(input: z.infer<typeof DatosEmpresaSchema>) {
+  const perfil = await getPerfilActual();
+  if (!perfil || perfil.rol !== 'admin_th') return { ok: false, error: 'No autorizado' };
+
+  const parsed = DatosEmpresaSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? 'Datos inválidos' };
+
+  const supabase = createClient();
+  const { error } = await supabase
+    .from('empresas')
+    .update({
+      nit: parsed.data.nit || null,
+      direccion: parsed.data.direccion || null,
+      telefono: parsed.data.telefono || null,
+      ciudad: parsed.data.ciudad || null,
+      firmante_nombre: parsed.data.firmanteNombre || null,
+      firmante_cargo: parsed.data.firmanteCargo || null,
+    })
+    .eq('id', perfil.empresa_id);
+
+  if (error) return { ok: false, error: error.message };
+
+  revalidatePath('/administracion/configuracion');
+  return { ok: true };
+}

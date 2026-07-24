@@ -4,7 +4,7 @@ import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { SemaforoBadge } from '@/components/circulo-crecimiento/semaforo-badge';
 import { formatearFecha } from '@/lib/utils';
 import { notFound } from 'next/navigation';
-import { GraduationCap, Briefcase, Sparkles, ShieldCheck, Target, Clock, History } from 'lucide-react';
+import { GraduationCap, Briefcase, Sparkles, ShieldCheck, Target, Clock, History, FolderLock } from 'lucide-react';
 
 export default async function FichaColaboradorPage({ params }: { params: { id: string } }) {
   const perfil = await getPerfilActual();
@@ -39,6 +39,11 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
   // ni para el propio colaborador, así que tampoco se enlaza para ellos aquí.
   const puedeVerHistorial =
     perfil.rol === 'admin_th' || (perfil.rol === 'lider' && colaborador.lider_id === perfil.colaborador_id);
+
+  // Documentos (hoja de vida, contrato, certificado laboral): solo Talento
+  // Humano y el propio colaborador, ni siquiera el líder — el contrato trae
+  // el salario.
+  const puedeVerDocumentos = perfil.rol === 'admin_th' || (perfil.rol === 'colaborador' && perfil.colaborador_id === colaborador.id);
 
   const [{ data: ultimoResultado }, { data: saber }, { data: ser }, { data: pdi }, { data: hojaVida }, { data: induccionItems }] =
     await Promise.all([
@@ -239,15 +244,27 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
         )}
       </div>
 
-      {puedeVerHistorial && (
-        <Link
-          href={`/circulo-crecimiento/colaboradores/${params.id}/historial`}
-          className="card p-5 flex items-center gap-2 hover:border-flow-300 transition"
-        >
-          <History size={16} className="text-flow-600" />
-          <span className="text-sm font-medium text-marmol-800">Ver historial y línea de tiempo</span>
-        </Link>
-      )}
+      <div className="grid md:grid-cols-2 gap-4">
+        {puedeVerDocumentos && (
+          <Link
+            href={`/circulo-crecimiento/colaboradores/${params.id}/documentos`}
+            className="card p-5 flex items-center gap-2 hover:border-flow-300 transition"
+          >
+            <FolderLock size={16} className="text-flow-600" />
+            <span className="text-sm font-medium text-marmol-800">Documentos y certificado laboral</span>
+          </Link>
+        )}
+
+        {puedeVerHistorial && (
+          <Link
+            href={`/circulo-crecimiento/colaboradores/${params.id}/historial`}
+            className="card p-5 flex items-center gap-2 hover:border-flow-300 transition"
+          >
+            <History size={16} className="text-flow-600" />
+            <span className="text-sm font-medium text-marmol-800">Ver historial y línea de tiempo</span>
+          </Link>
+        )}
+      </div>
     </div>
   );
 }

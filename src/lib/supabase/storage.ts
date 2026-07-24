@@ -36,3 +36,22 @@ export async function obtenerUrlFirmadaFeedAdjunto(path: string | null): Promise
   if (error || !data) return null;
   return data.signedUrl;
 }
+
+/**
+ * Igual que arriba pero para documentos del colaborador (bucket privado
+ * "documentos-colaborador"): hoja de vida y contrato. La ruta de cada
+ * archivo trae el tipo ("hoja-vida" o "contrato") como tercer segmento, así
+ * que Storage aplica una regla de lectura más estricta para el contrato
+ * (excluye al líder, por el salario).
+ */
+export async function obtenerUrlFirmadaDocumentoColaborador(path: string | null): Promise<string | null> {
+  if (!path) return null;
+
+  const supabase = createClient();
+  const { data, error } = await supabase.storage
+    .from('documentos-colaborador')
+    .createSignedUrl(path, UNA_HORA_EN_SEGUNDOS);
+
+  if (error || !data) return null;
+  return data.signedUrl;
+}
