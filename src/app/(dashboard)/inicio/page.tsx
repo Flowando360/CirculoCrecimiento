@@ -5,7 +5,8 @@ import { StatCard } from '@/components/ui/stat-card';
 import { EmptyState } from '@/components/ui/empty-state';
 import { AlertaSeveridadDot, AlertaTipoBadge } from '@/components/alertas/alerta-badge';
 import { formatearFecha } from '@/lib/utils';
-import { Users, Target, ShieldAlert, TrendingUp, Bell, Compass } from 'lucide-react';
+import { Users, Target, ShieldAlert, TrendingUp, Bell, Compass, TrendingDown, Minus } from 'lucide-react';
+import { obtenerInformeHistorico } from '@/app/(dashboard)/informes/historico/data';
 
 export default async function InicioPage() {
   const perfil = await getPerfilActual();
@@ -40,6 +41,10 @@ export default async function InicioPage() {
       .select('*')
       .eq('empresa_id', perfil.empresa_id)
       .maybeSingle();
+
+    const { filas: historico } = await obtenerInformeHistorico();
+    const cicloActual = historico[historico.length - 1];
+    const cicloAnterior = historico[historico.length - 2];
 
     const { data: alertasCriticas } = await supabase
       .from('v_alertas_proximas')
@@ -102,6 +107,53 @@ export default async function InicioPage() {
             value={indicadores?.en_proceso_salida ?? 0}
           />
         </div>
+
+        {cicloActual && (
+          <div className="card p-5">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-display text-base font-semibold text-secundario flex items-center gap-2">
+                <TrendingUp size={16} /> Comparativo: ciclo actual vs. anterior
+              </h2>
+              <Link href="/informes/historico" className="text-xs text-flow-600 hover:underline">
+                Ver histórico completo
+              </Link>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4 text-sm">
+              <div className="flex items-center justify-between border-b border-marmol-100 pb-2 sm:border-b-0 sm:border-r sm:pr-4">
+                <div>
+                  <p className="text-xs text-marmol-500">Hacer — {cicloActual.cicloNombre}</p>
+                  <p className="text-xl font-display font-semibold text-secundario">{cicloActual.promedioHacer ?? '—'}</p>
+                </div>
+                {cicloAnterior && cicloActual.promedioHacer != null && cicloAnterior.promedioHacer != null ? (
+                  (() => {
+                    const dif = Math.round((cicloActual.promedioHacer - cicloAnterior.promedioHacer) * 100) / 100;
+                    if (dif > 0) return <span className="text-alto text-xs flex items-center gap-0.5"><TrendingUp size={12} /> +{dif}</span>;
+                    if (dif < 0) return <span className="text-bajo text-xs flex items-center gap-0.5"><TrendingDown size={12} /> {dif}</span>;
+                    return <span className="text-marmol-400 text-xs flex items-center gap-0.5"><Minus size={12} /> sin cambio</span>;
+                  })()
+                ) : (
+                  <span className="text-marmol-300 text-xs">sin ciclo anterior</span>
+                )}
+              </div>
+              <div className="flex items-center justify-between pl-0 sm:pl-4">
+                <div>
+                  <p className="text-xs text-marmol-500">Deber — {cicloActual.cicloNombre}</p>
+                  <p className="text-xl font-display font-semibold text-secundario">{cicloActual.promedioDeber ?? '—'}</p>
+                </div>
+                {cicloAnterior && cicloActual.promedioDeber != null && cicloAnterior.promedioDeber != null ? (
+                  (() => {
+                    const dif = Math.round((cicloActual.promedioDeber - cicloAnterior.promedioDeber) * 100) / 100;
+                    if (dif > 0) return <span className="text-alto text-xs flex items-center gap-0.5"><TrendingUp size={12} /> +{dif}</span>;
+                    if (dif < 0) return <span className="text-bajo text-xs flex items-center gap-0.5"><TrendingDown size={12} /> {dif}</span>;
+                    return <span className="text-marmol-400 text-xs flex items-center gap-0.5"><Minus size={12} /> sin cambio</span>;
+                  })()
+                ) : (
+                  <span className="text-marmol-300 text-xs">sin ciclo anterior</span>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="card p-5">
           <div className="flex items-center justify-between mb-4">
