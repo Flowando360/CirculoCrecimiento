@@ -29,7 +29,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <div className="flex min-h-screen bg-marmol-50">
-      <Sidebar rol={perfil.rol} />
+      <Sidebar rol={perfil.rol} esSuperadmin={perfil.es_superadmin} />
       <div className="flex-1 flex flex-col min-w-0">
         <Header
           nombre={perfil.nombre_completo}
