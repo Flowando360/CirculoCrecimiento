@@ -67,6 +67,27 @@ están resueltos en ambas capas.
 | Vercel Hobby | Crons limitados a 1 vez/día | El cron de alertas está configurado a diario (`0 8 * * *`), suficiente para el caso de uso |
 | WhatsApp Business API | Sin tier gratuito real para envío proactivo | Notificaciones fase 1 van por email (Resend, 3000/mes gratis); WhatsApp queda para fase 2 |
 
+## Motor automático brecha → PDI → formación
+
+Cumple la promesa comercial de la alianza (Modelo de Negocio Espiral
+Evolutiva, secc. 1: "una brecha detectada en la evaluación dispara, sin
+intervención manual, la ruta de formación correspondiente"). Antes de
+`0025_motor_pdi_automatico.sql`, `planes_desarrollo` (el PDI) no tenía
+ningún punto del código que insertara filas — era 100% manual.
+
+Se implementa dentro del mismo trigger de cálculo en tiempo real
+(`fn_recalcular_resultados_evaluacion`, ver arriba): cuando una evaluación
+llega al 100% de avance (todas las tareas respondidas) y el semáforo de
+Hacer o Deber queda en `bajo`, la función:
+1. Crea un PDI (`planes_desarrollo.generado_automaticamente = true`),
+   idempotente por colaborador+ciclo+dimensión.
+2. Asigna en `nexa_rutas_formacion` los cursos configurados en
+   `dimension_cursos_recomendados` (admin_th los configura por empresa),
+   trazados hacia ese PDI vía `pdi_origen_id`.
+
+Es un mecanismo aparte del disparador por alertas SST/Saber (abajo): éste
+nace de la evaluación 360°, aquél de vencimientos de certificación.
+
 ## Integración con Nexa: por eventos, no por datos compartidos
 
 `src/app/api/nexa/disparadores/route.ts` es el punto de integración

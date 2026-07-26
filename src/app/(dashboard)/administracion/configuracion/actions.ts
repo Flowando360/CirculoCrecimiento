@@ -107,3 +107,34 @@ export async function guardarDatosEmpresa(input: z.infer<typeof DatosEmpresaSche
   revalidatePath('/administracion/configuracion');
   return { ok: true };
 }
+
+/**
+ * Configura qué curso de Nexa refuerza una brecha de Hacer o de Deber —
+ * fuente del motor automático brecha→PDI→formación (ver
+ * 0025_motor_pdi_automatico.sql y docs/ARQUITECTURA.md).
+ */
+export async function agregarCursoRecomendado(dimension: 'hacer' | 'deber', cursoId: string) {
+  const perfil = await getPerfilActual();
+  if (!perfil || perfil.rol !== 'admin_th') return { ok: false, error: 'No autorizado' };
+  if (!cursoId) return { ok: false, error: 'Selecciona un curso' };
+
+  const supabase = createClient();
+  const { error } = await supabase
+    .from('dimension_cursos_recomendados')
+    .insert({ empresa_id: perfil.empresa_id, dimension, curso_id: cursoId });
+
+  if (error) return { ok: false, error: error.message };
+  revalidatePath('/administracion/configuracion');
+  return { ok: true };
+}
+
+export async function eliminarCursoRecomendado(id: string) {
+  const perfil = await getPerfilActual();
+  if (!perfil || perfil.rol !== 'admin_th') return { ok: false, error: 'No autorizado' };
+
+  const supabase = createClient();
+  const { error } = await supabase.from('dimension_cursos_recomendados').delete().eq('id', id);
+  if (error) return { ok: false, error: error.message };
+  revalidatePath('/administracion/configuracion');
+  return { ok: true };
+}

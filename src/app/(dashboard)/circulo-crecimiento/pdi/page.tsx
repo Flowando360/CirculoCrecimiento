@@ -27,7 +27,9 @@ export default async function PdiPage() {
 
   let query = supabase
     .from('planes_desarrollo')
-    .select('id, brecha_detectada, accion, origen, estado, fecha_compromiso, colaborador:colaborador_id(nombre_completo)')
+    .select(
+      'id, brecha_detectada, accion, origen, estado, fecha_compromiso, generado_automaticamente, colaborador:colaborador_id(nombre_completo)'
+    )
     .order('fecha_compromiso', { ascending: true });
 
   if (perfil.rol === 'colaborador' && perfil.colaborador_id) {
@@ -65,6 +67,14 @@ export default async function PdiPage() {
                 </p>
               </div>
               <div className="flex items-center gap-2 shrink-0">
+                {p.generado_automaticamente && (
+                  <span
+                    className="text-xs rounded-full px-2 py-0.5 font-medium bg-crecimiento/10 text-crecimiento"
+                    title="Generado automáticamente por el motor de brechas al cerrar la evaluación"
+                  >
+                    Automático
+                  </span>
+                )}
                 <span className={cn('text-xs rounded-full px-2 py-0.5 font-medium capitalize', ORIGEN_COLOR[p.origen])}>
                   {p.origen}
                 </span>
