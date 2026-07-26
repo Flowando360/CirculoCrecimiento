@@ -40,19 +40,27 @@ Usado por RRHH y también por líderes/jefes de área.
 
 
 
+\## Modo de trabajo: autónomo (sin pausas de aprobación)
+
+El usuario prefiere que Claude trabaje de forma autónoma en este proyecto: \*\*no pedir aprobación antes\*\* de programar, hacer `git commit`, hacer `git push`, o tocar la base de datos en Supabase (incluyendo `supabase db push` u otros comandos). Se debe avisar \*\*después\*\* de hecho, explicando qué se hizo y por qué, no antes de hacerlo.
+
+Esto reemplaza los pasos de aprobación previa que tenía este proyecto anteriormente.
+
+
+
 \## Rutina de trabajo esperada
 
 1\. El usuario abre PowerShell y se mueve a esta carpeta.
 
 2\. Si la tarea toca la base de datos, el usuario activa el token de Supabase de este proyecto en la sesión (`$env:SUPABASE\_ACCESS\_TOKEN`) antes de abrir Claude Code.
 
-3\. Antes de programar cualquier cambio, mostrar primero un plan simple de qué se va a hacer y esperar aprobación.
+3\. Claude programa el cambio directamente, sin esperar aprobación previa de un plan.
 
-4\. Después de hacer el cambio, indicar cómo probarlo antes de seguir.
+4\. Después de hacer el cambio, indicar cómo probarlo.
 
-5\. Antes de `git commit` / `git push`, mostrar un resumen de qué archivos cambiaron y por qué.
+5\. Claude puede hacer `git commit` / `git push` directamente. Después de hacerlo, mostrar un resumen de qué archivos cambiaron y por qué.
 
-6\. Si el cambio toca la base de datos en Supabase, avisar explícitamente y explicar si se debe correr `supabase db push` u otro comando, sin ejecutarlo por cuenta propia sin confirmación.
+6\. Si el cambio toca la base de datos en Supabase, Claude puede ejecutar lo necesario (incluyendo `supabase db push`) directamente. Después de hacerlo, avisar explícitamente qué se ejecutó y qué efecto tuvo.
 
 7\. Si el cambio requiere un nuevo despliegue en Vercel, mencionarlo claramente y explicar el paso a seguir (una vez esté configurado el CLI).
 
@@ -64,15 +72,11 @@ Usado por RRHH y también por líderes/jefes de área.
 
 \- Explicar siempre los cambios en español, en lenguaje simple y sin tecnicismos innecesarios
 
-\- No borrar ni modificar código sin explicar primero qué se va a cambiar y por qué
+\- Se puede programar, commitear, hacer push y tocar la base de datos sin pedir aprobación previa — avisar siempre después de hecho, con un resumen claro de qué se cambió y por qué
 
-\- Antes de hacer commit/push, mostrar un resumen de qué archivos cambiaron
-
-\- Cuidado especial con fechas de contratos y SG-SST: son datos sensibles, no modificar su lógica sin confirmar conmigo primero
+\- Cuidado especial con fechas de contratos y SG-SST: son datos sensibles; se puede modificar su lógica sin pedir aprobación previa, pero avisar explícitamente después explicando el cambio con detalle
 
 \- Tener en cuenta que hay distintos niveles de acceso (RRHH vs. líderes de área) — no romper esos permisos al hacer cambios
-
-\- Si algo toca la base de datos en Supabase, avisar explícitamente antes de ejecutar
 
 \- Si un cambio requiere un nuevo despliegue en Vercel, mencionarlo claramente
 
