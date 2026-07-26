@@ -30,6 +30,7 @@ export const etiquetaRol: Record<string, string> = {
   lider: 'Líder',
   colaborador: 'Colaborador',
   gerencia: 'Gerencia',
+  auditor_externo: 'Auditor externo',
 };
 
 export const etiquetaSemaforo: Record<string, string> = {

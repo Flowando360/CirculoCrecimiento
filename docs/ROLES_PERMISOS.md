@@ -30,6 +30,26 @@ Funciones auxiliares reutilizadas en cada policy:
 - `fn_mi_colaborador_id()` — su ficha de colaborador vinculada (si existe).
 - `fn_es_mi_equipo(colaborador_id)` — ¿esa persona reporta directamente a mí?
 
+## Rol `auditor_externo` (auditor/aliado externo invitado)
+
+Rol de **solo lectura**, pensado para un auditor de ISO 9001, SARLAFT/SAGRILAFT
+o SST invitado puntualmente (Portafolio Nexus: línea de Auditoría). No ve
+ningún módulo de talento humano (evaluaciones, PDI, feed, mensajes, salarios):
+solo tiene acceso a nombres/cargos de colaboradores, certificaciones SST, y
+al módulo de Procesos y Sistemas de Gestión (`procesos_gestion`,
+`matriz_riesgos_controles`, `checklist_cumplimiento`), incluyendo el paquete
+de evidencia de auditoría exportable en `/informes/evidencia-auditoria`.
+Se crea igual que cualquier otro usuario, desde Administración → Usuarios y
+roles.
+
+## Panel meta-admin (`es_superadmin`)
+
+No es un rol de `rol_usuario` sino un campo aparte (`perfiles_usuario.es_superadmin`),
+porque quien lo tiene no pertenece a una sola empresa: es el equipo interno
+de la alianza (Flowando/Nexus/V&E) que administra cuentas y membresías de
+**todas** las empresas cliente desde `/meta-admin`. Se activa manualmente en
+la base de datos (no hay UI de autoservicio para otorgarlo, por seguridad).
+
 ## Nota sobre "gerencia" vs "admin_th"
 
 El documento original menciona a Gerencia como consumidora de "reportes

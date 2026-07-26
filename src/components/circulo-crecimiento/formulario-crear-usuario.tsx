@@ -6,7 +6,7 @@ import { etiquetaRol, cn } from '@/lib/utils';
 import { Check, Copy, UserPlus } from 'lucide-react';
 import type { RolUsuario } from '@/types/colaborador';
 
-const ROLES: RolUsuario[] = ['admin_th', 'lider', 'colaborador', 'gerencia'];
+const ROLES: RolUsuario[] = ['admin_th', 'lider', 'colaborador', 'gerencia', 'auditor_externo'];
 const CARACTERES_PASSWORD = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
 
 function generarPassword() {

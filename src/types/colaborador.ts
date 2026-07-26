@@ -1,4 +1,4 @@
-export type RolUsuario = 'admin_th' | 'lider' | 'colaborador' | 'gerencia';
+export type RolUsuario = 'admin_th' | 'lider' | 'colaborador' | 'gerencia' | 'auditor_externo';
 
 export type EstadoColaborador = 'activo' | 'inactivo' | 'en_proceso_salida' | 'periodo_prueba';
 

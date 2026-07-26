@@ -233,6 +233,27 @@ export default async function InicioPage() {
     );
   }
 
+  // ── Vista para Auditor externo: solo evidencia de auditoría ─────────────
+  if (perfil.rol === 'auditor_externo') {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="font-display text-2xl font-semibold text-secundario">
+            Hola, {perfil.nombre_completo.split(' ')[0]}
+          </h1>
+          <p className="text-sm text-marmol-500 mt-1">Acceso de solo lectura a evidencia de auditoría</p>
+        </div>
+
+        <Link href="/informes/evidencia-auditoria" className="card p-5 hover:border-flow-300 transition block max-w-md">
+          <h3 className="font-display font-semibold text-secundario mb-1">Evidencia de auditoría</h3>
+          <p className="text-sm text-marmol-500">
+            Certificaciones SST, checklist de cumplimiento y matriz de riesgos (ISO 9001, SARLAFT/SAGRILAFT).
+          </p>
+        </Link>
+      </div>
+    );
+  }
+
   // ── Vista para Colaborador: su propio resumen ───────────────────────────
   return (
     <div className="space-y-6">

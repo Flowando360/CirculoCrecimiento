@@ -8,7 +8,7 @@ import { z } from 'zod';
 const CrearCuentaSchema = z.object({
   nombreCompleto: z.string().trim().min(1, 'El nombre es requerido'),
   email: z.string().trim().email('Correo inválido'),
-  rol: z.enum(['admin_th', 'lider', 'colaborador', 'gerencia']),
+  rol: z.enum(['admin_th', 'lider', 'colaborador', 'gerencia', 'auditor_externo']),
   password: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres'),
   colaboradorId: z.string().uuid().optional(),
 });
