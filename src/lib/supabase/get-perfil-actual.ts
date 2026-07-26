@@ -12,6 +12,7 @@ export interface PerfilActual {
   nombre_completo: string;
   email: string;
   colaborador_id: string | null;
+  es_superadmin: boolean;
 }
 
 /**
@@ -29,7 +30,7 @@ export async function getPerfilActual(): Promise<PerfilActual | null> {
   if (BYPASS_AUTH) {
     const { data: perfil } = await supabase
       .from('perfiles_usuario')
-      .select('id, empresa_id, rol, nombre_completo, email')
+      .select('id, empresa_id, rol, nombre_completo, email, es_superadmin')
       .eq('empresa_id', EMPRESA_PILOTO_ID)
       .eq('rol', 'admin_th')
       .limit(1)
@@ -50,6 +51,7 @@ export async function getPerfilActual(): Promise<PerfilActual | null> {
       nombre_completo: perfil.nombre_completo as string,
       email: perfil.email as string,
       colaborador_id: (colaborador?.id as string) ?? null,
+      es_superadmin: Boolean(perfil.es_superadmin),
     };
   }
 
@@ -61,7 +63,7 @@ export async function getPerfilActual(): Promise<PerfilActual | null> {
 
   const { data: perfil } = await supabase
     .from('perfiles_usuario')
-    .select('id, empresa_id, rol, nombre_completo, email')
+    .select('id, empresa_id, rol, nombre_completo, email, es_superadmin')
     .eq('id', user.id)
     .single();
 
@@ -80,5 +82,6 @@ export async function getPerfilActual(): Promise<PerfilActual | null> {
     nombre_completo: perfil.nombre_completo as string,
     email: perfil.email as string,
     colaborador_id: (colaborador?.id as string) ?? null,
+    es_superadmin: Boolean(perfil.es_superadmin),
   };
 }
