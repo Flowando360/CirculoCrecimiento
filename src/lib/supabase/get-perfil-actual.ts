@@ -16,6 +16,23 @@ export interface PerfilActual {
 }
 
 /**
+ * Consulta es_superadmin en una llamada aparte, tolerante a que la
+ * migración 0029_meta_admin_membresias.sql todavía no se haya aplicado en
+ * la base de datos (esa columna no existe aún) — así el login y el resto
+ * de la app nunca dependen de que esta migración puntual ya haya corrido.
+ * Devuelve false ante cualquier error, nunca lanza.
+ */
+async function obtenerEsSuperadmin(supabase: ReturnType<typeof createClient>, usuarioId: string): Promise<boolean> {
+  const { data, error } = await supabase
+    .from('perfiles_usuario')
+    .select('es_superadmin')
+    .eq('id', usuarioId)
+    .maybeSingle();
+  if (error || !data) return false;
+  return Boolean((data as any).es_superadmin);
+}
+
+/**
  * Trae el perfil (rol + empresa + ficha de colaborador vinculada) del
  * usuario autenticado actual. Se usa en Server Components para decidir
  * qué mostrar en el sidebar y filtrar consultas por rol.
@@ -30,7 +47,7 @@ export async function getPerfilActual(): Promise<PerfilActual | null> {
   if (BYPASS_AUTH) {
     const { data: perfil } = await supabase
       .from('perfiles_usuario')
-      .select('id, empresa_id, rol, nombre_completo, email, es_superadmin')
+      .select('id, empresa_id, rol, nombre_completo, email')
       .eq('empresa_id', EMPRESA_PILOTO_ID)
       .eq('rol', 'admin_th')
       .limit(1)
@@ -51,7 +68,7 @@ export async function getPerfilActual(): Promise<PerfilActual | null> {
       nombre_completo: perfil.nombre_completo as string,
       email: perfil.email as string,
       colaborador_id: (colaborador?.id as string) ?? null,
-      es_superadmin: Boolean(perfil.es_superadmin),
+      es_superadmin: await obtenerEsSuperadmin(supabase, perfil.id as string),
     };
   }
 
@@ -63,7 +80,7 @@ export async function getPerfilActual(): Promise<PerfilActual | null> {
 
   const { data: perfil } = await supabase
     .from('perfiles_usuario')
-    .select('id, empresa_id, rol, nombre_completo, email, es_superadmin')
+    .select('id, empresa_id, rol, nombre_completo, email')
     .eq('id', user.id)
     .single();
 
@@ -82,6 +99,6 @@ export async function getPerfilActual(): Promise<PerfilActual | null> {
     nombre_completo: perfil.nombre_completo as string,
     email: perfil.email as string,
     colaborador_id: (colaborador?.id as string) ?? null,
-    es_superadmin: Boolean(perfil.es_superadmin),
+    es_superadmin: await obtenerEsSuperadmin(supabase, user.id),
   };
 }
