@@ -4,6 +4,9 @@ import { createClient } from '@/lib/supabase/server';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { revalidatePath } from 'next/cache';
 import { parsearPerfilCargo, type PerfilCargoParseado } from '@/lib/importador-perfil-cargo';
+import type { Database } from '@/types/database.types';
+
+type CargoUpdate = Database['public']['Tables']['cargos']['Update'];
 
 /**
  * Parsea el Excel (formato FORSST 61) y devuelve el resultado SIN guardar
@@ -100,7 +103,10 @@ export async function guardarPerfilCargoImportado(datos: PerfilCargoParseado) {
   camposCargo.destreza_manual = datos.destrezaManual;
   camposCargo.destreza_coordinacion_motora = datos.destrezaCoordinacionMotora;
 
-  const { error: errorUpdate } = await supabase.from('cargos').update(camposCargo).eq('id', cargoId);
+  // camposCargo se arma dinámicamente con nombres de columnas reales de "cargos"
+  // (ver helper set() arriba) — el cast es seguro, solo evita que postgrest exija
+  // conocer las claves en tiempo de compilación para un objeto armado en runtime.
+  const { error: errorUpdate } = await supabase.from('cargos').update(camposCargo as CargoUpdate).eq('id', cargoId);
   if (errorUpdate) return { ok: false as const, error: errorUpdate.message };
 
   // Reemplazar listas relacionadas por completo.

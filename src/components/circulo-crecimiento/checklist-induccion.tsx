@@ -42,7 +42,9 @@ export function ChecklistInduccion({
   function toggle(item: ItemAsignado) {
     const nuevoEstado = !item.completado;
     setItems((prev) => prev.map((i) => (i.id === item.id ? { ...i, completado: nuevoEstado } : i)));
-    startTransition(() => marcarItemInduccion(colaboradorId, item.id, nuevoEstado));
+    startTransition(async () => {
+      await marcarItemInduccion(colaboradorId, item.id, nuevoEstado);
+    });
   }
 
   const total = items.length;

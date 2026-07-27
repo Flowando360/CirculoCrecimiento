@@ -73,3 +73,8 @@ export async function guardarBrief(formData: FormData) {
   revalidatePath(`/circulo-crecimiento/evaluaciones/${parsed.data.evaluacionId}/brief`);
   return { ok: true as const };
 }
+
+/** Wrapper de guardarBrief para usar directo como `<form action>` (necesita devolver void). */
+export async function guardarBriefForm(formData: FormData) {
+  await guardarBrief(formData);
+}

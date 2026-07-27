@@ -4,7 +4,7 @@ import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { FirmaAcuerdo } from '@/components/circulo-crecimiento/firma-acuerdo';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, HandshakeIcon } from 'lucide-react';
-import { guardarCompromisos } from './actions';
+import { guardarCompromisosForm } from './actions';
 
 export default async function AcuerdoCrecimientoPage({ params }: { params: { evaluacionId: string } }) {
   const perfil = await getPerfilActual();
@@ -53,7 +53,7 @@ export default async function AcuerdoCrecimientoPage({ params }: { params: { eva
         <p className="text-sm text-marmol-500 mt-1">Compromisos acordados con {colaborador.nombre_completo}.</p>
       </div>
 
-      <form action={guardarCompromisos} className="card p-5 space-y-4">
+      <form action={guardarCompromisosForm} className="card p-5 space-y-4">
         <input type="hidden" name="evaluacionId" value={params.evaluacionId} />
 
         <div>

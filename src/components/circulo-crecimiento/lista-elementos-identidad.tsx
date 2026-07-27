@@ -38,7 +38,9 @@ export function ListaElementosIdentidad({
 
   function eliminar(id: string) {
     setElementos((prev) => prev.filter((e) => e.id !== id));
-    startTransition(() => eliminarElementoIdentidad(id));
+    startTransition(async () => {
+      await eliminarElementoIdentidad(id);
+    });
   }
 
   return (

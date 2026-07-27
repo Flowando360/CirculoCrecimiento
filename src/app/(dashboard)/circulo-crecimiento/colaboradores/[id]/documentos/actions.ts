@@ -3,6 +3,9 @@
 import { createClient } from '@/lib/supabase/server';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { revalidatePath } from 'next/cache';
+import type { Database } from '@/types/database.types';
+
+type ColaboradorUpdate = Database['public']['Tables']['colaboradores']['Update'];
 
 async function esAdminThDeEsteColaborador(colaboradorId: string) {
   const perfil = await getPerfilActual();
@@ -71,7 +74,7 @@ export async function guardarContrato(formData: FormData) {
   }
 
   const supabase = createClient();
-  const camposActualizar: Record<string, unknown> = { salario };
+  const camposActualizar: ColaboradorUpdate = { salario };
 
   const file = formData.get('archivo') as File | null;
   if (file && file.size > 0) {

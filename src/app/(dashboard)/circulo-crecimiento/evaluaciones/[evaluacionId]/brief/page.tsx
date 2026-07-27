@@ -4,7 +4,7 @@ import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { SemaforoBadge } from '@/components/circulo-crecimiento/semaforo-badge';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, FileText } from 'lucide-react';
-import { guardarBrief } from './actions';
+import { guardarBriefForm } from './actions';
 
 export default async function BriefPage({ params }: { params: { evaluacionId: string } }) {
   const perfil = await getPerfilActual();
@@ -79,7 +79,7 @@ export default async function BriefPage({ params }: { params: { evaluacionId: st
         </div>
       </div>
 
-      <form action={guardarBrief} className="card p-5 space-y-4">
+      <form action={guardarBriefForm} className="card p-5 space-y-4">
         <input type="hidden" name="evaluacionId" value={params.evaluacionId} />
 
         <div>

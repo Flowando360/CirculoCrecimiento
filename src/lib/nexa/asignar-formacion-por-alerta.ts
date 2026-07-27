@@ -26,6 +26,7 @@ export async function asignarFormacionPorAlerta(alertaId: string) {
 
   const { data: alerta } = await supabase.from('alertas').select('id, colaborador_id, tipo').eq('id', alertaId).maybeSingle();
   if (!alerta) return { ok: false as const, accion: 'ninguna', motivo: 'alerta no encontrada' };
+  if (!alerta.colaborador_id) return { ok: false as const, accion: 'ninguna', motivo: 'alerta sin colaborador asociado' };
 
   if (!TIPOS_QUE_DISPARAN_FORMACION.includes(alerta.tipo)) {
     return { ok: true as const, accion: 'ninguna', motivo: 'tipo de alerta no dispara formación' };
@@ -39,6 +40,7 @@ export async function asignarFormacionPorAlerta(alertaId: string) {
   if (!colaborador) return { ok: false as const, accion: 'ninguna', motivo: 'colaborador no encontrado' };
 
   const categoria = CATEGORIA_POR_TIPO_ALERTA[alerta.tipo];
+  if (!categoria) return { ok: true as const, accion: 'ninguna', motivo: 'sin categoría configurada para este tipo de alerta' };
 
   // Antes esto tomaba "el primer curso del cargo, sin importar cuál" —
   // calculaba la categoría pero nunca la usaba para filtrar. Ahora sí se

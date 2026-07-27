@@ -10,20 +10,22 @@ interface Criterio {
   criterio: string;
 }
 
+type Bloque =
+  | 'competencias_organizacionales'
+  | 'competencias_funcionales'
+  | 'competencias_liderazgo'
+  | 'roles_y_funciones'
+  | 'cultura';
+
 export interface ItemEvaluacion {
   id: string; // evaluacion_item id
-  bloque:
-    | 'competencias_organizacionales'
-    | 'competencias_funcionales'
-    | 'competencias_liderazgo'
-    | 'roles_y_funciones'
-    | 'cultura';
+  bloque: Bloque;
   titulo: string;
   descripcion: string | null;
   criterios?: Criterio[]; // solo si el ítem viene de una competencia con guía de valoración
 }
 
-const ETIQUETA_BLOQUE: Record<string, { titulo: string; color: string }> = {
+const ETIQUETA_BLOQUE: Record<Bloque, { titulo: string; color: string }> = {
   competencias_organizacionales: { titulo: '1. Competencias Organizacionales', color: 'text-flow-600' },
   competencias_funcionales: { titulo: '2. Competencias Funcionales del Cargo', color: 'text-hacer' },
   competencias_liderazgo: { titulo: '3. Competencias de Liderazgo', color: 'text-deber' },
@@ -159,7 +161,8 @@ export function FormularioEvaluacion({
                   defaultValue={observaciones[item.id] ?? ''}
                   onChange={(e) => setObservaciones((prev) => ({ ...prev, [item.id]: e.target.value }))}
                   onBlur={() => {
-                    if (notas[item.id]) guardar(item.id, notas[item.id]);
+                    const nota = notas[item.id];
+                    if (nota) guardar(item.id, nota);
                   }}
                   className="mt-3 w-full rounded-lg border border-marmol-200 p-2.5 text-sm"
                   rows={2}

@@ -57,7 +57,9 @@ export function ListaRiesgos({ riesgosIniciales, puedeEditar }: { riesgosInicial
 
   function eliminar(id: string) {
     setRiesgos((prev) => prev.filter((r) => r.id !== id));
-    startTransition(() => eliminarRiesgo(id));
+    startTransition(async () => {
+      await eliminarRiesgo(id);
+    });
   }
 
   return (

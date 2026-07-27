@@ -31,7 +31,9 @@ export function HiloMensajes({ destinatarioId, itemsIniciales }: { destinatarioI
     };
     setMensajes((prev) => [...prev, optimista]);
     setTexto('');
-    startTransition(() => enviarMensaje({ destinatarioId, contenido }));
+    startTransition(async () => {
+      await enviarMensaje({ destinatarioId, contenido });
+    });
   }
 
   return (

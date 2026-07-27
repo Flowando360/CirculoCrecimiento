@@ -127,7 +127,15 @@ export async function obtenerInforme360(colaboradorId: string) {
     ciclo_nombre: evalConResultado?.ciclo?.nombre ?? null,
     resultado: evalConResultado?.resultado?.[0] ?? null,
     detallePorEvaluador,
-    saber: saber ?? null,
+    saber: saber
+      ? {
+          porcentaje_cumplimiento: saber.porcentaje_cumplimiento,
+          total_items: saber.total_items ?? 0,
+          items_cumple: saber.items_cumple ?? 0,
+          items_parcial: saber.items_parcial ?? 0,
+          items_pendiente: saber.items_pendiente ?? 0,
+        }
+      : null,
     ser: ser ?? null,
   };
 

@@ -42,6 +42,8 @@ export async function GET(req: NextRequest) {
   let correosEnviados = 0;
   let cursosAsignados = 0;
   for (const alerta of proximas ?? []) {
+    if (!alerta.id || !alerta.colaborador_id) continue;
+
     const { data: colaborador } = await supabase
       .from('colaboradores')
       .select('usuario_id, usuario:usuario_id(email)')

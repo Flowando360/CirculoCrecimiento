@@ -82,7 +82,9 @@ export function NotebookLista({ notasIniciales }: { notasIniciales: NotaItem[] }
 
   function eliminar(id: string) {
     setNotas((prev) => prev.filter((n) => n.id !== id));
-    startTransition(() => eliminarNota(id));
+    startTransition(async () => {
+      await eliminarNota(id);
+    });
   }
 
   return (

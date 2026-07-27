@@ -95,6 +95,11 @@ export async function guardarCompromisos(formData: FormData) {
   return { ok: true as const };
 }
 
+/** Wrapper de guardarCompromisos para usar directo como `<form action>` (necesita devolver void). */
+export async function guardarCompromisosForm(formData: FormData) {
+  await guardarCompromisos(formData);
+}
+
 const FirmarSchema = z.object({
   evaluacionId: z.string().uuid(),
   parte: z.enum(['colaborador', 'lider']),

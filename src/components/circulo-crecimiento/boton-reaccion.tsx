@@ -22,7 +22,9 @@ export function BotonReaccion({
     const nuevoEstado = !yaReacciono;
     setYaReacciono(nuevoEstado);
     setTotal((prev) => prev + (nuevoEstado ? 1 : -1));
-    startTransition(() => alternarReaccion(publicacionId));
+    startTransition(async () => {
+      await alternarReaccion(publicacionId);
+    });
   }
 
   return (

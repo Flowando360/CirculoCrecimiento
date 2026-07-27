@@ -22,12 +22,16 @@ export function ListaNotificaciones({ itemsIniciales }: { itemsIniciales: Notifi
 
   function marcarUna(id: string) {
     setItems((prev) => prev.map((i) => (i.id === id ? { ...i, leido: true } : i)));
-    startTransition(() => marcarNotificacionLeida(id));
+    startTransition(async () => {
+      await marcarNotificacionLeida(id);
+    });
   }
 
   function marcarTodas() {
     setItems((prev) => prev.map((i) => ({ ...i, leido: true })));
-    startTransition(() => marcarTodasLeidas());
+    startTransition(async () => {
+      await marcarTodasLeidas();
+    });
   }
 
   return (

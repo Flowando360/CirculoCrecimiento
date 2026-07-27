@@ -99,12 +99,16 @@ export function ListaChecklist({
 
   function eliminar(id: string) {
     setItems((prev) => prev.filter((i) => i.id !== id));
-    startTransition(() => eliminarChecklistItem(id));
+    startTransition(async () => {
+      await eliminarChecklistItem(id);
+    });
   }
 
   function cambiarEstado(id: string, estado: ChecklistItem['estado']) {
     setItems((prev) => prev.map((i) => (i.id === id ? { ...i, estado } : i)));
-    startTransition(() => actualizarEstadoChecklist(id, estado as any));
+    startTransition(async () => {
+      await actualizarEstadoChecklist(id, estado as any);
+    });
   }
 
   return (

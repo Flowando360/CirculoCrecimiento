@@ -1,7 +1,7 @@
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import { guardarIdentidad } from './actions';
+import { guardarIdentidadForm } from './actions';
 import { ListaElementosIdentidad } from '@/components/circulo-crecimiento/lista-elementos-identidad';
 
 export default async function IdentidadOrganizacionalPage() {
@@ -29,7 +29,7 @@ export default async function IdentidadOrganizacionalPage() {
         </p>
       </div>
 
-      <form action={guardarIdentidad} className="card p-5 space-y-4">
+      <form action={guardarIdentidadForm} className="card p-5 space-y-4">
         <div>
           <label className="block text-sm font-medium text-marmol-700 mb-1">
             Propósito Superior (Misión)

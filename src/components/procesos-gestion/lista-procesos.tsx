@@ -44,7 +44,9 @@ export function ListaProcesos({ procesosIniciales, puedeEditar }: { procesosInic
 
   function eliminar(id: string) {
     setProcesos((prev) => prev.filter((p) => p.id !== id));
-    startTransition(() => eliminarProceso(id));
+    startTransition(async () => {
+      await eliminarProceso(id);
+    });
   }
 
   return (

@@ -23,6 +23,11 @@ export async function guardarIdentidad(formData: FormData) {
   return { ok: true };
 }
 
+/** Wrapper de guardarIdentidad para usar directo como `<form action>` (necesita devolver void). */
+export async function guardarIdentidadForm(formData: FormData) {
+  await guardarIdentidad(formData);
+}
+
 export async function agregarElementoIdentidad(tipo: 'principio' | 'valor', nombre: string, descripcion: string) {
   const perfil = await getPerfilActual();
   if (!perfil || perfil.rol !== 'admin_th') return { ok: false, error: 'No autorizado' };

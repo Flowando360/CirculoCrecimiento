@@ -40,7 +40,9 @@ export function ListaCursosRecomendados({
 
   function eliminar(id: string) {
     setAsignaciones((prev) => prev.filter((a) => a.id !== id));
-    startTransition(() => eliminarCursoRecomendado(id));
+    startTransition(async () => {
+      await eliminarCursoRecomendado(id);
+    });
   }
 
   const yaAsignadosIds = new Set(asignaciones.map((a) => a.curso_id));

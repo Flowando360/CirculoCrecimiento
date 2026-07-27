@@ -44,7 +44,9 @@ export function PlanInduccionCargo({ cargoId, itemsIniciales }: { cargoId: strin
 
   function eliminar(id: string) {
     setItems((prev) => prev.filter((i) => i.id !== id));
-    startTransition(() => eliminarItemInduccion(id, cargoId));
+    startTransition(async () => {
+      await eliminarItemInduccion(id, cargoId);
+    });
   }
 
   const grupos = (Object.keys(CATEGORIA_LABEL) as Categoria[])

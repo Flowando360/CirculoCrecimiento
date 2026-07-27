@@ -266,9 +266,11 @@ export default async function DetalleCargoPage({ params }: { params: { id: strin
           <div className="space-y-3">
             {riesgos.map((r) => (
               <div key={r.id} className="border-b border-marmol-100 pb-2 last:border-0 text-sm">
-                <span className="text-xs rounded-full bg-marmol-100 text-marmol-600 px-2 py-0.5 font-medium capitalize mb-1 inline-block">
-                  {r.categoria.replace(/_/g, ' ')}
-                </span>
+                {r.categoria && (
+                  <span className="text-xs rounded-full bg-marmol-100 text-marmol-600 px-2 py-0.5 font-medium capitalize mb-1 inline-block">
+                    {r.categoria.replace(/_/g, ' ')}
+                  </span>
+                )}
                 <p className="text-marmol-700">{r.factor}</p>
                 {r.efectos_posibles && <p className="text-xs text-marmol-400 mt-0.5">Efectos: {r.efectos_posibles}</p>}
               </div>
