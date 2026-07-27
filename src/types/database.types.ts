@@ -3348,7 +3348,7 @@ export type Database = {
       respuestas_evaluacion: {
         Row: {
           comentario: string | null
-          competencia_id: string
+          competencia_id: string | null
           created_at: string
           evaluacion_item_id: string | null
           evaluacion_tarea_id: string
@@ -3359,7 +3359,7 @@ export type Database = {
         }
         Insert: {
           comentario?: string | null
-          competencia_id: string
+          competencia_id?: string | null
           created_at?: string
           evaluacion_item_id?: string | null
           evaluacion_tarea_id: string
@@ -3370,7 +3370,7 @@ export type Database = {
         }
         Update: {
           comentario?: string | null
-          competencia_id?: string
+          competencia_id?: string | null
           created_at?: string
           evaluacion_item_id?: string | null
           evaluacion_tarea_id?: string
