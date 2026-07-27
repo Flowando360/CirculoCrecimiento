@@ -60,7 +60,7 @@ Esto reemplaza los pasos de aprobación previa que tenía este proyecto anterior
 
 5\. Claude puede hacer `git commit` / `git push` directamente. Después de hacerlo, mostrar un resumen de qué archivos cambiaron y por qué.
 
-6\. Si el cambio toca la base de datos en Supabase, Claude puede ejecutar lo necesario (incluyendo `supabase db push`) directamente. Después de hacerlo, avisar explícitamente qué se ejecutó y qué efecto tuvo.
+6\. Si el cambio toca la base de datos en Supabase, Claude puede ejecutar lo necesario (incluyendo `supabase db push`) directamente. Después de hacerlo, avisar explícitamente qué se ejecutó y qué efecto tuvo. \*\*Inmediatamente después de cada `supabase db push`, correr también `npm run db:types`\*\* (regenera `src/types/database.types.ts`) y comitear ese archivo junto con la migración — si no, el archivo de tipos queda desactualizado y rompe el chequeo de tipos (`npm run typecheck`) del resto del código sin que se note, porque el build de Vercel ignora errores de tipos (`ignoreBuildErrors: true` en `next.config`).
 
 7\. Si el cambio requiere un nuevo despliegue en Vercel, mencionarlo claramente y explicar el paso a seguir (una vez esté configurado el CLI).
 
