@@ -3,7 +3,7 @@ import type { ModuloAyuda } from '@/types/ayuda';
 export const moduloInformes: ModuloAyuda = {
   slug: 'informes',
   titulo: 'Informes',
-  descripcion: 'Los ocho informes del sistema. Los primeros cuatro (360°, PDI, SST, Brechas) se pueden exportar a PDF y Excel; los cuatro más nuevos (Formación, Cultura y Engagement, Consolidado Gerencial, Histórico Comparativo) por ahora solo se consultan en pantalla.',
+  descripcion: 'Los nueve informes del sistema. Los primeros cuatro (360°, PDI, SST, Brechas) se pueden exportar a PDF y Excel; los cuatro siguientes (Formación, Cultura y Engagement, Consolidado Gerencial, Histórico Comparativo) por ahora solo se consultan en pantalla; el noveno (Evidencia de auditoría) descarga un paquete ZIP para entregar a un auditor externo.',
   paginas: [
     {
       slug: 'indice',
@@ -82,6 +82,21 @@ export const moduloInformes: ModuloAyuda = {
       notas: [
         'Visible para admin_th, líder (su equipo) y gerencia.',
         'Un resumen de los dos ciclos más recientes también aparece como widget en el dashboard de Inicio.',
+      ],
+    },
+    {
+      slug: 'evidencia-auditoria',
+      ruta: '/informes/evidencia-auditoria',
+      titulo: 'Evidencia de auditoría',
+      resumen:
+        'Descarga un paquete ZIP (PDF de portada + Excel de detalle + documentos adjuntos) listo para entregar a un auditor externo, con certificaciones SST, checklist de cumplimiento, riesgos y procesos documentados.',
+      camposYBotones: [
+        { nombre: 'Paquete completo', explicacion: 'SST + ISO 9001 + SARLAFT/SAGRILAFT + PTEE, todo en un solo ZIP.' },
+        { nombre: 'Paquetes por marco normativo', explicacion: 'SST, ISO 9001 o SARLAFT/SAGRILAFT por separado, cuando el auditor solo pide uno.' },
+      ],
+      notas: [
+        'Pensado para el rol auditor_externo (acceso de solo lectura), aunque admin_th, líder y gerencia también pueden entrar y descargarlo.',
+        'La información sale de Procesos y Sistemas de Gestión (checklist, riesgos, procesos) y del módulo SST — no duplica datos, solo los empaqueta.',
       ],
     },
   ],

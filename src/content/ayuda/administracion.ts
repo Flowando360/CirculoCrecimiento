@@ -69,11 +69,11 @@ export const moduloAdministracion: ModuloAyuda = {
       titulo: 'Usuarios y roles',
       resumen: 'Crea cuentas de acceso para los colaboradores y administra sus roles.',
       camposYBotones: [
-        { nombre: 'Nuevo usuario', explicacion: 'Elige un colaborador sin cuenta todavía, su correo, rol (admin_th/líder/colaborador/gerencia) y una contraseña temporal.' },
+        { nombre: 'Nuevo usuario', explicacion: 'Elige un colaborador sin cuenta todavía, su correo, rol (admin_th/líder/colaborador/gerencia/auditor_externo) y una contraseña temporal.' },
         { nombre: 'Tabla de usuarios', explicacion: 'Nombre, correo, rol y si la cuenta está activa.' },
       ],
       notas: [
-        'Roles y su alcance: admin_th ve y edita todo; líder ve su equipo y su propia información; colaborador se ve solo a sí mismo; gerencia ve reportes agregados.',
+        'Roles y su alcance: admin_th ve y edita todo; líder ve su equipo y su propia información; colaborador se ve solo a sí mismo; gerencia ve reportes agregados; auditor_externo solo ve, de solo lectura, nombre/cargo de los colaboradores y sus certificaciones de hoja de vida — pensado para entregar evidencia a una auditoría sin exponer el resto del sistema.',
       ],
     },
     {
@@ -84,9 +84,11 @@ export const moduloAdministracion: ModuloAyuda = {
       camposYBotones: [
         { nombre: 'Datos de la empresa', explicacion: 'NIT, dirección, teléfono, ciudad, y nombre/cargo de quien firma el certificado laboral. Se usan cada vez que se genera un certificado desde la ficha de un colaborador.' },
         { nombre: 'Porcentajes por fuente', explicacion: 'Deben sumar 100% en cada grupo (con equipo / sin equipo).' },
+        { nombre: 'Cursos para brecha de Hacer / de Deber', explicacion: 'Elige qué curso(s) de Nexa se asignan automáticamente cuando el motor de PDI automático detecta una brecha en esa dimensión. Se puede dejar sin cursos configurados (entonces solo se crea el PDI, sin formación asociada).' },
       ],
       notas: [
         'Los porcentajes de ponderación solo se pueden editar mientras el ciclo está en estado "planeado" — una vez abierto un ciclo, sus pesos ya no se pueden cambiar, para no afectar Encuentros de Crecimiento en curso. Los datos de la empresa, en cambio, se pueden editar en cualquier momento.',
+        'El motor automático de brechas → formación se explica en detalle en Círculo de Crecimiento → Planes de Desarrollo Individual (PDI).',
       ],
     },
   ],

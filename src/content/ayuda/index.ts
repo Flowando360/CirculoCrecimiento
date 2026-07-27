@@ -6,6 +6,8 @@ import { moduloAlertas } from './alertas';
 import { moduloComunicacion } from './comunicacion';
 import { moduloInformes } from './informes';
 import { moduloAdministracion } from './administracion';
+import { moduloProcesosGestion } from './procesos-gestion';
+import { moduloMetaAdmin } from './meta-admin';
 
 export { preguntasFrecuentes } from './faq';
 export { glosario } from './glosario';
@@ -19,6 +21,8 @@ export const MODULOS: ModuloAyuda[] = [
   moduloComunicacion,
   moduloInformes,
   moduloAdministracion,
+  moduloProcesosGestion,
+  moduloMetaAdmin,
 ];
 
 function coincideRuta(patron: string, pathname: string): boolean {

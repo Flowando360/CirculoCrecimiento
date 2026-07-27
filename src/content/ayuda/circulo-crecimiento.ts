@@ -211,8 +211,12 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
       camposYBotones: [
         { nombre: 'Origen', explicacion: 'De qué dimensión viene la brecha detectada (Hacer/Deber/Saber/Ser/Mixto).' },
         { nombre: 'Estado', explicacion: 'Pendiente, en curso, cumplido o vencido, con su fecha de compromiso.' },
+        { nombre: 'Insignia "Automático"', explicacion: 'Marca los PDI que generó solo el sistema (ver nota siguiente), para distinguirlos de los que redactó admin_th o el líder a mano.' },
       ],
-      notas: ['Un colaborador solo ve su propio PDI; admin_th, líder y gerencia ven el de su alcance correspondiente.'],
+      notas: [
+        'Un colaborador solo ve su propio PDI; admin_th, líder y gerencia ven el de su alcance correspondiente.',
+        'Motor automático de brechas: cuando un Encuentro de Crecimiento queda 100% respondido y el semáforo de Hacer o de Deber sale en "bajo", el sistema crea aquí un PDI automático y asigna al colaborador los cursos de Nexa configurados para esa dimensión — sin que nadie tenga que redactarlo a mano. Los cursos que dispara cada dimensión se configuran en Administración → Configuración.',
+      ],
     },
   ],
 };

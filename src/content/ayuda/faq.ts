@@ -116,4 +116,24 @@ export const preguntasFrecuentes: PreguntaFrecuente[] = [
     pregunta: '¿Cómo reacciono a una publicación del feed corporativo?',
     respuesta: 'Con el botón "Me gusta" que aparece abajo de cada publicación. Vuelve a hacer clic para quitar tu reacción.',
   },
+  {
+    pregunta: '¿Por qué aparece un PDI que nadie de mi equipo redactó?',
+    respuesta:
+      'Lo generó el motor automático: cuando un Encuentro de Crecimiento queda 100% respondido y el semáforo de Hacer o Deber sale "bajo", el sistema crea el PDI solo y asigna los cursos de Nexa configurados para esa dimensión. Se distingue por la insignia "Automático" en Planes de Desarrollo Individual. Los cursos que dispara se configuran en Administración → Configuración.',
+  },
+  {
+    pregunta: '¿Qué es el rol auditor_externo y qué puede ver?',
+    respuesta:
+      'Un rol de solo lectura pensado para alguien ajeno a la empresa (ej. un auditor de certificación). Solo ve nombre/cargo de los colaboradores y sus certificaciones de hoja de vida, y puede descargar el paquete de Evidencia de auditoría. No tiene acceso a ningún otro módulo. Se asigna igual que cualquier otro rol, desde Administración → Usuarios y roles.',
+  },
+  {
+    pregunta: '¿Qué trae el paquete "Evidencia de auditoría" y de dónde sale la información?',
+    respuesta:
+      'Es un ZIP con un PDF de portada, un Excel de detalle y los archivos de evidencia adjuntos. La información sale directo de Procesos y Sistemas de Gestión (procesos, riesgos, checklist) y del módulo SST — no hay que volver a diligenciar nada aparte.',
+  },
+  {
+    pregunta: '¿Quién puede ver el panel de "Cuentas y membresías" (Meta-Admin)?',
+    respuesta:
+      'Solo el equipo interno de la alianza Flowando/Nexus/V&E (cuentas marcadas como superadmin). Ninguna empresa cliente lo ve, ni siquiera con el rol admin_th.',
+  },
 ];

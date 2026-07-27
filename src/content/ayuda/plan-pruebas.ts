@@ -22,6 +22,23 @@ export const planPruebas: SeccionPlanPruebas[] = [
           { paso: 'Inicia sesión como líder y entra a Colaboradores.', resultadoEsperado: 'Solo ve a las personas que le reportan directamente, no a toda la empresa.' },
         ],
       },
+      {
+        titulo: 'El rol auditor_externo solo ve lo mínimo',
+        rolNecesario: 'auditor_externo',
+        pasos: [
+          { paso: 'Inicia sesión con una cuenta con rol auditor_externo.', resultadoEsperado: 'El menú lateral solo muestra Colaboradores (nombre/cargo) e Informes → Evidencia de auditoría.' },
+          { paso: 'Intenta entrar por URL a una pantalla fuera de su alcance (ej. /administracion/usuarios o /circulo-crecimiento/ciclos).', resultadoEsperado: 'Redirige a Inicio, no muestra datos.' },
+          { paso: 'Entra a Colaboradores.', resultadoEsperado: 'Ve nombre y cargo de cada persona, sin datos sensibles (sin Hacer/Deber, sin salario, sin documentos).' },
+        ],
+      },
+      {
+        titulo: 'El panel Meta-Admin es exclusivo del equipo interno',
+        rolNecesario: 'admin_th (para confirmar que NO entra) y una cuenta superadmin',
+        pasos: [
+          { paso: 'Inicia sesión como admin_th y escribe la URL /meta-admin directamente en el navegador.', resultadoEsperado: 'Redirige a Inicio — admin_th no tiene acceso, aunque sea el rol más alto dentro de su empresa.' },
+          { paso: 'Inicia sesión con una cuenta marcada como superadmin (equipo interno de la alianza) y entra a /meta-admin.', resultadoEsperado: 'Carga la tabla de "Cuentas y membresías" con todas las empresas cliente del sistema, no solo la propia.' },
+        ],
+      },
     ],
   },
   {
@@ -53,6 +70,17 @@ export const planPruebas: SeccionPlanPruebas[] = [
           { paso: 'Completa y guarda el Brief.', resultadoEsperado: 'Queda guardado; el colaborador en crecimiento NO puede verlo.' },
           { paso: 'Entra al Acuerdo de crecimiento de la misma persona, completa los compromisos y firma.', resultadoEsperado: 'La casilla de firma queda marcada con la fecha.' },
           { paso: 'Inicia sesión como ese colaborador y firma su parte del acuerdo.', resultadoEsperado: 'Ambas firmas quedan registradas.' },
+        ],
+      },
+      {
+        titulo: 'Motor automático: brecha detectada genera PDI y formación solo',
+        rolNecesario: 'admin_th (configurar) y los acompañantes de un Encuentro de Crecimiento (valorar)',
+        pasos: [
+          { paso: 'En Administración → Configuración, asigna al menos un curso a "Cursos para brecha de Hacer" (o de Deber).', resultadoEsperado: 'Queda guardado en la lista de esa dimensión.' },
+          { paso: 'Completa todas las valoraciones pendientes de un Encuentro de Crecimiento (autoevaluación, líder, pares y colaboradores a cargo) hasta llegar a 100% de avance, dejando notas bajas en los ítems de Hacer o Deber.', resultadoEsperado: 'Al guardar la última respuesta, el % de avance del Encuentro de Crecimiento llega a 100%.' },
+          { paso: 'Entra a Círculo de Crecimiento → Planes de Desarrollo Individual (PDI) de esa persona.', resultadoEsperado: 'Aparece un nuevo PDI con la insignia "Automático", origen Hacer o Deber (según cuál quedó en semáforo bajo).' },
+          { paso: 'Entra a la formación de esa persona en Nexa.', resultadoEsperado: 'Aparece asignado el curso configurado en el paso 1, sin que nadie lo haya asignado a mano.' },
+          { paso: 'Corrige una respuesta del mismo Encuentro de Crecimiento y deja que se recalcule.', resultadoEsperado: 'No se crea un segundo PDI automático duplicado para la misma persona, ciclo y dimensión.' },
         ],
       },
     ],
@@ -245,6 +273,65 @@ export const planPruebas: SeccionPlanPruebas[] = [
           { paso: 'Entra a Informes → Histórico Comparativo.', resultadoEsperado: 'Muestra la comparación entre el ciclo actual y el anterior, igual que el widget de Inicio.' },
         ],
       },
+      {
+        titulo: 'Evidencia de auditoría: descarga y alcance',
+        rolNecesario: 'auditor_externo y, por separado, admin_th',
+        pasos: [
+          { paso: 'Con datos ya cargados en Procesos y Sistemas de Gestión (al menos un proceso, un riesgo y un ítem de checklist con evidencia adjunta), inicia sesión como auditor_externo y entra a Informes → Evidencia de auditoría.', resultadoEsperado: 'Ve las 4 tarjetas de paquete (Completo, SST, ISO 9001, SARLAFT/SAGRILAFT) con los conteos reales.' },
+          { paso: 'Descarga el "Paquete completo".', resultadoEsperado: 'Baja un archivo ZIP con un PDF de portada, un Excel de detalle y los archivos de evidencia adjuntos al checklist.' },
+          { paso: 'Descarga el paquete "ISO 9001" únicamente.', resultadoEsperado: 'El ZIP trae solo lo correspondiente a ese marco normativo (menos contenido que el paquete completo).' },
+          { paso: 'Inicia sesión como admin_th y repite la descarga.', resultadoEsperado: 'También puede acceder y descargar — no es exclusivo del auditor externo.' },
+        ],
+      },
+    ],
+  },
+  {
+    modulo: 'Procesos y Sistemas de Gestión',
+    escenarios: [
+      {
+        titulo: 'Registrar un proceso documentado',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Entra a Procesos y Sistemas de Gestión y agrega un proceso con área, nombre, descripción y versión.', resultadoEsperado: 'Aparece en la lista de "Procesos documentados" con la fecha de actualización de hoy.' },
+          { paso: 'Elimínalo.', resultadoEsperado: 'Desaparece de la lista de inmediato.' },
+        ],
+      },
+      {
+        titulo: 'Registrar un riesgo en la matriz',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Agrega un riesgo eligiendo marco normativo (ISO 9001 / SARLAFT-SAGRILAFT / PTEE / Interno), probabilidad, impacto y un control asociado.', resultadoEsperado: 'Aparece en la matriz con la etiqueta de marco normativo y el color según el impacto (verde/amarillo/rojo).' },
+        ],
+      },
+      {
+        titulo: 'Checklist de cumplimiento con evidencia adjunta',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Agrega un ítem de checklist para un marco normativo, adjuntando un archivo como evidencia.', resultadoEsperado: 'Queda creado en estado "No cumple" (estado inicial por defecto) con el ícono de clip indicando que tiene evidencia.' },
+          { paso: 'Cambia su estado a "Cumple".', resultadoEsperado: 'La etiqueta de estado cambia de color de inmediato (rojo → verde).' },
+        ],
+      },
+      {
+        titulo: 'Un líder consulta pero no edita',
+        rolNecesario: 'Líder',
+        pasos: [
+          { paso: 'Inicia sesión como líder y entra a Procesos y Sistemas de Gestión.', resultadoEsperado: 'Puede ver los tres bloques (procesos, riesgos, checklist), pero no aparecen los formularios para agregar/eliminar ni el selector de estado — solo lectura.' },
+        ],
+      },
+    ],
+  },
+  {
+    modulo: 'Meta-Admin (equipo interno de la alianza)',
+    escenarios: [
+      {
+        titulo: 'Editar el plan y la facturación de una empresa cliente',
+        rolNecesario: 'Cuenta superadmin',
+        pasos: [
+          { paso: 'Entra a /meta-admin y localiza una empresa en la tabla.', resultadoEsperado: 'Ve usuarios activos y colaboradores activos de esa empresa (conteos de solo lectura).' },
+          { paso: 'Cambia su Plan a "Premium", ajusta el precio mensual, el estado de facturación a "Pendiente" y la fecha de próximo pago, y presiona "Guardar" en esa fila.', resultadoEsperado: 'El botón muestra "Guardando…" y luego "Guardado"; al recargar la página, los valores nuevos siguen ahí.' },
+          { paso: 'Repite el cambio en otra fila (otra empresa).', resultadoEsperado: 'Solo se actualiza esa empresa — las demás filas no cambian.' },
+        ],
+      },
     ],
   },
   {
@@ -254,8 +341,8 @@ export const planPruebas: SeccionPlanPruebas[] = [
         titulo: 'Crear un usuario',
         rolNecesario: 'admin_th',
         pasos: [
-          { paso: 'Entra a Usuarios y roles → "Nuevo usuario".', resultadoEsperado: 'Pide colaborador sin cuenta, correo, rol y contraseña temporal.' },
-          { paso: 'Completa y guarda.', resultadoEsperado: 'Aparece en la tabla de usuarios; esa persona ya puede iniciar sesión con la contraseña temporal.' },
+          { paso: 'Entra a Usuarios y roles → "Nuevo usuario".', resultadoEsperado: 'Pide colaborador sin cuenta, correo, rol y contraseña temporal. El selector de rol incluye admin_th, líder, colaborador, gerencia y auditor_externo.' },
+          { paso: 'Completa y guarda, eligiendo el rol auditor_externo.', resultadoEsperado: 'Aparece en la tabla de usuarios con ese rol; esa persona ya puede iniciar sesión con la contraseña temporal y solo ve lo permitido para auditor_externo.' },
         ],
       },
       {
