@@ -2658,6 +2658,57 @@ export type Database = {
           },
         ]
       }
+      nexa_documentos_politica: {
+        Row: {
+          activo: boolean
+          archivo_url: string | null
+          categoria: string
+          contenido: string
+          created_at: string
+          empresa_id: string
+          id: string
+          subido_por: string | null
+          titulo: string
+        }
+        Insert: {
+          activo?: boolean
+          archivo_url?: string | null
+          categoria?: string
+          contenido: string
+          created_at?: string
+          empresa_id: string
+          id?: string
+          subido_por?: string | null
+          titulo: string
+        }
+        Update: {
+          activo?: boolean
+          archivo_url?: string | null
+          categoria?: string
+          contenido?: string
+          created_at?: string
+          empresa_id?: string
+          id?: string
+          subido_por?: string | null
+          titulo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nexa_documentos_politica_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "nexa_documentos_politica_subido_por_fkey"
+            columns: ["subido_por"]
+            isOneToOne: false
+            referencedRelation: "perfiles_usuario"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       nexa_feed_publicaciones: {
         Row: {
           archivo_nombre: string | null

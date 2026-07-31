@@ -2,6 +2,37 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 
+type SupabaseServerClient = ReturnType<typeof createClient>;
+
+/**
+ * RAG básico por búsqueda de texto completo de Postgres (sin embeddings —
+ * ver 0035_nexa_documentos_politica.sql para la justificación de escala).
+ * Si la búsqueda no encuentra nada (p. ej. la pregunta no comparte
+ * palabras con ningún documento), cae a los 2 documentos activos más
+ * recientes en vez de dejar al asistente sin ningún contexto documental.
+ */
+async function buscarDocumentosRelevantes(supabase: SupabaseServerClient, empresaId: string, pregunta: string) {
+  const { data: porBusqueda } = await supabase
+    .from('nexa_documentos_politica')
+    .select('titulo, contenido')
+    .eq('empresa_id', empresaId)
+    .eq('activo', true)
+    .textSearch('contenido', pregunta, { type: 'websearch', config: 'spanish' })
+    .limit(3);
+
+  if (porBusqueda && porBusqueda.length > 0) return porBusqueda;
+
+  const { data: recientes } = await supabase
+    .from('nexa_documentos_politica')
+    .select('titulo, contenido')
+    .eq('empresa_id', empresaId)
+    .eq('activo', true)
+    .order('created_at', { ascending: false })
+    .limit(2);
+
+  return recientes ?? [];
+}
+
 /**
  * Asistente de IA de Nexa: responde dudas normativas y de procedimiento
  * (SST, políticas internas) entrenado con el contexto de la empresa.
@@ -29,7 +60,7 @@ export async function POST(req: NextRequest) {
   } else {
     try {
       const supabaseContexto = createClient();
-      const [{ data: empresa }, { data: identidad }, { data: elementos }] = await Promise.all([
+      const [{ data: empresa }, { data: identidad }, { data: elementos }, documentosRelevantes] = await Promise.all([
         supabaseContexto.from('empresas').select('nombre').eq('id', perfil.empresa_id).maybeSingle(),
         supabaseContexto
           .from('empresa_identidad')
@@ -41,6 +72,7 @@ export async function POST(req: NextRequest) {
           .select('tipo, nombre, descripcion')
           .eq('empresa_id', perfil.empresa_id)
           .order('orden'),
+        buscarDocumentosRelevantes(supabaseContexto, perfil.empresa_id, pregunta),
       ]);
 
       const nombreEmpresa = empresa?.nombre ?? 'la empresa';
@@ -63,6 +95,12 @@ export async function POST(req: NextRequest) {
           ? `\n\nContexto de identidad organizacional de ${nombreEmpresa} (úsalo como referencia para que tus respuestas estén alineadas con esto, sin repetirlo textualmente salvo que te lo pidan):\n${bloquesContexto.join('\n')}`
           : '';
 
+      const contextoDocumentos =
+        documentosRelevantes.length > 0
+          ? `\n\nFragmentos de documentos propios de ${nombreEmpresa} que pueden ser relevantes para esta pregunta (cítalos si los usas; si no responden la pregunta, ignóralos):\n` +
+            documentosRelevantes.map((d) => `--- ${d.titulo} ---\n${d.contenido.slice(0, 4000)}`).join('\n\n')
+          : '';
+
       const r = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
@@ -74,8 +112,9 @@ export async function POST(req: NextRequest) {
           model: 'claude-sonnet-5',
           max_tokens: 500,
           system:
-            `Eres el asistente interno de Nexa para ${nombreEmpresa}. Respondes dudas sobre SST, políticas internas y procedimientos de forma breve, clara y práctica. Si no tienes información específica de la empresa, dilo y sugiere contactar a Talento Humano o al líder SST.` +
-            contextoIdentidad,
+            `Eres el asistente interno de Nexa para ${nombreEmpresa}. Respondes dudas sobre SST, políticas internas y procedimientos de forma breve, clara y práctica, basándote en los fragmentos de documentos propios que se te den como contexto cuando existan. Si la pregunta es normativa/de procedimiento y NO tienes ningún fragmento relevante en el contexto, dilo explícitamente (no inventes la política) y sugiere contactar a Talento Humano o al líder SST.` +
+            contextoIdentidad +
+            contextoDocumentos,
           messages: [{ role: 'user', content: pregunta }],
         }),
       });
