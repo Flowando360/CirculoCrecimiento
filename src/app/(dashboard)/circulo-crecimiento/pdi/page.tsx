@@ -2,22 +2,7 @@ import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { createClient } from '@/lib/supabase/server';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Target } from 'lucide-react';
-import { formatearFecha, cn } from '@/lib/utils';
-
-const ORIGEN_COLOR: Record<string, string> = {
-  hacer: 'bg-hacer/10 text-hacer',
-  deber: 'bg-deber/10 text-deber',
-  saber: 'bg-saber/10 text-saber',
-  ser: 'bg-ser/10 text-ser',
-  mixto: 'bg-marmol-200 text-marmol-600',
-};
-
-const ESTADO_COLOR: Record<string, string> = {
-  pendiente: 'bg-marmol-100 text-marmol-600',
-  en_curso: 'bg-flow-50 text-flow-700',
-  cumplido: 'bg-green-100 text-alto',
-  vencido: 'bg-red-100 text-bajo',
-};
+import { PdiKanban } from '@/components/circulo-crecimiento/pdi-kanban';
 
 export default async function PdiPage() {
   const perfil = await getPerfilActual();
@@ -37,6 +22,7 @@ export default async function PdiPage() {
   }
 
   const { data: planes } = await query;
+  const puedeArrastrar = perfil.rol !== 'gerencia';
 
   return (
     <div className="space-y-6">
@@ -57,39 +43,7 @@ export default async function PdiPage() {
           descripcion="Se generan de forma asistida al cerrar cada Ciclo de Crecimiento, cruzando brechas de Hacer/Deber con Saber y Ser."
         />
       ) : (
-        <div className="space-y-3">
-          {planes.map((p: any) => (
-            <div key={p.id} className="card p-4 flex items-center justify-between gap-4">
-              <div className="min-w-0">
-                <p className="text-sm font-medium text-marmol-900">{p.accion}</p>
-                <p className="text-xs text-marmol-500 mt-0.5">
-                  {p.colaborador?.nombre_completo} · Brecha: {p.brecha_detectada}
-                </p>
-              </div>
-              <div className="flex items-center gap-2 shrink-0">
-                {p.generado_automaticamente && (
-                  <span
-                    className="text-xs rounded-full px-2 py-0.5 font-medium bg-crecimiento/10 text-crecimiento"
-                    title="Generado automáticamente por el motor de brechas al cerrar la evaluación"
-                  >
-                    Automático
-                  </span>
-                )}
-                <span className={cn('text-xs rounded-full px-2 py-0.5 font-medium capitalize', ORIGEN_COLOR[p.origen])}>
-                  {p.origen}
-                </span>
-                <span className={cn('text-xs rounded-full px-2 py-0.5 font-medium capitalize', ESTADO_COLOR[p.estado])}>
-                  {p.estado.replace(/_/g, ' ')}
-                </span>
-                {p.fecha_compromiso && (
-                  <span className="text-xs text-marmol-400 w-24 text-right">
-                    {formatearFecha(p.fecha_compromiso)}
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+        <PdiKanban planesIniciales={planes as any} puedeArrastrar={puedeArrastrar} />
       )}
     </div>
   );

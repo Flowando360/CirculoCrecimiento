@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { ListaProcesos } from '@/components/procesos-gestion/lista-procesos';
 import { ListaRiesgos } from '@/components/procesos-gestion/lista-riesgos';
-import { ListaChecklist } from '@/components/procesos-gestion/lista-checklist';
+import { ChecklistKanban } from '@/components/procesos-gestion/checklist-kanban';
 
 export default async function ProcesosGestionPage() {
   const perfil = await getPerfilActual();
@@ -43,7 +43,7 @@ export default async function ProcesosGestionPage() {
 
       <ListaProcesos procesosIniciales={(procesos ?? []) as any} puedeEditar={puedeEditar} />
       <ListaRiesgos riesgosIniciales={(riesgos ?? []) as any} puedeEditar={puedeEditar} />
-      <ListaChecklist itemsIniciales={(checklist ?? []) as any} puedeEditar={puedeEditar} empresaId={perfil.empresa_id} />
+      <ChecklistKanban itemsIniciales={(checklist ?? []) as any} puedeEditar={puedeEditar} empresaId={perfil.empresa_id} />
     </div>
   );
 }
