@@ -255,6 +255,32 @@
   .module p { margin: 0.35rem 0 0; font-size: 0.83rem; color: var(--text-soft); }
 
   /* ── Proof strip ────────────────────────────────────── */
+  /* ── Ease-of-use strip ──────────────────────────────── */
+  .ease {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.6rem;
+  }
+  .ease .item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.1rem 1.25rem;
+  }
+  .ease .item .verb {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mint-ink, #0d9488);
+    margin-bottom: 0.4rem;
+  }
+  :root[data-theme="dark"] .ease .item .verb { color: var(--mint); }
+  @media (prefers-color-scheme: dark) { .ease .item .verb { color: var(--mint); } }
+  .ease .item h3 { margin: 0 0 0.3rem; font-size: 0.95rem; color: var(--text); }
+  .ease .item p { margin: 0; font-size: 0.82rem; color: var(--text-soft); }
+
   .proof {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -297,6 +323,7 @@
     .flow { grid-template-columns: 1fr; gap: 1rem; }
     .flow .step:not(:first-child) { border-left: none; border-top: 1px solid var(--border); padding-top: 1rem; }
     .modules { grid-template-columns: 1fr; }
+    .ease { grid-template-columns: 1fr; }
     .proof { grid-template-columns: 1fr 1fr; }
     footer.cta { flex-direction: column; align-items: flex-start; }
   }
@@ -385,6 +412,25 @@
     <div class="module">
       <div class="icon-row"><span class="chip" style="background:var(--hacer)"></span><h3>Alertas y fechas clave</h3></div>
       <p>Vencimiento de contratos, certificaciones SST, cumpleaños y fechas personales — con la privacidad de cada quien protegida por diseño.</p>
+    </div>
+  </div>
+
+  <h2 class="section-title">Fácil de manejar: la información se actualiza sola</h2>
+  <div class="ease">
+    <div class="item">
+      <div class="verb">Arrastra</div>
+      <h3>Y ya quedó guardado</h3>
+      <p>Mover una tarjeta de columna en cualquier tablero —un proceso, un plan de desarrollo, un ítem de cumplimiento— es la actualización. No hay botón "Guardar" que alguien se pueda olvidar de presionar.</p>
+    </div>
+    <div class="item">
+      <div class="verb">Responde</div>
+      <h3>Y se recalcula al instante</h3>
+      <p>Cada respuesta de un Encuentro de Crecimiento se guarda sola y el semáforo de esa persona se recalcula en el mismo segundo. Nadie corre un proceso al cierre del mes para que los números cuadren.</p>
+    </div>
+    <div class="item">
+      <div class="verb">Entra</div>
+      <h3>Y ya está al día</h3>
+      <p>Los tableros de control de Inicio e Indicadores no son un reporte de ayer: se calculan en vivo cada vez que alguien abre la pantalla, directo desde los datos actuales.</p>
     </div>
   </div>
 
