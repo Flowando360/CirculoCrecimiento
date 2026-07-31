@@ -116,6 +116,100 @@ const AsignarColaboradorSchema = z.object({
   fechaLimite: z.string().optional(),
 });
 
+const PreguntaSchema = z.object({
+  cursoId: z.string().uuid(),
+  enunciado: z.string().trim().min(1, 'La pregunta es requerida'),
+  opciones: z
+    .array(z.object({ texto: z.string().trim().min(1), correcta: z.boolean() }))
+    .min(2, 'Se necesitan al menos 2 opciones'),
+});
+
+/** Crea una pregunta de quiz con sus opciones (admin_th). Exactamente una opción debe ser la correcta. */
+export async function crearPreguntaConOpciones(input: z.infer<typeof PreguntaSchema>) {
+  const perfil = await getPerfilActual();
+  if (!perfil || perfil.rol !== 'admin_th') return { ok: false as const, error: 'No autorizado' };
+
+  const parsed = PreguntaSchema.safeParse(input);
+  if (!parsed.success) return { ok: false as const, error: parsed.error.issues[0]?.message ?? 'Datos inválidos' };
+
+  const correctas = parsed.data.opciones.filter((o) => o.correcta).length;
+  if (correctas !== 1) return { ok: false as const, error: 'Marca exactamente una opción como correcta' };
+
+  const supabase = createClient();
+  const { data: pregunta, error: errorPregunta } = await supabase
+    .from('nexa_curso_preguntas')
+    .insert({ curso_id: parsed.data.cursoId, enunciado: parsed.data.enunciado })
+    .select('id')
+    .single();
+
+  if (errorPregunta || !pregunta) return { ok: false as const, error: errorPregunta?.message ?? 'No se pudo crear la pregunta' };
+
+  const { error: errorOpciones } = await supabase.from('nexa_curso_opciones').insert(
+    parsed.data.opciones.map((o, i) => ({
+      pregunta_id: pregunta.id,
+      texto: o.texto,
+      correcta: o.correcta,
+      orden: i,
+    }))
+  );
+
+  if (errorOpciones) {
+    await supabase.from('nexa_curso_preguntas').delete().eq('id', pregunta.id);
+    return { ok: false as const, error: errorOpciones.message };
+  }
+
+  revalidatePath(`/nexa/formacion/${parsed.data.cursoId}/quiz`);
+  return { ok: true as const, id: pregunta.id as string };
+}
+
+/** Elimina una pregunta del quiz (admin_th) — sus opciones se borran en cascada. */
+export async function eliminarPregunta(preguntaId: string, cursoId: string) {
+  const perfil = await getPerfilActual();
+  if (!perfil || perfil.rol !== 'admin_th') return { ok: false as const, error: 'No autorizado' };
+
+  const supabase = createClient();
+  const { error } = await supabase.from('nexa_curso_preguntas').delete().eq('id', preguntaId);
+  if (error) return { ok: false as const, error: error.message };
+  revalidatePath(`/nexa/formacion/${cursoId}/quiz`);
+  return { ok: true as const };
+}
+
+/** Ajusta el % mínimo de aprobación del quiz de un curso (admin_th). */
+export async function actualizarUmbralQuiz(cursoId: string, umbral: number) {
+  const perfil = await getPerfilActual();
+  if (!perfil || perfil.rol !== 'admin_th') return { ok: false as const, error: 'No autorizado' };
+  if (umbral < 1 || umbral > 100) return { ok: false as const, error: 'El umbral debe estar entre 1 y 100' };
+
+  const supabase = createClient();
+  const { error } = await supabase.from('nexa_cursos').update({ quiz_umbral_aprobacion: umbral }).eq('id', cursoId);
+  if (error) return { ok: false as const, error: error.message };
+  revalidatePath(`/nexa/formacion/${cursoId}/quiz`);
+  return { ok: true as const };
+}
+
+/** El colaborador envía sus respuestas; la calificación real ocurre en la función security definer. */
+export async function enviarRespuestasQuiz(rutaId: string, respuestas: Record<string, string>) {
+  const perfil = await getPerfilActual();
+  if (!perfil || perfil.rol !== 'colaborador') return { ok: false as const, error: 'No autorizado' };
+
+  const supabase = createClient();
+  const { data, error } = await supabase.rpc('fn_calificar_intento_quiz', {
+    p_ruta_id: rutaId,
+    p_respuestas: respuestas,
+  });
+
+  if (error) return { ok: false as const, error: error.message };
+  const resultado = Array.isArray(data) ? data[0] : data;
+  if (!resultado) return { ok: false as const, error: 'No se pudo calificar el quiz' };
+  revalidatePath('/nexa/formacion');
+  return {
+    ok: true as const,
+    puntajePct: Number(resultado.puntaje_pct),
+    aprobado: Boolean(resultado.aprobado),
+    umbral: Number(resultado.umbral),
+  };
+}
+
 /** Asigna un curso directamente a una persona (admin_th, misma regla que RLS). */
 export async function asignarCursoAColaborador(input: z.infer<typeof AsignarColaboradorSchema>) {
   const perfil = await getPerfilActual();

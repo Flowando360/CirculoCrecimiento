@@ -2509,6 +2509,70 @@ export type Database = {
           },
         ]
       }
+      nexa_curso_opciones: {
+        Row: {
+          correcta: boolean
+          id: string
+          orden: number
+          pregunta_id: string
+          texto: string
+        }
+        Insert: {
+          correcta?: boolean
+          id?: string
+          orden?: number
+          pregunta_id: string
+          texto: string
+        }
+        Update: {
+          correcta?: boolean
+          id?: string
+          orden?: number
+          pregunta_id?: string
+          texto?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nexa_curso_opciones_pregunta_id_fkey"
+            columns: ["pregunta_id"]
+            isOneToOne: false
+            referencedRelation: "nexa_curso_preguntas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      nexa_curso_preguntas: {
+        Row: {
+          created_at: string
+          curso_id: string
+          enunciado: string
+          id: string
+          orden: number
+        }
+        Insert: {
+          created_at?: string
+          curso_id: string
+          enunciado: string
+          id?: string
+          orden?: number
+        }
+        Update: {
+          created_at?: string
+          curso_id?: string
+          enunciado?: string
+          id?: string
+          orden?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nexa_curso_preguntas_curso_id_fkey"
+            columns: ["curso_id"]
+            isOneToOne: false
+            referencedRelation: "nexa_cursos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       nexa_cursos: {
         Row: {
           activo: boolean
@@ -2520,6 +2584,7 @@ export type Database = {
           empresa_id: string
           id: string
           puntos_otorgados: number
+          quiz_umbral_aprobacion: number
           titulo: string
         }
         Insert: {
@@ -2532,6 +2597,7 @@ export type Database = {
           empresa_id: string
           id?: string
           puntos_otorgados?: number
+          quiz_umbral_aprobacion?: number
           titulo: string
         }
         Update: {
@@ -2544,6 +2610,7 @@ export type Database = {
           empresa_id?: string
           id?: string
           puntos_otorgados?: number
+          quiz_umbral_aprobacion?: number
           titulo?: string
         }
         Relationships: [
@@ -2864,6 +2931,9 @@ export type Database = {
           id: string
           pdi_origen_id: string | null
           progreso_pct: number
+          quiz_aprobado_en: string | null
+          quiz_intentos: number
+          quiz_puntaje_pct: number | null
           verificacion_saber_origen_id: string | null
         }
         Insert: {
@@ -2878,6 +2948,9 @@ export type Database = {
           id?: string
           pdi_origen_id?: string | null
           progreso_pct?: number
+          quiz_aprobado_en?: string | null
+          quiz_intentos?: number
+          quiz_puntaje_pct?: number | null
           verificacion_saber_origen_id?: string | null
         }
         Update: {
@@ -2892,6 +2965,9 @@ export type Database = {
           id?: string
           pdi_origen_id?: string | null
           progreso_pct?: number
+          quiz_aprobado_en?: string | null
+          quiz_intentos?: number
+          quiz_puntaje_pct?: number | null
           verificacion_saber_origen_id?: string | null
         }
         Relationships: [
@@ -4181,6 +4257,23 @@ export type Database = {
         }
         Relationships: []
       }
+      v_nexa_curso_opciones: {
+        Row: {
+          id: string | null
+          orden: number | null
+          pregunta_id: string | null
+          texto: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nexa_curso_opciones_pregunta_id_fkey"
+            columns: ["pregunta_id"]
+            isOneToOne: false
+            referencedRelation: "nexa_curso_preguntas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v_organigrama_colaboradores_a_cargo: {
         Row: {
           colaborador_a_cargo_id: string | null
@@ -4338,6 +4431,14 @@ export type Database = {
       }
     }
     Functions: {
+      fn_calificar_intento_quiz: {
+        Args: { p_respuestas: Json; p_ruta_id: string }
+        Returns: {
+          aprobado: boolean
+          puntaje_pct: number
+          umbral: number
+        }[]
+      }
       fn_es_mi_equipo: { Args: { p_colaborador_id: string }; Returns: boolean }
       fn_generar_pdi_y_formacion_por_dimension: {
         Args: {
