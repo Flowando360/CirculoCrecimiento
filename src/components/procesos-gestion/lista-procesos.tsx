@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import Link from 'next/link';
 import { crearProceso, eliminarProceso } from '@/app/(dashboard)/procesos-gestion/actions';
-import { Trash2, Plus } from 'lucide-react';
+import { Trash2, Plus, KanbanSquare } from 'lucide-react';
 import { formatearFecha } from '@/lib/utils';
 
 interface Proceso {
@@ -65,11 +66,20 @@ export function ListaProcesos({ procesosIniciales, puedeEditar }: { procesosInic
                 {p.version && `v${p.version} · `}Actualizado {formatearFecha(p.fecha_actualizacion)}
               </p>
             </div>
-            {puedeEditar && (
-              <button onClick={() => eliminar(p.id)} className="text-marmol-300 hover:text-bajo shrink-0">
-                <Trash2 size={14} />
-              </button>
-            )}
+            <div className="flex items-center gap-2 shrink-0">
+              <Link
+                href={`/procesos-gestion/${p.id}/tablero`}
+                title="Ver tablero"
+                className="text-marmol-300 hover:text-flow-600"
+              >
+                <KanbanSquare size={15} />
+              </Link>
+              {puedeEditar && (
+                <button onClick={() => eliminar(p.id)} className="text-marmol-300 hover:text-bajo">
+                  <Trash2 size={14} />
+                </button>
+              )}
+            </div>
           </div>
         ))}
         {procesos.length === 0 && <p className="text-sm text-marmol-400">Sin procesos documentados todavía.</p>}
