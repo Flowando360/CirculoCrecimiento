@@ -1,4 +1,4 @@
-<title>Círculo de Crecimiento 360° — One Pager</title>
+<title>Espiral Evolutiva 360° — One Pager</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
   :root {
@@ -159,40 +159,66 @@
   .btn-primary { background: var(--purple); color: #fff; }
   .btn-ghost { border-color: var(--border); color: var(--text); }
 
-  /* ── Ring diagram ───────────────────────────────────── */
-  .ring-wrap {
-    position: relative;
+  /* ── Espiral ascendente: Persona → Equipo → Empresa ──── */
+  .spiral {
     display: flex;
+    align-items: flex-end;
     justify-content: center;
+    gap: 0.35rem;
+    padding: 0.5rem 0 0.75rem;
   }
-  .ring-wrap svg { width: 100%; max-width: 300px; height: auto; }
-  .ring-center-label {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    pointer-events: none;
+  .spiral .stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
   }
-  .ring-center-label .num {
-    font-family: ui-sans-serif, -apple-system, "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
-    font-weight: 800;
-    font-size: 1.7rem;
-    color: var(--text);
-    font-variant-numeric: tabular-nums;
+  .spiral .stage:nth-child(3) { margin-bottom: 1.35rem; }
+  .spiral .stage:nth-child(5) { margin-bottom: 2.7rem; }
+  .spiral .arrow {
+    color: var(--stone-400);
+    font-size: 1.3rem;
     line-height: 1;
+    margin: 0 -0.1rem;
+    align-self: center;
   }
-  .ring-center-label .cap {
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+  .spiral .stage:nth-child(2) .arrow { margin-bottom: 0.6rem; }
+  .spiral .stage:nth-child(4) .arrow { margin-bottom: 1.3rem; }
+  .ring {
+    border-radius: 999px;
+    background: conic-gradient(var(--purple) 0 25%, var(--saber) 25% 50%, var(--hacer) 50% 75%, var(--deber) 75% 100%);
+    position: relative;
+    box-shadow: var(--shadow);
+  }
+  .ring::after {
+    content: "";
+    position: absolute;
+    inset: 20%;
+    border-radius: 999px;
+    background: var(--bg);
+  }
+  .ring-persona { width: 62px; height: 62px; }
+  .ring-equipo { width: 92px; height: 92px; }
+  .ring-empresa { width: 130px; height: 130px; }
+  .spiral .label {
+    font-size: 0.72rem;
+    font-weight: 700;
     color: var(--text-soft);
+    text-align: center;
+    white-space: nowrap;
+  }
+  .spiral-caption {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-soft);
+    margin: 0 0 1.5rem;
   }
 
   .legend {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.6rem 1rem;
-    margin-top: 1.1rem;
+    margin-top: 0.4rem;
   }
   .legend .item { display: flex; gap: 0.55rem; align-items: flex-start; }
   .legend .dot { width: 10px; height: 10px; border-radius: 999px; margin-top: 0.4em; flex-shrink: 0; }
@@ -340,41 +366,38 @@
   <header class="top">
     <div class="brand">
       <div class="brand-mark" aria-hidden="true"></div>
-      <div class="brand-name">Círculo de Crecimiento <span>360°</span></div>
+      <div class="brand-name">Espiral Evolutiva <span>360°</span></div>
     </div>
     <div class="top-tag">Una plataforma · FlowAndo, en alianza con Nexus y V&amp;E</div>
   </header>
 
   <section class="hero">
     <div>
-      <p class="eyebrow">Gestión de talento humano</p>
-      <h1 class="display">El talento de su empresa, visto <em>en un solo círculo.</em></h1>
-      <p class="lede">Una plataforma que valora a cada persona en cuatro dimensiones —no solo si cumplió una meta— y convierte automáticamente cada brecha detectada en un plan de acción, sin que nadie tenga que redactarlo a mano.</p>
+      <p class="eyebrow">Desarrollo y evidencia de talento</p>
+      <h1 class="display">El desarrollo de su gente, <em>en espiral ascendente.</em></h1>
+      <p class="lede">Cada persona tiene su propio círculo de desarrollo 360°. Esos círculos se conectan y ascienden: primero al desarrollo del equipo, después al de toda la empresa — una espiral que evidencia el talento real, no una foto fija de un solo día.</p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#contacto">Agendar una demo</a>
         <a class="btn btn-ghost" href="#modulos">Ver qué incluye</a>
       </div>
     </div>
-    <div class="ring-wrap">
-      <svg viewBox="0 0 420 420" role="img" aria-label="Las cuatro dimensiones: Ser, Saber, Hacer y Deber, dispuestas en círculo">
-        <circle cx="210" cy="210" r="150" fill="none" stroke="var(--border)" stroke-width="1"></circle>
-        <path d="M215.2,60.1 A150,150 0 0 1 359.9,204.8" fill="none" stroke="var(--purple)" stroke-width="46" stroke-linecap="butt"></path>
-        <path d="M359.9,215.2 A150,150 0 0 1 215.2,359.9" fill="none" stroke="var(--saber)" stroke-width="46" stroke-linecap="butt"></path>
-        <path d="M204.8,359.9 A150,150 0 0 1 60.1,215.2" fill="none" stroke="var(--hacer)" stroke-width="46" stroke-linecap="butt"></path>
-        <path d="M60.1,204.8 A150,150 0 0 1 204.8,60.1" fill="none" stroke="var(--deber)" stroke-width="46" stroke-linecap="butt"></path>
-      </svg>
-      <div class="ring-center-label">
-        <div class="num">4×</div>
-        <div class="cap">dimensiones</div>
+    <div>
+      <div class="spiral" role="img" aria-label="Espiral ascendente: círculo de desarrollo de la Persona, que asciende al del Equipo, que asciende al de la Empresa">
+        <div class="stage"><div class="ring ring-persona" aria-hidden="true"></div><span class="label">Persona</span></div>
+        <span class="arrow" aria-hidden="true">↗</span>
+        <div class="stage"><div class="ring ring-equipo" aria-hidden="true"></div><span class="label">Equipo</span></div>
+        <span class="arrow" aria-hidden="true">↗</span>
+        <div class="stage"><div class="ring ring-empresa" aria-hidden="true"></div><span class="label">Empresa</span></div>
       </div>
+      <p class="spiral-caption">El mismo 360° —Ser, Saber, Hacer, Deber— evoluciona de una persona a toda la organización.</p>
     </div>
   </section>
 
-  <div class="legend" style="margin: -1.6rem 0 2.6rem; grid-template-columns: 1fr 1fr;">
+  <div class="legend" style="margin: -0.6rem 0 2.6rem; grid-template-columns: 1fr 1fr;">
     <div class="item"><span class="dot" style="background:var(--purple)"></span><div><div class="t">Ser</div><div class="d">Talentos naturales y propósito de la persona.</div></div></div>
     <div class="item"><span class="dot" style="background:var(--saber)"></span><div><div class="t">Saber</div><div class="d">Lo que exige el cargo, contra lo que la persona realmente tiene.</div></div></div>
-    <div class="item"><span class="dot" style="background:var(--hacer)"></span><div><div class="t">Hacer</div><div class="d">Desempeño en comportamientos observables, por ciclo.</div></div></div>
-    <div class="item"><span class="dot" style="background:var(--deber)"></span><div><div class="t">Deber</div><div class="d">Actitud y cultura: cómo trabaja con los demás.</div></div></div>
+    <div class="item"><span class="dot" style="background:var(--hacer)"></span><div><div class="t">Hacer</div><div class="d">Aprendizaje demostrado en comportamientos observables, por ciclo.</div></div></div>
+    <div class="item"><span class="dot" style="background:var(--deber)"></span><div><div class="t">Deber</div><div class="d">Actitud y cultura: cómo crece la persona junto con los demás.</div></div></div>
   </div>
 
   <div class="flow">
@@ -384,13 +407,13 @@
       <p>Autoevaluación, líder, pares y colaboradores a cargo, ponderados — no la opinión de una sola persona.</p>
     </div>
     <div class="step">
-      <div class="k">2 · Se detecta</div>
-      <h3>La brecha exacta</h3>
+      <div class="k">2 · Se evidencia</div>
+      <h3>La oportunidad exacta</h3>
       <p>El sistema calcula el semáforo de cada dimensión al instante, sin hojas de cálculo externas.</p>
     </div>
     <div class="step">
-      <div class="k">3 · Se actúa solo</div>
-      <h3>Plan + formación</h3>
+      <div class="k">3 · Se aprende solo</div>
+      <h3>Ruta de desarrollo + formación</h3>
       <p>Genera el plan de desarrollo y asigna la formación automáticamente. Nadie tiene que acordarse.</p>
     </div>
   </div>

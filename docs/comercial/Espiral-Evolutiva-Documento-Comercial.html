@@ -1,4 +1,4 @@
-<title>Círculo de Crecimiento 360° — Documento Comercial</title>
+<title>Espiral Evolutiva 360° — Documento Comercial</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
   :root {
@@ -145,6 +145,26 @@
   table.roles th { color: var(--text-soft); font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; }
   .table-wrap { overflow-x: auto; }
 
+  .scale-path {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 1.3rem 0 1.6rem;
+    padding: 0.9rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .scale-step { display: flex; align-items: center; gap: 0.45rem; font-weight: 700; font-size: 0.88rem; color: var(--heading); }
+  .scale-dot {
+    display: inline-block;
+    border-radius: 999px;
+    background: conic-gradient(var(--purple) 0 25%, var(--saber) 25% 50%, var(--hacer) 50% 75%, var(--deber) 75% 100%);
+  }
+  .scale-arrow { color: var(--stone-400); font-size: 1rem; }
+
   .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1.2rem 0; }
   .why-item { padding: 1rem 1.1rem; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); }
   .why-item h4 { margin: 0 0 0.3rem; font-size: 0.94rem; color: var(--heading); }
@@ -182,21 +202,21 @@
   <div class="masthead">
     <div class="brand">
       <div class="brand-mark" aria-hidden="true"></div>
-      <div class="brand-name">Círculo de Crecimiento 360°</div>
+      <div class="brand-name">Espiral Evolutiva 360°</div>
     </div>
     <div class="doc-type">Documento comercial · FlowAndo</div>
   </div>
 
   <p class="cover-eyebrow">Plataforma de gestión de talento humano</p>
-  <h1 class="cover-title display">Todo lo que Círculo de Crecimiento hace por su empresa, explicado a fondo</h1>
-  <p class="cover-dek">Este documento describe, módulo por módulo, cómo funciona la plataforma: qué mide, qué automatiza, qué le resuelve a Talento Humano y qué le resuelve a Gerencia. Está pensado para acompañar una conversación comercial o para que su equipo lo revise con calma antes de una demo.</p>
+  <h1 class="cover-title display">Todo lo que la Espiral Evolutiva hace por su empresa, explicado a fondo</h1>
+  <p class="cover-dek">Este documento describe, módulo por módulo, cómo funciona la plataforma: qué evidencia, qué automatiza, qué le resuelve a Talento Humano y qué le resuelve a Gerencia. Está pensado para acompañar una conversación comercial o para que su equipo lo revise con calma antes de una demo.</p>
 
   <nav class="toc" aria-label="Contenido">
     <div class="eyebrow">Contenido</div>
     <ol>
       <li><a href="#s1"><span class="idx">01</span>El problema que resuelve</a></li>
       <li><a href="#s2"><span class="idx">02</span>Ser · Saber · Hacer · Deber</a></li>
-      <li><a href="#s3"><span class="idx">03</span>El motor automático de brechas</a></li>
+      <li><a href="#s3"><span class="idx">03</span>El motor automático de desarrollo</a></li>
       <li><a href="#s4"><span class="idx">04</span>Facilidad de uso y tableros en tiempo real</a></li>
       <li><a href="#s5"><span class="idx">05</span>Nexa: cultura y formación</a></li>
       <li><a href="#s6"><span class="idx">06</span>Cumplimiento normativo y auditorías</a></li>
@@ -211,12 +231,20 @@
   <section id="s1">
     <div class="section-head"><span class="section-num">01</span><h2>El problema que resuelve</h2></div>
     <p>La mayoría de empresas maneja su talento humano repartido entre un Excel de personal, otro de vencimientos de contratos, una carpeta de hojas de vida, un correo con la última evaluación de desempeño y la memoria de quién le debe formación a quién. Nada conversa entre sí. Cuando llega una auditoría, alguien pasa dos días armando carpetas. Cuando alguien renuncia, nadie sabe con certeza si su formación estaba al día.</p>
-    <p>Círculo de Crecimiento reemplaza ese archipiélago de herramientas con una sola plataforma donde el desempeño, la formación, el cumplimiento normativo y las fechas críticas del ciclo de vida laboral viven juntos — y se conectan automáticamente entre sí.</p>
+    <p>La Espiral Evolutiva reemplaza ese archipiélago de herramientas con una sola plataforma donde el desempeño, la formación, el cumplimiento normativo y las fechas críticas del ciclo de vida laboral viven juntos — y se conectan automáticamente entre sí.</p>
   </section>
 
   <section id="s2">
     <div class="section-head"><span class="section-num">02</span><h2>Ser · Saber · Hacer · Deber</h2></div>
-    <p>La mayoría de software de desempeño reduce a una persona a un número: ¿cumplió la meta? Círculo de Crecimiento valora cuatro dimensiones distintas, porque el desempeño real depende de más de una cosa a la vez:</p>
+    <p>Por qué se llama Espiral y no Círculo: cada persona tiene su propio círculo de desarrollo 360°. Ese círculo no se queda dando vueltas en el mismo punto — asciende. Se conecta con el desarrollo de su equipo, y el de todos los equipos asciende al panorama de toda la empresa. Es una espiral evolutiva: el mismo modelo de cuatro dimensiones, aplicado a una escala cada vez mayor.</p>
+    <div class="scale-path">
+      <span class="scale-step"><span class="scale-dot" style="width:14px;height:14px"></span>Persona</span>
+      <span class="scale-arrow">→</span>
+      <span class="scale-step"><span class="scale-dot" style="width:18px;height:18px"></span>Equipo</span>
+      <span class="scale-arrow">→</span>
+      <span class="scale-step"><span class="scale-dot" style="width:24px;height:24px"></span>Empresa</span>
+    </div>
+    <p>La mayoría de software de desempeño reduce a una persona a un número: ¿cumplió la meta? La Espiral Evolutiva valora cuatro dimensiones distintas, porque el desarrollo real depende de más de una cosa a la vez:</p>
     <div class="dims">
       <div class="dim-card dim-ser"><h4>Ser</h4><p>Talentos naturales y propósito de la persona, explorados con un instrumento propio de autoconocimiento (la Guía del Flow).</p></div>
       <div class="dim-card dim-saber"><h4>Saber</h4><p>Lo que exige el cargo — formación, habilidades, certificaciones, experiencia — comparado contra lo que la persona realmente tiene.</p></div>
@@ -224,17 +252,17 @@
       <div class="dim-card dim-deber"><h4>Deber</h4><p>Actitud y cultura: cómo la persona trabaja con los demás, también por ciclo.</p></div>
     </div>
     <h3>Un 360° que de verdad es 360°</h3>
-    <p>Hacer y Deber no los califica solo el jefe. Cada Encuentro de Crecimiento recoge la autoevaluación de la propia persona, la de su líder, la de sus pares, y — si tiene equipo a cargo — la de sus colaboradores directos. Cada fuente tiene un peso configurable distinto según si la persona tiene o no personal a cargo, y el resultado final es un promedio ponderado, no la opinión aislada de una sola persona en un día cualquiera.</p>
+    <p>Hacer y Deber no los valora solo el jefe. Cada Encuentro de Crecimiento recoge la autoevaluación de la propia persona, la de su líder, la de sus pares, y — si tiene equipo a cargo — la de sus colaboradores directos. Cada fuente tiene un peso configurable distinto según si la persona tiene o no personal a cargo, y el resultado final es un promedio ponderado, no la opinión aislada de una sola persona en un día cualquiera.</p>
     <h3>El cierre del ciclo: Brief y Acuerdo de Crecimiento</h3>
     <p>Antes de la conversación de retroalimentación, el líder prepara un brief privado (talento central de la persona, resumen de resultados, sugerencias de enfoque) que solo él y Talento Humano ven. En la reunión, ambas partes registran compromisos concretos en el Acuerdo de Crecimiento y lo firman — una firma simple de casilla más fecha, sin fricción, pero con trazabilidad completa de quién se comprometió a qué y cuándo.</p>
   </section>
 
   <section id="s3">
-    <div class="section-head"><span class="section-num">03</span><h2>El motor automático de brechas</h2></div>
+    <div class="section-head"><span class="section-num">03</span><h2>El motor automático de desarrollo</h2></div>
     <p>Esta es la parte que más tiempo le ahorra a Talento Humano. Cuando un Encuentro de Crecimiento queda 100% respondido y el semáforo de Hacer o de Deber sale en nivel bajo, el sistema:</p>
     <ul class="check">
-      <li>Genera automáticamente un <strong>Plan de Desarrollo Individual</strong> para esa persona, describiendo la brecha detectada.</li>
-      <li>Le asigna la <strong>ruta de formación</strong> ya configurada para esa dimensión (los cursos que Talento Humano decidió que refuerzan una brecha de Hacer o de Deber).</li>
+      <li>Genera automáticamente un <strong>Plan de Desarrollo Individual</strong> para esa persona, documentando la oportunidad de desarrollo detectada.</li>
+      <li>Le asigna la <strong>ruta de formación</strong> ya configurada para esa dimensión (los cursos que Talento Humano decidió que refuerzan una oportunidad de desarrollo en Hacer o en Deber).</li>
       <li>Es idempotente: si alguien corrige una respuesta y el resultado se recalcula, no duplica el plan ya generado.</li>
     </ul>
     <div class="callout"><b>Sin este motor</b>, alguien tendría que revisar manualmente cada resultado, decidir si amerita un plan de desarrollo, redactarlo y acordarse de asignar la formación correspondiente — para 20, 100 o 500 personas, ciclo tras ciclo.</div>
@@ -243,7 +271,7 @@
 
   <section id="s4">
     <div class="section-head"><span class="section-num">04</span><h2>Facilidad de uso y tableros en tiempo real</h2></div>
-    <p>Nada de esto sirve si la gente de Talento Humano necesita un manual para usarlo a diario. Círculo de Crecimiento está construido para que la actualización de la información no sea una tarea aparte — es una consecuencia directa de usar la herramienta.</p>
+    <p>Nada de esto sirve si la gente de Talento Humano necesita un manual para usarlo a diario. La Espiral Evolutiva está construida para que la actualización de la información no sea una tarea aparte — es una consecuencia directa de usar la herramienta.</p>
     <h3>Arrastrar es actualizar</h3>
     <p>Los tableros de Procesos y Sistemas de Gestión, de Planes de Desarrollo y del checklist de cumplimiento funcionan igual que un tablero de tareas al que ya está acostumbrada su gente: se arrastra una tarjeta de una columna a otra y eso <em>es</em> la actualización. No hay un botón "Guardar" separado que alguien se pueda olvidar de presionar, ni una hoja de cálculo aparte que alguien tenga que mantener sincronizada a mano.</p>
     <h3>Cada respuesta se recalcula sola</h3>
@@ -280,7 +308,7 @@
 
   <section id="s7">
     <div class="section-head"><span class="section-num">07</span><h2>Alertas y fechas clave</h2></div>
-    <p>Un calendario vivo que nadie tiene que revisar manualmente: vencimiento de contratos, fin de periodo de prueba, exámenes médicos, certificaciones SST, inducción, EPP, vencimiento de formación, apertura de ciclos de evaluación, cumpleaños, aniversario de ingreso, aniversario de bodas y baby showers. Cada alerta se notifica dentro de la plataforma con la anticipación configurada.</p>
+    <p>Un calendario vivo que nadie tiene que revisar manualmente: vencimiento de contratos, fin de periodo de prueba, exámenes médicos, certificaciones SST, inducción, EPP, vencimiento de formación, apertura de Ciclos de Crecimiento, cumpleaños, aniversario de ingreso, aniversario de bodas y baby showers. Cada alerta se notifica dentro de la plataforma con la anticipación configurada.</p>
     <p>Las fechas personales más sensibles —estado de embarazo y fecha probable de parto— están tratadas aparte a propósito: la persona las autogestiona desde su perfil, y solo las ve ella misma y Talento Humano. Ni el líder directo tiene acceso, por diseño.</p>
   </section>
 
@@ -332,7 +360,7 @@
     <div class="section-head"><span class="section-num">11</span><h2>Por qué esta plataforma y no otra</h2></div>
     <div class="why-grid">
       <div class="why-item"><h4>No es genérica</h4><p>Se configura alrededor del organigrama, los cargos y el propósito organizacional reales de su empresa — no al revés.</p></div>
-      <div class="why-item"><h4>Conecta lo que otros dejan suelto</h4><p>Una brecha de desempeño dispara sola el plan de desarrollo y la formación. Nadie tiene que hacer ese puente a mano.</p></div>
+      <div class="why-item"><h4>Conecta lo que otros dejan suelto</h4><p>Una oportunidad de desarrollo detectada dispara sola el plan de acción y la formación. Nadie tiene que hacer ese puente a mano.</p></div>
       <div class="why-item"><h4>Cumplimiento incluido, no aparte</h4><p>ISO 9001, SARLAFT/SAGRILAFT, PTEE y SST viven en la misma plataforma que el desempeño — no en otro sistema que nadie actualiza.</p></div>
       <div class="why-item"><h4>Privacidad por diseño</h4><p>Los datos sensibles están protegidos a nivel de base de datos, no solo escondidos en la interfaz.</p></div>
     </div>
