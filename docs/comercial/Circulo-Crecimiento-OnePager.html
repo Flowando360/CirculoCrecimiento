@@ -1,0 +1,406 @@
+<title>Círculo de Crecimiento 360° — One Pager</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --ink: #1B2A5B;
+    --ink-soft: #3d4a75;
+    --purple: #7C3AED;
+    --purple-ink: #5B21B6;
+    --saber: #0EA5A4;
+    --hacer: #D97706;
+    --deber: #2563EB;
+    --mint: #5EEAD4;
+    --stone-0: #FFFFFF;
+    --stone-50: #FAF9F7;
+    --stone-100: #F2F0EC;
+    --stone-200: #E4E0D8;
+    --stone-400: #ACA194;
+    --stone-600: #6B6153;
+    --stone-800: #3A352E;
+    --bg: var(--stone-50);
+    --surface: var(--stone-0);
+    --border: var(--stone-200);
+    --text: var(--ink);
+    --text-soft: var(--stone-600);
+    --ring-gap: var(--bg);
+    --shadow: 0 1px 2px rgba(27,42,91,.05), 0 8px 24px -12px rgba(27,42,91,.18);
+  }
+  :root[data-theme="dark"] {
+    --bg: #14172a;
+    --surface: #1c2038;
+    --border: #2c3151;
+    --text: #f1eefc;
+    --text-soft: #b7bcdb;
+    --ink-soft: #cdd2f2;
+    --ring-gap: var(--bg);
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -14px rgba(0,0,0,.6);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14172a;
+      --surface: #1c2038;
+      --border: #2c3151;
+      --text: #f1eefc;
+      --text-soft: #b7bcdb;
+      --ink-soft: #cdd2f2;
+      --ring-gap: var(--bg);
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -14px rgba(0,0,0,.6);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .display {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  .eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--purple);
+  }
+  :root[data-theme="dark"] .eyebrow, @media (prefers-color-scheme: dark) { }
+
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 3rem 2rem 4rem;
+  }
+
+  /* ── Header ─────────────────────────────────────────── */
+  header.top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .brand-mark {
+    width: 34px; height: 34px; border-radius: 999px;
+    background: conic-gradient(var(--purple) 0 25%, var(--saber) 25% 50%, var(--hacer) 50% 75%, var(--deber) 75% 100%);
+    box-shadow: var(--shadow);
+    flex-shrink: 0;
+  }
+  .brand-name {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+  .brand-name span { color: var(--purple); }
+  .top-tag {
+    font-size: 0.78rem;
+    color: var(--text-soft);
+    text-align: right;
+  }
+
+  /* ── Hero ───────────────────────────────────────────── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 2.5rem;
+    align-items: center;
+    margin-bottom: 3rem;
+  }
+  .hero h1 {
+    font-size: clamp(1.9rem, 3.4vw, 2.55rem);
+    line-height: 1.08;
+    margin: 0.5rem 0 0.9rem;
+    color: var(--text);
+  }
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(90deg, var(--purple), var(--mint));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero p.lede {
+    font-size: 1.05rem;
+    color: var(--text-soft);
+    max-width: 46ch;
+    margin: 0;
+  }
+  .hero-cta {
+    margin-top: 1.4rem;
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1.15rem;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    text-decoration: none;
+    border: 1px solid transparent;
+  }
+  .btn-primary { background: var(--purple); color: #fff; }
+  .btn-ghost { border-color: var(--border); color: var(--text); }
+
+  /* ── Ring diagram ───────────────────────────────────── */
+  .ring-wrap {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .ring-wrap svg { width: 100%; max-width: 300px; height: auto; }
+  .ring-center-label {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+  }
+  .ring-center-label .num {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+    font-weight: 800;
+    font-size: 1.7rem;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .ring-center-label .cap {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem 1rem;
+    margin-top: 1.1rem;
+  }
+  .legend .item { display: flex; gap: 0.55rem; align-items: flex-start; }
+  .legend .dot { width: 10px; height: 10px; border-radius: 999px; margin-top: 0.4em; flex-shrink: 0; }
+  .legend .t { font-weight: 700; font-size: 0.86rem; color: var(--text); }
+  .legend .d { font-size: 0.78rem; color: var(--text-soft); }
+
+  /* ── How it works ───────────────────────────────────── */
+  .flow {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 1.3rem 1.5rem;
+    margin-bottom: 2.6rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+  .flow .step {
+    padding: 0 1rem;
+    position: relative;
+  }
+  .flow .step:not(:first-child) { border-left: 1px solid var(--border); }
+  .flow .step .k {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 0.3rem;
+  }
+  .flow .step h3 { margin: 0 0 0.25rem; font-size: 1rem; color: var(--text); }
+  .flow .step p { margin: 0; font-size: 0.83rem; color: var(--text-soft); }
+
+  /* ── Section titles ─────────────────────────────────── */
+  h2.section-title {
+    font-size: 1.35rem;
+    margin: 0 0 1.1rem;
+    color: var(--text);
+  }
+
+  /* ── Module grid ────────────────────────────────────── */
+  .modules {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.6rem;
+  }
+  .module {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.1rem 1.25rem;
+  }
+  .module .icon-row { display: flex; align-items: center; gap: 0.55rem; margin-bottom: 0.5rem; }
+  .module .chip {
+    width: 8px; height: 8px; border-radius: 999px;
+  }
+  .module h3 { margin: 0; font-size: 0.98rem; color: var(--text); }
+  .module p { margin: 0.35rem 0 0; font-size: 0.83rem; color: var(--text-soft); }
+
+  /* ── Proof strip ────────────────────────────────────── */
+  .proof {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.9rem;
+    margin-bottom: 2.6rem;
+  }
+  .proof .stat {
+    text-align: left;
+    padding: 1rem 0 0;
+    border-top: 2px solid var(--purple);
+  }
+  .proof .stat .n {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .proof .stat .l { font-size: 0.78rem; color: var(--text-soft); margin-top: 0.15rem; }
+
+  /* ── Footer CTA ─────────────────────────────────────── */
+  footer.cta {
+    background: var(--ink);
+    color: #f4f2ff;
+    border-radius: 16px;
+    padding: 1.6rem 1.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  :root[data-theme="dark"] footer.cta, @media (prefers-color-scheme: dark) { }
+  footer.cta h3 { margin: 0 0 0.2rem; font-size: 1.1rem; }
+  footer.cta p { margin: 0; font-size: 0.85rem; color: #c9c4f0; }
+  footer.cta .btn-primary { background: var(--mint); color: var(--ink); }
+
+  @media (max-width: 720px) {
+    .hero { grid-template-columns: 1fr; }
+    .flow { grid-template-columns: 1fr; gap: 1rem; }
+    .flow .step:not(:first-child) { border-left: none; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .modules { grid-template-columns: 1fr; }
+    .proof { grid-template-columns: 1fr 1fr; }
+    footer.cta { flex-direction: column; align-items: flex-start; }
+  }
+
+  @media print {
+    body { background: #fff; }
+    .page { padding: 0.4in 0.5in; max-width: 100%; }
+    footer.cta { background: var(--ink) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div class="brand-name">Círculo de Crecimiento <span>360°</span></div>
+    </div>
+    <div class="top-tag">Una plataforma · FlowAndo, en alianza con Nexus y V&amp;E</div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Gestión de talento humano</p>
+      <h1 class="display">El talento de su empresa, visto <em>en un solo círculo.</em></h1>
+      <p class="lede">Una plataforma que valora a cada persona en cuatro dimensiones —no solo si cumplió una meta— y convierte automáticamente cada brecha detectada en un plan de acción, sin que nadie tenga que redactarlo a mano.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#contacto">Agendar una demo</a>
+        <a class="btn btn-ghost" href="#modulos">Ver qué incluye</a>
+      </div>
+    </div>
+    <div class="ring-wrap">
+      <svg viewBox="0 0 420 420" role="img" aria-label="Las cuatro dimensiones: Ser, Saber, Hacer y Deber, dispuestas en círculo">
+        <circle cx="210" cy="210" r="150" fill="none" stroke="var(--border)" stroke-width="1"></circle>
+        <path d="M215.2,60.1 A150,150 0 0 1 359.9,204.8" fill="none" stroke="var(--purple)" stroke-width="46" stroke-linecap="butt"></path>
+        <path d="M359.9,215.2 A150,150 0 0 1 215.2,359.9" fill="none" stroke="var(--saber)" stroke-width="46" stroke-linecap="butt"></path>
+        <path d="M204.8,359.9 A150,150 0 0 1 60.1,215.2" fill="none" stroke="var(--hacer)" stroke-width="46" stroke-linecap="butt"></path>
+        <path d="M60.1,204.8 A150,150 0 0 1 204.8,60.1" fill="none" stroke="var(--deber)" stroke-width="46" stroke-linecap="butt"></path>
+      </svg>
+      <div class="ring-center-label">
+        <div class="num">4×</div>
+        <div class="cap">dimensiones</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="legend" style="margin: -1.6rem 0 2.6rem; grid-template-columns: 1fr 1fr;">
+    <div class="item"><span class="dot" style="background:var(--purple)"></span><div><div class="t">Ser</div><div class="d">Talentos naturales y propósito de la persona.</div></div></div>
+    <div class="item"><span class="dot" style="background:var(--saber)"></span><div><div class="t">Saber</div><div class="d">Lo que exige el cargo, contra lo que la persona realmente tiene.</div></div></div>
+    <div class="item"><span class="dot" style="background:var(--hacer)"></span><div><div class="t">Hacer</div><div class="d">Desempeño en comportamientos observables, por ciclo.</div></div></div>
+    <div class="item"><span class="dot" style="background:var(--deber)"></span><div><div class="t">Deber</div><div class="d">Actitud y cultura: cómo trabaja con los demás.</div></div></div>
+  </div>
+
+  <div class="flow">
+    <div class="step">
+      <div class="k">1 · Se valora</div>
+      <h3>360° real</h3>
+      <p>Autoevaluación, líder, pares y colaboradores a cargo, ponderados — no la opinión de una sola persona.</p>
+    </div>
+    <div class="step">
+      <div class="k">2 · Se detecta</div>
+      <h3>La brecha exacta</h3>
+      <p>El sistema calcula el semáforo de cada dimensión al instante, sin hojas de cálculo externas.</p>
+    </div>
+    <div class="step">
+      <div class="k">3 · Se actúa solo</div>
+      <h3>Plan + formación</h3>
+      <p>Genera el plan de desarrollo y asigna la formación automáticamente. Nadie tiene que acordarse.</p>
+    </div>
+  </div>
+
+  <h2 class="section-title" id="modulos">Todo lo que trae, en cuatro frentes</h2>
+  <div class="modules">
+    <div class="module">
+      <div class="icon-row"><span class="chip" style="background:var(--purple)"></span><h3>Encuentros de Crecimiento</h3></div>
+      <p>Ciclos, brief de retroalimentación, acuerdo firmado digitalmente y tablero kanban de planes de desarrollo.</p>
+    </div>
+    <div class="module">
+      <div class="icon-row"><span class="chip" style="background:var(--mint)"></span><h3>Nexa — Cultura y formación</h3></div>
+      <p>Feed corporativo, cursos con quizzes de verificación, reconocimientos con puntos, simulacros, y un asistente de IA entrenado con las políticas propias de la empresa.</p>
+    </div>
+    <div class="module">
+      <div class="icon-row"><span class="chip" style="background:var(--deber)"></span><h3>Cumplimiento normativo</h3></div>
+      <p>Procesos documentados, matriz de riesgos y checklist ISO 9001 / SARLAFT-SAGRILAFT / PTEE en tableros visuales. Evidencia de auditoría lista en un ZIP.</p>
+    </div>
+    <div class="module">
+      <div class="icon-row"><span class="chip" style="background:var(--hacer)"></span><h3>Alertas y fechas clave</h3></div>
+      <p>Vencimiento de contratos, certificaciones SST, cumpleaños y fechas personales — con la privacidad de cada quien protegida por diseño.</p>
+    </div>
+  </div>
+
+  <div class="proof">
+    <div class="stat"><div class="n">8</div><div class="l">informes exportables a PDF y Excel</div></div>
+    <div class="stat"><div class="n">5</div><div class="l">roles con permisos reales, fila por fila</div></div>
+    <div class="stat"><div class="n">1 clic</div><div class="l">paquete completo de evidencia de auditoría</div></div>
+    <div class="stat"><div class="n">100%</div><div class="l">instalable como app, sin tienda de aplicaciones</div></div>
+  </div>
+
+  <footer class="cta" id="contacto">
+    <div>
+      <h3>¿Lo vemos funcionando con los datos reales de su empresa?</h3>
+      <p>Una demo de 30 minutos vale más que veinte diapositivas.</p>
+    </div>
+    <a class="btn btn-primary" href="mailto:innovacion@flowando.com">innovacion@flowando.com</a>
+  </footer>
+
+</div>

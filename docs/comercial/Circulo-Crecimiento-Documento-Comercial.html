@@ -1,0 +1,334 @@
+<title>Círculo de Crecimiento 360° — Documento Comercial</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --ink: #1B2A5B;
+    --purple: #7C3AED;
+    --purple-soft: #ebe4ff;
+    --saber: #0EA5A4;
+    --hacer: #D97706;
+    --deber: #2563EB;
+    --mint: #5EEAD4;
+    --stone-0: #FFFFFF;
+    --stone-50: #FAF9F7;
+    --stone-100: #F2F0EC;
+    --stone-200: #E4E0D8;
+    --stone-400: #ACA194;
+    --stone-600: #6B6153;
+    --bg: var(--stone-50);
+    --surface: var(--stone-0);
+    --border: var(--stone-200);
+    --text: #201d33;
+    --text-soft: var(--stone-600);
+    --heading: var(--ink);
+    --shadow: 0 1px 2px rgba(27,42,91,.05), 0 6px 20px -12px rgba(27,42,91,.18);
+  }
+  :root[data-theme="dark"] {
+    --bg: #14172a;
+    --surface: #1c2038;
+    --border: #2c3151;
+    --text: #e9e7f7;
+    --text-soft: #b7bcdb;
+    --heading: #eceafd;
+    --purple-soft: #2b2350;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14172a;
+      --surface: #1c2038;
+      --border: #2c3151;
+      --text: #e9e7f7;
+      --text-soft: #b7bcdb;
+      --heading: #eceafd;
+      --purple-soft: #2b2350;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.6);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .display {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    color: var(--heading);
+  }
+  a { color: var(--purple); }
+
+  .sheet {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 3.2rem 1.75rem 5rem;
+  }
+
+  /* ── Masthead ───────────────────────────────────────── */
+  .masthead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1.6rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.2rem;
+  }
+  .brand { display: flex; align-items: center; gap: 0.55rem; }
+  .brand-mark {
+    width: 26px; height: 26px; border-radius: 999px; flex-shrink: 0;
+    background: conic-gradient(var(--purple) 0 25%, var(--saber) 25% 50%, var(--hacer) 50% 75%, var(--deber) 75% 100%);
+  }
+  .brand-name { font-family: ui-sans-serif, -apple-system, "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif; font-weight: 800; font-size: 0.92rem; color: var(--heading); }
+  .masthead .doc-type { font-size: 0.78rem; color: var(--text-soft); text-align: right; }
+
+  .cover-eyebrow { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--purple); margin-bottom: 0.6rem; }
+  h1.cover-title { font-size: clamp(1.8rem, 4vw, 2.3rem); line-height: 1.12; margin: 0 0 0.9rem; }
+  p.cover-dek { font-size: 1.05rem; color: var(--text-soft); max-width: 58ch; margin: 0 0 2.6rem; }
+
+  /* ── TOC ────────────────────────────────────────────── */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 1.3rem 1.6rem;
+    margin-bottom: 3rem;
+  }
+  .toc .eyebrow { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 0.7rem; }
+  .toc ol { margin: 0; padding: 0; list-style: none; columns: 2; column-gap: 1.5rem; }
+  .toc li { font-size: 0.86rem; margin-bottom: 0.45rem; break-inside: avoid; }
+  .toc a { text-decoration: none; color: var(--text); }
+  .toc a:hover { color: var(--purple); }
+  .toc .idx { font-variant-numeric: tabular-nums; color: var(--purple); font-weight: 700; margin-right: 0.4em; }
+
+  /* ── Sections ───────────────────────────────────────── */
+  section { margin-bottom: 3rem; scroll-margin-top: 1.5rem; }
+  .section-head { display: flex; align-items: baseline; gap: 0.7rem; margin-bottom: 1.1rem; }
+  .section-num { font-family: ui-sans-serif, -apple-system, "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif; font-weight: 800; font-size: 0.95rem; color: var(--purple); font-variant-numeric: tabular-nums; }
+  h2 { font-size: 1.4rem; margin: 0; color: var(--heading); font-family: ui-sans-serif, -apple-system, "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif; font-weight: 800; letter-spacing: -0.01em; }
+  h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; color: var(--heading); }
+  p { margin: 0 0 0.9rem; max-width: 68ch; }
+  ul.check, ul.plain { margin: 0 0 0.9rem; padding-left: 1.2rem; }
+  ul.check li, ul.plain li { margin-bottom: 0.4rem; max-width: 64ch; }
+  strong { color: var(--heading); }
+
+  .callout {
+    background: var(--purple-soft);
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.9rem;
+    color: var(--heading);
+    margin: 1rem 0;
+  }
+  .callout b { color: var(--purple); }
+
+  /* dimension mini-cards */
+  .dims { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin: 1.2rem 0; }
+  .dim-card { border-left: 3px solid; border-radius: 8px; background: var(--surface); box-shadow: var(--shadow); padding: 0.85rem 1rem; }
+  .dim-card h4 { margin: 0 0 0.25rem; font-size: 0.92rem; }
+  .dim-card p { margin: 0; font-size: 0.82rem; color: var(--text-soft); }
+  .dim-ser { border-color: var(--purple); } .dim-ser h4 { color: var(--purple); }
+  .dim-saber { border-color: var(--saber); } .dim-saber h4 { color: var(--saber); }
+  .dim-hacer { border-color: var(--hacer); } .dim-hacer h4 { color: var(--hacer); }
+  .dim-deber { border-color: var(--deber); } .dim-deber h4 { color: var(--deber); }
+
+  table.roles { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 1rem 0 1.4rem; }
+  table.roles th, table.roles td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  table.roles th { color: var(--text-soft); font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  .table-wrap { overflow-x: auto; }
+
+  .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1.2rem 0; }
+  .why-item { padding: 1rem 1.1rem; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); }
+  .why-item h4 { margin: 0 0 0.3rem; font-size: 0.94rem; color: var(--heading); }
+  .why-item p { margin: 0; font-size: 0.83rem; color: var(--text-soft); }
+
+  footer.close {
+    background: var(--ink);
+    color: #f4f2ff;
+    border-radius: 16px;
+    padding: 1.8rem 2rem;
+    margin-top: 3.5rem;
+  }
+  footer.close h3 { color: #fff; margin: 0 0 0.4rem; font-size: 1.2rem; }
+  footer.close p { color: #c9c4f0; margin: 0 0 1rem; max-width: 60ch; }
+  footer.close a.btn {
+    display: inline-block; background: var(--mint); color: var(--ink); font-weight: 700;
+    padding: 0.6rem 1.1rem; border-radius: 9px; text-decoration: none; font-size: 0.88rem;
+  }
+
+  @media (max-width: 640px) {
+    .dims, .why-grid { grid-template-columns: 1fr; }
+    .toc ol { columns: 1; }
+  }
+
+  @media print {
+    body { background: #fff; }
+    .sheet { max-width: 100%; padding: 0.4in 0.5in; }
+    section { break-inside: avoid-page; }
+    footer.close { background: var(--ink) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+
+<div class="sheet">
+
+  <div class="masthead">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div class="brand-name">Círculo de Crecimiento 360°</div>
+    </div>
+    <div class="doc-type">Documento comercial · FlowAndo</div>
+  </div>
+
+  <p class="cover-eyebrow">Plataforma de gestión de talento humano</p>
+  <h1 class="cover-title display">Todo lo que Círculo de Crecimiento hace por su empresa, explicado a fondo</h1>
+  <p class="cover-dek">Este documento describe, módulo por módulo, cómo funciona la plataforma: qué mide, qué automatiza, qué le resuelve a Talento Humano y qué le resuelve a Gerencia. Está pensado para acompañar una conversación comercial o para que su equipo lo revise con calma antes de una demo.</p>
+
+  <nav class="toc" aria-label="Contenido">
+    <div class="eyebrow">Contenido</div>
+    <ol>
+      <li><a href="#s1"><span class="idx">01</span>El problema que resuelve</a></li>
+      <li><a href="#s2"><span class="idx">02</span>Ser · Saber · Hacer · Deber</a></li>
+      <li><a href="#s3"><span class="idx">03</span>El motor automático de brechas</a></li>
+      <li><a href="#s4"><span class="idx">04</span>Nexa: cultura y formación</a></li>
+      <li><a href="#s5"><span class="idx">05</span>Cumplimiento normativo y auditorías</a></li>
+      <li><a href="#s6"><span class="idx">06</span>Alertas y fechas clave</a></li>
+      <li><a href="#s7"><span class="idx">07</span>Informes y reportería</a></li>
+      <li><a href="#s8"><span class="idx">08</span>Roles, permisos y privacidad</a></li>
+      <li><a href="#s9"><span class="idx">09</span>Tecnología y despliegue</a></li>
+      <li><a href="#s10"><span class="idx">10</span>Por qué esta plataforma y no otra</a></li>
+    </ol>
+  </nav>
+
+  <section id="s1">
+    <div class="section-head"><span class="section-num">01</span><h2>El problema que resuelve</h2></div>
+    <p>La mayoría de empresas maneja su talento humano repartido entre un Excel de personal, otro de vencimientos de contratos, una carpeta de hojas de vida, un correo con la última evaluación de desempeño y la memoria de quién le debe formación a quién. Nada conversa entre sí. Cuando llega una auditoría, alguien pasa dos días armando carpetas. Cuando alguien renuncia, nadie sabe con certeza si su formación estaba al día.</p>
+    <p>Círculo de Crecimiento reemplaza ese archipiélago de herramientas con una sola plataforma donde el desempeño, la formación, el cumplimiento normativo y las fechas críticas del ciclo de vida laboral viven juntos — y se conectan automáticamente entre sí.</p>
+  </section>
+
+  <section id="s2">
+    <div class="section-head"><span class="section-num">02</span><h2>Ser · Saber · Hacer · Deber</h2></div>
+    <p>La mayoría de software de desempeño reduce a una persona a un número: ¿cumplió la meta? Círculo de Crecimiento valora cuatro dimensiones distintas, porque el desempeño real depende de más de una cosa a la vez:</p>
+    <div class="dims">
+      <div class="dim-card dim-ser"><h4>Ser</h4><p>Talentos naturales y propósito de la persona, explorados con un instrumento propio de autoconocimiento (la Guía del Flow).</p></div>
+      <div class="dim-card dim-saber"><h4>Saber</h4><p>Lo que exige el cargo — formación, habilidades, certificaciones, experiencia — comparado contra lo que la persona realmente tiene.</p></div>
+      <div class="dim-card dim-hacer"><h4>Hacer</h4><p>Desempeño en comportamientos observables, valorado por ciclo (normalmente semestral).</p></div>
+      <div class="dim-card dim-deber"><h4>Deber</h4><p>Actitud y cultura: cómo la persona trabaja con los demás, también por ciclo.</p></div>
+    </div>
+    <h3>Un 360° que de verdad es 360°</h3>
+    <p>Hacer y Deber no los califica solo el jefe. Cada Encuentro de Crecimiento recoge la autoevaluación de la propia persona, la de su líder, la de sus pares, y — si tiene equipo a cargo — la de sus colaboradores directos. Cada fuente tiene un peso configurable distinto según si la persona tiene o no personal a cargo, y el resultado final es un promedio ponderado, no la opinión aislada de una sola persona en un día cualquiera.</p>
+    <h3>El cierre del ciclo: Brief y Acuerdo de Crecimiento</h3>
+    <p>Antes de la conversación de retroalimentación, el líder prepara un brief privado (talento central de la persona, resumen de resultados, sugerencias de enfoque) que solo él y Talento Humano ven. En la reunión, ambas partes registran compromisos concretos en el Acuerdo de Crecimiento y lo firman — una firma simple de casilla más fecha, sin fricción, pero con trazabilidad completa de quién se comprometió a qué y cuándo.</p>
+  </section>
+
+  <section id="s3">
+    <div class="section-head"><span class="section-num">03</span><h2>El motor automático de brechas</h2></div>
+    <p>Esta es la parte que más tiempo le ahorra a Talento Humano. Cuando un Encuentro de Crecimiento queda 100% respondido y el semáforo de Hacer o de Deber sale en nivel bajo, el sistema:</p>
+    <ul class="check">
+      <li>Genera automáticamente un <strong>Plan de Desarrollo Individual</strong> para esa persona, describiendo la brecha detectada.</li>
+      <li>Le asigna la <strong>ruta de formación</strong> ya configurada para esa dimensión (los cursos que Talento Humano decidió que refuerzan una brecha de Hacer o de Deber).</li>
+      <li>Es idempotente: si alguien corrige una respuesta y el resultado se recalcula, no duplica el plan ya generado.</li>
+    </ul>
+    <div class="callout"><b>Sin este motor</b>, alguien tendría que revisar manualmente cada resultado, decidir si amerita un plan de desarrollo, redactarlo y acordarse de asignar la formación correspondiente — para 20, 100 o 500 personas, ciclo tras ciclo.</div>
+    <p>Los planes de desarrollo —automáticos o redactados a mano— viven en un tablero kanban: Pendiente, En curso, Cumplido, Vencido. Se arrastran de una columna a otra, con alerta visual cuando la fecha de compromiso ya venció.</p>
+  </section>
+
+  <section id="s4">
+    <div class="section-head"><span class="section-num">04</span><h2>Nexa: cultura y formación</h2></div>
+    <p>Nexa es el ala de cultura organizacional y aprendizaje de la plataforma, construida junto a nuestro aliado Nexus:</p>
+    <ul class="check">
+      <li><strong>Feed corporativo</strong> — comunicados, políticas SST y logros, con documentos, links con vista previa automática, o video adjunto.</li>
+      <li><strong>Formación gamificada</strong> — cursos por categoría (inducción SST, alturas, manejo de cargas, EPP, protocolos de emergencia, cultura, técnico), asignables por cargo o por persona, con puntos.</li>
+      <li><strong>Quizzes de verificación</strong> — preguntas de opción múltiple con un % mínimo de aprobación configurable por curso, para confirmar que la persona realmente aprendió, no solo que arrastró una barra hasta el 100%. La respuesta correcta nunca se expone al navegador de quien responde.</li>
+      <li><strong>Reconocimientos</strong> — puntos y ranking entre compañeros, para reforzar comportamientos deseados de forma visible.</li>
+      <li><strong>Simulacros y dinámicas en vivo</strong> — programación, asistencia y valoración de desempeño.</li>
+      <li><strong>Asistente de inteligencia artificial</strong> — resuelve dudas normativas y de procedimiento apoyándose en los documentos propios que Talento Humano cargue (reglamento SST, manual interno). Si no tiene información relevante para una pregunta, lo dice explícitamente en vez de inventar una respuesta.</li>
+    </ul>
+  </section>
+
+  <section id="s5">
+    <div class="section-head"><span class="section-num">05</span><h2>Cumplimiento normativo y auditorías</h2></div>
+    <p>Construido junto a nuestro aliado V&amp;E, este módulo documenta los procesos y sistemas de gestión de la empresa y los deja listos para auditoría:</p>
+    <ul class="check">
+      <li><strong>Procesos documentados</strong> por área, cada uno con su propio tablero visual de tareas/casos en curso.</li>
+      <li><strong>Matriz de riesgos y controles</strong>, clasificada por marco normativo: ISO 9001, SARLAFT/SAGRILAFT, PTEE, o interno.</li>
+      <li><strong>Checklist de cumplimiento</strong> por marco normativo, en un tablero de estados (No cumple → Cumple parcial → Cumple → No aplica), con evidencia documental adjunta directamente a cada ítem.</li>
+      <li><strong>Paquete de evidencia de auditoría</strong>: un botón descarga un ZIP con PDF de resumen, Excel de detalle y todos los archivos de evidencia adjuntos — filtrable por marco normativo o completo.</li>
+    </ul>
+    <p>Este mismo módulo cubre certificaciones SST por persona (con vencimiento) y el catálogo de exámenes médicos y EPP exigidos por cada cargo.</p>
+  </section>
+
+  <section id="s6">
+    <div class="section-head"><span class="section-num">06</span><h2>Alertas y fechas clave</h2></div>
+    <p>Un calendario vivo que nadie tiene que revisar manualmente: vencimiento de contratos, fin de periodo de prueba, exámenes médicos, certificaciones SST, inducción, EPP, vencimiento de formación, apertura de ciclos de evaluación, cumpleaños, aniversario de ingreso, aniversario de bodas y baby showers. Cada alerta se notifica dentro de la plataforma con la anticipación configurada.</p>
+    <p>Las fechas personales más sensibles —estado de embarazo y fecha probable de parto— están tratadas aparte a propósito: la persona las autogestiona desde su perfil, y solo las ve ella misma y Talento Humano. Ni el líder directo tiene acceso, por diseño.</p>
+  </section>
+
+  <section id="s7">
+    <div class="section-head"><span class="section-num">07</span><h2>Informes y reportería</h2></div>
+    <p>Ocho informes exportables a PDF y Excel con un clic, cada uno respetando el alcance de quien lo consulta (equipo, empresa completa, o solo lo propio):</p>
+    <ul class="plain">
+      <li>Encuentro de Crecimiento 360° Integrado</li>
+      <li>Plan de Desarrollo Individual</li>
+      <li>Cumplimiento SST</li>
+      <li>Brechas por dimensión</li>
+      <li>Formación</li>
+      <li>Cultura y Engagement</li>
+      <li>Consolidado Gerencial</li>
+      <li>Histórico Comparativo entre Ciclos</li>
+    </ul>
+    <p>A esto se suma el paquete de Evidencia de Auditoría descrito en la sección 5 — el noveno "informe", pensado para entregarse directamente a un auditor externo.</p>
+  </section>
+
+  <section id="s8">
+    <div class="section-head"><span class="section-num">08</span><h2>Roles, permisos y privacidad</h2></div>
+    <p>Cada dato se filtra por rol a nivel de fila en la base de datos, no solo escondiendo botones en la pantalla — así que lo que un rol no debe ver, técnicamente no puede verlo, ni siquiera intentando entrar a una URL directa.</p>
+    <div class="table-wrap">
+    <table class="roles">
+      <thead><tr><th>Rol</th><th>Alcance</th></tr></thead>
+      <tbody>
+        <tr><td><strong>admin_th</strong></td><td>Talento Humano — administra toda la empresa.</td></tr>
+        <tr><td><strong>Líder</strong></td><td>Su equipo directo y él mismo, incluyendo casos donde reemplaza a un acompañante.</td></tr>
+        <tr><td><strong>Colaborador</strong></td><td>Su propia información únicamente.</td></tr>
+        <tr><td><strong>Gerencia</strong></td><td>Indicadores agregados de toda la empresa, sin bajar al detalle individual.</td></tr>
+        <tr><td><strong>Auditor externo</strong></td><td>Solo lectura: nombre/cargo de cada persona y el paquete de Evidencia de Auditoría. Ningún otro módulo.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>Los datos más sensibles —salario, entrevista de salida, embarazo— tienen su propia capa de restricción, más estrecha que la del resto de la ficha de una persona.</p>
+  </section>
+
+  <section id="s9">
+    <div class="section-head"><span class="section-num">09</span><h2>Tecnología y despliegue</h2></div>
+    <ul class="check">
+      <li><strong>Instalable como app</strong> (PWA) en Android e iPhone, sin pasar por una tienda de aplicaciones.</li>
+      <li><strong>Multi-empresa</strong> desde el diseño de base de datos: cada empresa cliente tiene sus datos completamente aislados de las demás.</li>
+      <li><strong>Infraestructura en la nube</strong>, con respaldo y despliegue continuo — las mejoras llegan sin instalar nada.</li>
+      <li><strong>Exportación real</strong> de todo dato que la empresa quiera llevarse (PDF, Excel, ZIP de evidencia) — nada queda encerrado.</li>
+    </ul>
+  </section>
+
+  <section id="s10">
+    <div class="section-head"><span class="section-num">10</span><h2>Por qué esta plataforma y no otra</h2></div>
+    <div class="why-grid">
+      <div class="why-item"><h4>No es genérica</h4><p>Se configura alrededor del organigrama, los cargos y el propósito organizacional reales de su empresa — no al revés.</p></div>
+      <div class="why-item"><h4>Conecta lo que otros dejan suelto</h4><p>Una brecha de desempeño dispara sola el plan de desarrollo y la formación. Nadie tiene que hacer ese puente a mano.</p></div>
+      <div class="why-item"><h4>Cumplimiento incluido, no aparte</h4><p>ISO 9001, SARLAFT/SAGRILAFT, PTEE y SST viven en la misma plataforma que el desempeño — no en otro sistema que nadie actualiza.</p></div>
+      <div class="why-item"><h4>Privacidad por diseño</h4><p>Los datos sensibles están protegidos a nivel de base de datos, no solo escondidos en la interfaz.</p></div>
+    </div>
+  </section>
+
+  <footer class="close">
+    <h3>El siguiente paso es sencillo</h3>
+    <p>Una demo de 30 minutos con datos parecidos a los de su empresa dice más que cualquier documento. Escríbanos y la coordinamos.</p>
+    <a class="btn" href="mailto:innovacion@flowando.com">innovacion@flowando.com</a>
+  </footer>
+
+</div>
