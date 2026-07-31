@@ -619,6 +619,119 @@ export type Database = {
           },
         ]
       }
+      casos_proceso: {
+        Row: {
+          created_at: string
+          descripcion: string | null
+          etapa_id: string
+          fecha_limite: string | null
+          id: string
+          orden: number
+          prioridad: string
+          proceso_id: string
+          responsable_id: string | null
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          descripcion?: string | null
+          etapa_id: string
+          fecha_limite?: string | null
+          id?: string
+          orden?: number
+          prioridad?: string
+          proceso_id: string
+          responsable_id?: string | null
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          descripcion?: string | null
+          etapa_id?: string
+          fecha_limite?: string | null
+          id?: string
+          orden?: number
+          prioridad?: string
+          proceso_id?: string
+          responsable_id?: string | null
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "casos_proceso_etapa_id_fkey"
+            columns: ["etapa_id"]
+            isOneToOne: false
+            referencedRelation: "etapas_proceso"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "casos_proceso_proceso_id_fkey"
+            columns: ["proceso_id"]
+            isOneToOne: false
+            referencedRelation: "procesos_gestion"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "casos_proceso_responsable_id_fkey"
+            columns: ["responsable_id"]
+            isOneToOne: false
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "casos_proceso_responsable_id_fkey"
+            columns: ["responsable_id"]
+            isOneToOne: false
+            referencedRelation: "v_alineacion_talento_rol"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "casos_proceso_responsable_id_fkey"
+            columns: ["responsable_id"]
+            isOneToOne: false
+            referencedRelation: "v_indicadores_equipo"
+            referencedColumns: ["lider_id"]
+          },
+          {
+            foreignKeyName: "casos_proceso_responsable_id_fkey"
+            columns: ["responsable_id"]
+            isOneToOne: false
+            referencedRelation: "v_lideres_de_linea_sin_lider_interno"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "casos_proceso_responsable_id_fkey"
+            columns: ["responsable_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_a_cargo_id"]
+          },
+          {
+            foreignKeyName: "casos_proceso_responsable_id_fkey"
+            columns: ["responsable_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "casos_proceso_responsable_id_fkey"
+            columns: ["responsable_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "casos_proceso_responsable_id_fkey"
+            columns: ["responsable_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["par_id"]
+          },
+        ]
+      }
       checklist_cumplimiento: {
         Row: {
           created_at: string
@@ -1418,6 +1531,41 @@ export type Database = {
             columns: ["empresa_id"]
             isOneToOne: false
             referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      etapas_proceso: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          nombre: string
+          orden: number
+          proceso_id: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          id?: string
+          nombre: string
+          orden?: number
+          proceso_id: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          nombre?: string
+          orden?: number
+          proceso_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "etapas_proceso_proceso_id_fkey"
+            columns: ["proceso_id"]
+            isOneToOne: false
+            referencedRelation: "procesos_gestion"
             referencedColumns: ["id"]
           },
         ]
