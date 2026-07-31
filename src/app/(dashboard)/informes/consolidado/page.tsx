@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { obtenerInformeConsolidado } from './data';
-import { BarChart3 } from 'lucide-react';
+import { BarChart3, FileDown, FileSpreadsheet } from 'lucide-react';
 
 function Dato({ etiqueta, valor }: { etiqueta: string; valor: string | number }) {
   return (
@@ -17,11 +17,28 @@ export default async function InformeConsolidadoPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-2xl font-semibold text-secundario flex items-center gap-2">
-          <BarChart3 size={22} className="text-flow-600" /> Informe Consolidado Gerencial
-        </h1>
-        <p className="text-sm text-marmol-500 mt-1">Panorama completo de la empresa, listo para presentar.</p>
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="font-display text-2xl font-semibold text-secundario flex items-center gap-2">
+            <BarChart3 size={22} className="text-flow-600" /> Informe Consolidado Gerencial
+          </h1>
+          <p className="text-sm text-marmol-500 mt-1">Panorama completo de la empresa, listo para presentar.</p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <a
+            href="/api/informes/consolidado/pdf"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-marmol-200 hover:border-flow-300 text-marmol-600 text-sm font-medium px-3.5 py-2 transition"
+          >
+            <FileDown size={16} /> PDF
+          </a>
+          <a
+            href="/api/informes/consolidado/excel"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-marmol-200 hover:border-flow-300 text-marmol-600 text-sm font-medium px-3.5 py-2 transition"
+          >
+            <FileSpreadsheet size={16} /> Excel
+          </a>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

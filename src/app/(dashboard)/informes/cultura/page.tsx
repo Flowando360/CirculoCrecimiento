@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { EmptyState } from '@/components/ui/empty-state';
-import { Heart } from 'lucide-react';
+import { Heart, FileDown, FileSpreadsheet } from 'lucide-react';
 import { obtenerInformeCultura } from './data';
 
 export default async function InformeCulturaPage() {
@@ -9,12 +9,29 @@ export default async function InformeCulturaPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-2xl font-semibold text-secundario">Cultura y Engagement</h1>
-        <p className="text-sm text-marmol-500 mt-1">
-          Reconocimientos recibidos, participación en el feed y formación de cultura completada — las señales
-          reales de participación que registra Nexa.
-        </p>
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="font-display text-2xl font-semibold text-secundario">Cultura y Engagement</h1>
+          <p className="text-sm text-marmol-500 mt-1">
+            Reconocimientos recibidos, participación en el feed y formación de cultura completada — las señales
+            reales de participación que registra Nexa.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <a
+            href="/api/informes/cultura/pdf"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-marmol-200 hover:border-flow-300 text-marmol-600 text-sm font-medium px-3.5 py-2 transition"
+          >
+            <FileDown size={16} /> PDF
+          </a>
+          <a
+            href="/api/informes/cultura/excel"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-marmol-200 hover:border-flow-300 text-marmol-600 text-sm font-medium px-3.5 py-2 transition"
+          >
+            <FileSpreadsheet size={16} /> Excel
+          </a>
+        </div>
       </div>
 
       {filas.length === 0 ? (
