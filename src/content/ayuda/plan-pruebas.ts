@@ -73,6 +73,16 @@ export const planPruebas: SeccionPlanPruebas[] = [
         ],
       },
       {
+        titulo: 'Tablero kanban de Planes de Desarrollo Individual (PDI)',
+        rolNecesario: 'Colaborador (arrastra lo propio) y admin_th/líder (arrastran lo de su alcance)',
+        pasos: [
+          { paso: 'Entra a Planes de Desarrollo Individual con un PDI existente en la columna "Pendiente".', resultadoEsperado: 'Ves 4 columnas fijas: Pendiente, En curso, Cumplido, Vencido, cada una con su contador.' },
+          { paso: 'Arrastra esa tarjeta a la columna "Cumplido".', resultadoEsperado: 'La tarjeta queda en la nueva columna y se guarda la fecha de cumplimiento automáticamente (sin recargar la página).' },
+          { paso: 'Arrastra una tarjeta con fecha de compromiso vencida a una columna distinta de "Cumplido".', resultadoEsperado: 'La fecha se muestra resaltada en rojo en la tarjeta.' },
+          { paso: 'Inicia sesión como gerencia y entra a PDI.', resultadoEsperado: 'Ve el tablero pero no puede arrastrar tarjetas (solo lectura).' },
+        ],
+      },
+      {
         titulo: 'Motor automático: brecha detectada genera PDI y formación solo',
         rolNecesario: 'admin_th (configurar) y los acompañantes de un Encuentro de Crecimiento (valorar)',
         pasos: [
@@ -111,6 +121,16 @@ export const planPruebas: SeccionPlanPruebas[] = [
         pasos: [
           { paso: 'Entra al historial de un colaborador y registra un movimiento (ej. cambio de cargo).', resultadoEsperado: 'Aparece en la línea de tiempo con fecha y descripción.' },
           { paso: 'Diligencia la entrevista de salida.', resultadoEsperado: 'Se guarda; solo admin_th puede verla (ni el líder ni el colaborador).' },
+        ],
+      },
+      {
+        titulo: 'Mis fechas personales (aniversario de bodas, baby shower, embarazo)',
+        rolNecesario: 'Colaborador (para cargar lo propio) y líder directo (para confirmar qué ve y qué no)',
+        pasos: [
+          { paso: 'Entra a Mi Perfil → "Mis fechas personales" y guarda una fecha de matrimonio y una de baby shower.', resultadoEsperado: 'Se guardan; aparece confirmación de "Guardado".' },
+          { paso: 'Inicia sesión como el líder directo de esa persona y entra a Alertas.', resultadoEsperado: 'Aparecen las alertas de "Aniversario de bodas" y "Baby shower" de esa persona, con su fecha.' },
+          { paso: 'Vuelve a Mi Perfil como el colaborador, marca "Estoy en embarazo" y guarda una fecha probable de parto.', resultadoEsperado: 'Se guarda correctamente.' },
+          { paso: 'Inicia sesión otra vez como el líder directo y revisa Alertas y la ficha de esa persona.', resultadoEsperado: 'NO aparece ninguna alerta ni dato de embarazo — ese dato es privado, solo lo ve la propia persona y admin_th.' },
         ],
       },
     ],
@@ -192,11 +212,22 @@ export const planPruebas: SeccionPlanPruebas[] = [
         ],
       },
       {
-        titulo: 'Marcar avance de un curso',
+        titulo: 'Marcar avance de un curso (sin quiz)',
         rolNecesario: 'Colaborador',
         pasos: [
-          { paso: 'Entra a Formación y SST y ajusta el control de avance de un curso asignado.', resultadoEsperado: 'Guarda el % y el estado pasa a "en curso".' },
+          { paso: 'Entra a Formación y SST y ajusta el control de avance de un curso asignado que NO tenga quiz configurado.', resultadoEsperado: 'Guarda el % y el estado pasa a "en curso".' },
           { paso: 'Presiona "Marcar como completado".', resultadoEsperado: 'Queda en 100% y estado "completado"; ya no se puede seguir editando.' },
+        ],
+      },
+      {
+        titulo: 'Armar y tomar el quiz de un curso',
+        rolNecesario: 'admin_th (arma el quiz) y colaborador (lo toma)',
+        pasos: [
+          { paso: 'Como admin_th, entra al catálogo de Formación y SST y presiona "Gestionar" en un curso.', resultadoEsperado: 'Abre la pantalla del quiz de ese curso, vacía si es la primera vez.' },
+          { paso: 'Define el % mínimo de aprobación y agrega 2 o 3 preguntas de opción múltiple, marcando una opción correcta en cada una.', resultadoEsperado: 'Cada pregunta aparece en la lista con la opción correcta señalada con un ícono.' },
+          { paso: 'Asigna ese curso a un colaborador (si no lo tenía ya) e inicia sesión como esa persona.', resultadoEsperado: 'En su tarjeta del curso aparece el botón "Tomar el quiz" en vez de la barra de avance.' },
+          { paso: 'Responde el quiz dejando alguna respuesta incorrecta a propósito, por debajo del % mínimo, y envíalo.', resultadoEsperado: 'Muestra el puntaje obtenido y el mensaje de que no se alcanzó el mínimo, con opción de "Reintentar".' },
+          { paso: 'Reintenta el quiz respondiendo todo correctamente.', resultadoEsperado: 'Muestra el puntaje en 100% (o por encima del mínimo) y el curso pasa a estado "completado" automáticamente.' },
         ],
       },
       {
@@ -234,6 +265,36 @@ export const planPruebas: SeccionPlanPruebas[] = [
     ],
   },
   {
+    modulo: 'Nexa — Asistente IA y base documental',
+    escenarios: [
+      {
+        titulo: 'Cargar un documento de política y que el asistente lo use',
+        rolNecesario: 'admin_th (carga el documento) y cualquier usuario (le pregunta al asistente)',
+        pasos: [
+          { paso: 'Como admin_th, entra a Nexa → Asistente IA → "Base documental" y pega un texto corto de una política de ejemplo (ej. "Los EPP se entregan cada 6 meses").', resultadoEsperado: 'El documento aparece en la lista, activo, con la cantidad de caracteres cargados.' },
+          { paso: 'Ve al chat del Asistente IA y pregunta algo directamente relacionado con ese texto.', resultadoEsperado: 'La respuesta incorpora la información del documento cargado (no una respuesta genérica).' },
+          { paso: 'Desactiva ese documento (casilla Activo/Inactivo) y vuelve a hacer la misma pregunta.', resultadoEsperado: 'El asistente ya no usa ese documento como referencia.' },
+          { paso: 'Pregunta algo normativo para lo que no hay ningún documento cargado ni activo.', resultadoEsperado: 'El asistente dice explícitamente que no tiene esa información, en vez de inventar una respuesta.' },
+        ],
+      },
+    ],
+  },
+  {
+    modulo: 'Progressive Web App (instalación en celular)',
+    escenarios: [
+      {
+        titulo: 'Instalar la app desde el navegador del celular',
+        rolNecesario: 'Cualquier usuario',
+        pasos: [
+          { paso: 'Abre la URL de la app en Chrome de un Android.', resultadoEsperado: 'El navegador ofrece la opción "Instalar app" o "Agregar a pantalla de inicio" (automática o desde el menú de tres puntos).' },
+          { paso: 'Instálala y ábrela desde el ícono en la pantalla de inicio.', resultadoEsperado: 'Abre a pantalla completa, sin la barra de direcciones del navegador, con el isotipo de Mármoles y Servicios como ícono.' },
+          { paso: 'Repite en un iPhone con Safari, usando el botón de compartir → "Agregar a pantalla de inicio".', resultadoEsperado: 'Mismo resultado: ícono propio, abre a pantalla completa.' },
+          { paso: 'Con la app instalada, navega por un par de pantallas y luego apaga los datos/wifi del celular.', resultadoEsperado: 'La app no se queda mostrando información vieja como si fuera actual — al no haber conexión, las pantallas con datos no cargan (a propósito no se guarda información sensible en caché).' },
+        ],
+      },
+    ],
+  },
+  {
     modulo: 'Alertas',
     escenarios: [
       {
@@ -258,13 +319,13 @@ export const planPruebas: SeccionPlanPruebas[] = [
         titulo: 'Exportar cada informe',
         rolNecesario: 'admin_th, líder o gerencia según el informe',
         pasos: [
-          { paso: 'Entra a cada uno de los 4 informes exportables (360°, PDI, SST, Brechas).', resultadoEsperado: 'Cada uno carga con datos reales, sin errores.' },
+          { paso: 'Entra a cada uno de los 8 informes exportables (360°, PDI, SST, Brechas, Formación, Cultura y Engagement, Consolidado Gerencial, Histórico Comparativo).', resultadoEsperado: 'Cada uno carga con datos reales, sin errores.' },
           { paso: 'Presiona "Exportar PDF" en cada uno.', resultadoEsperado: 'Descarga un PDF legible con la información correspondiente.' },
           { paso: 'Presiona "Exportar Excel" en cada uno.', resultadoEsperado: 'Descarga un archivo .xlsx con la misma información en formato tabla.' },
         ],
       },
       {
-        titulo: 'Los 4 informes nuevos cargan y respetan el alcance por rol',
+        titulo: 'Los 4 informes nuevos respetan el alcance por rol',
         rolNecesario: 'admin_th, líder o gerencia según el informe',
         pasos: [
           { paso: 'Entra a Informes → Formación con cualquier rol.', resultadoEsperado: 'Carga sin error, con el estado de cursos según el alcance de ese rol (equipo o toda la empresa).' },
@@ -304,18 +365,29 @@ export const planPruebas: SeccionPlanPruebas[] = [
         ],
       },
       {
-        titulo: 'Checklist de cumplimiento con evidencia adjunta',
+        titulo: 'Tablero de checklist de cumplimiento con evidencia adjunta',
         rolNecesario: 'admin_th',
         pasos: [
-          { paso: 'Agrega un ítem de checklist para un marco normativo, adjuntando un archivo como evidencia.', resultadoEsperado: 'Queda creado en estado "No cumple" (estado inicial por defecto) con el ícono de clip indicando que tiene evidencia.' },
-          { paso: 'Cambia su estado a "Cumple".', resultadoEsperado: 'La etiqueta de estado cambia de color de inmediato (rojo → verde).' },
+          { paso: 'Agrega un ítem de checklist para un marco normativo, adjuntando un archivo como evidencia.', resultadoEsperado: 'Aparece como tarjeta en la columna "No cumple" (estado inicial por defecto) con el ícono de clip indicando que tiene evidencia.' },
+          { paso: 'Arrastra esa tarjeta hasta la columna "Cumple".', resultadoEsperado: 'La tarjeta queda en la nueva columna y el contador de cada columna se actualiza.' },
+          { paso: 'Usa el filtro de marco normativo arriba del tablero para ver solo ISO 9001.', resultadoEsperado: 'Solo se muestran las tarjetas de ese marco normativo en las 4 columnas.' },
+        ],
+      },
+      {
+        titulo: 'Tablero kanban de un proceso',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Entra al tablero de un proceso que todavía no tiene etapas.', resultadoEsperado: 'Aparece el botón "Crear tablero con etapas por defecto".' },
+          { paso: 'Créalo, y luego usa "Configurar etapas" para renombrar una columna y agregar una nueva con un color distinto.', resultadoEsperado: 'Los cambios se reflejan de inmediato en el tablero.' },
+          { paso: 'Agrega una tarjeta con responsable, prioridad y fecha límite vencida.', resultadoEsperado: 'La tarjeta aparece en la columna elegida, con su fecha límite resaltada en rojo.' },
+          { paso: 'Arrastra la tarjeta a otra columna.', resultadoEsperado: 'Cambia de columna y el contador de cada una se actualiza.' },
         ],
       },
       {
         titulo: 'Un líder consulta pero no edita',
         rolNecesario: 'Líder',
         pasos: [
-          { paso: 'Inicia sesión como líder y entra a Procesos y Sistemas de Gestión.', resultadoEsperado: 'Puede ver los tres bloques (procesos, riesgos, checklist), pero no aparecen los formularios para agregar/eliminar ni el selector de estado — solo lectura.' },
+          { paso: 'Inicia sesión como líder y entra a Procesos y Sistemas de Gestión.', resultadoEsperado: 'Puede ver los tres bloques (procesos, riesgos, tablero de checklist), pero no aparecen los formularios para agregar/eliminar ni puede arrastrar tarjetas — solo lectura.' },
         ],
       },
     ],
