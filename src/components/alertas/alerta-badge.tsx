@@ -11,6 +11,8 @@ const ETIQUETAS: Record<string, string> = {
   ciclo_evaluacion: 'Ciclo de Crecimiento',
   cumpleanos: 'Cumpleaños',
   aniversario_ingreso: 'Aniversario',
+  aniversario_bodas: 'Aniversario de bodas',
+  baby_shower: 'Baby shower',
   otro: 'Otro',
 };
 

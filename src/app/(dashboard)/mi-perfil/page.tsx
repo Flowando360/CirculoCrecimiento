@@ -4,6 +4,7 @@ import { SemaforoBadge } from '@/components/circulo-crecimiento/semaforo-badge';
 import { formatearFecha } from '@/lib/utils';
 import { EmptyState } from '@/components/ui/empty-state';
 import { User } from 'lucide-react';
+import { FechasPersonalesForm } from '@/components/circulo-crecimiento/fechas-personales-form';
 
 export default async function MiPerfilPage() {
   const perfil = await getPerfilActual();
@@ -21,7 +22,7 @@ export default async function MiPerfilPage() {
 
   const supabase = createClient();
 
-  const [{ data: colaborador }, { data: resultado }, { data: ser }, { data: saber }] = await Promise.all([
+  const [{ data: colaborador }, { data: resultado }, { data: ser }, { data: saber }, { data: fechasPersonales }] = await Promise.all([
     supabase
       .from('colaboradores')
       .select('nombre_completo, fecha_ingreso, cargo:cargos(nombre, proceso_area, objetivo_cargo), lider:lider_id(nombre_completo)')
@@ -42,6 +43,11 @@ export default async function MiPerfilPage() {
       .limit(1)
       .maybeSingle(),
     supabase.from('v_saber_cumplimiento').select('*').eq('colaborador_id', perfil.colaborador_id).maybeSingle(),
+    supabase
+      .from('fechas_personales_colaborador')
+      .select('fecha_matrimonio, fecha_baby_shower, en_embarazo, fecha_probable_parto')
+      .eq('colaborador_id', perfil.colaborador_id)
+      .maybeSingle(),
   ]);
 
   const cargo = colaborador?.cargo as any;
@@ -107,6 +113,8 @@ export default async function MiPerfilPage() {
           </div>
         </div>
       )}
+
+      <FechasPersonalesForm datosIniciales={fechasPersonales ?? null} />
     </div>
   );
 }

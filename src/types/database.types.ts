@@ -1828,6 +1828,93 @@ export type Database = {
           },
         ]
       }
+      fechas_personales_colaborador: {
+        Row: {
+          colaborador_id: string
+          en_embarazo: boolean
+          fecha_baby_shower: string | null
+          fecha_matrimonio: string | null
+          fecha_probable_parto: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          colaborador_id: string
+          en_embarazo?: boolean
+          fecha_baby_shower?: string | null
+          fecha_matrimonio?: string | null
+          fecha_probable_parto?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          colaborador_id?: string
+          en_embarazo?: boolean
+          fecha_baby_shower?: string | null
+          fecha_matrimonio?: string | null
+          fecha_probable_parto?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fechas_personales_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: true
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fechas_personales_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: true
+            referencedRelation: "v_alineacion_talento_rol"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "fechas_personales_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: true
+            referencedRelation: "v_indicadores_equipo"
+            referencedColumns: ["lider_id"]
+          },
+          {
+            foreignKeyName: "fechas_personales_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: true
+            referencedRelation: "v_lideres_de_linea_sin_lider_interno"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "fechas_personales_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: true
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_a_cargo_id"]
+          },
+          {
+            foreignKeyName: "fechas_personales_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: true
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "fechas_personales_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: true
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "fechas_personales_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: true
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["par_id"]
+          },
+        ]
+      }
       guia_del_flow: {
         Row: {
           colaborador_id: string
@@ -4355,6 +4442,8 @@ export type Database = {
         | "cumpleanos"
         | "aniversario_ingreso"
         | "otro"
+        | "aniversario_bodas"
+        | "baby_shower"
       tipo_contrato:
         | "indefinido"
         | "fijo"
@@ -4581,6 +4670,8 @@ export const Constants = {
         "cumpleanos",
         "aniversario_ingreso",
         "otro",
+        "aniversario_bodas",
+        "baby_shower",
       ],
       tipo_contrato: [
         "indefinido",

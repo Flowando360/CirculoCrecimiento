@@ -30,7 +30,7 @@ export default async function AlertasPage() {
         <h1 className="font-display text-2xl font-semibold text-secundario">Alertas y fechas clave</h1>
         <p className="text-sm text-marmol-500 mt-1">
           Contratos, SST (exámenes, certificaciones, EPP), formación, Ciclos de Crecimiento y cultura
-          (cumpleaños, aniversarios).
+          (cumpleaños, aniversarios de ingreso y de bodas, baby showers).
         </p>
       </div>
 
