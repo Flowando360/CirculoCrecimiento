@@ -25,6 +25,10 @@ yarn-error.log*
 # local env files
 .env
 .env*.local
+Claves.txt
+
+# proyecto no relacionado que quedó anidado por accidente
+/FormularioPedidos/
 
 # vercel
 .vercel

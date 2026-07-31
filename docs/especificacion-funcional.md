@@ -40,6 +40,8 @@ Asesor externo (invitado)
 ARL, consultor SST o proveedor de formación certificada, según networking de Nexa
 Acceso limitado al directorio de aliados y, si se habilita, a indicadores agregados de cumplimiento SST del cliente que lo invita.
 
+NOTA DE ESTADO ACTUAL (agregada al revisar el aplicativo construido contra este documento comercial): hoy el sistema de roles tiene 4 roles reales, implementados a nivel de base de datos (enum rol_usuario) y de permisos (RLS): admin_th, gerencia, lider, colaborador — que cubren exactamente los primeros 4 roles de esta tabla. Los tres roles siguientes (Líder SST, Oficial de cumplimiento/Líder de calidad, Asesor externo invitado) son parte de la visión comercial del producto pero NO existen como roles separados en el sistema — hoy sus necesidades se cubren apoyándose en los roles existentes (ej. admin_th o lider ven el panel de alertas y el informe de cumplimiento SST). Antes de construir estos 3 roles como perfiles de acceso independientes, conviene confirmar que hay una necesidad real de un cliente (alguien que de verdad necesite ver SOLO SST, o invitar a un externo con acceso limitado) — no se construyeron todavía por no ser, hasta ahora, un requisito concreto de ningún cliente piloto.
+
 
 4. Estructura de menú y navegación
 El menú principal es el mismo para todos los usuarios; lo que cambia es qué opciones están habilitadas según el rol. La navegación se organiza en las siguientes secciones:
