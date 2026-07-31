@@ -32,15 +32,31 @@ export const moduloNexa: ModuloAyuda = {
       ruta: '/nexa/formacion',
       titulo: 'Formación y SST',
       resumen:
-        'Para un colaborador: sus cursos asignados con barra de progreso. Para admin_th: el catálogo completo de cursos gamificados, con creación y asignación.',
+        'Para un colaborador: sus cursos asignados, cada uno con barra de progreso o con un quiz de verificación (según cómo lo haya armado admin_th). Para admin_th: el catálogo completo de cursos gamificados, con creación, asignación y gestión del quiz de cada curso.',
       camposYBotones: [
         { nombre: 'Nuevo curso (admin_th)', explicacion: 'Título, descripción, categoría (inducción SST, alturas, manejo de cargas, EPP, protocolos de emergencia, cultura, técnico, otro), duración y puntos que otorga.' },
         { nombre: 'Asignar (admin_th)', explicacion: 'Por cada curso: asignarlo a todo un cargo (con nivel de riesgo y si es obligatorio) o directamente a una persona (con fecha límite).' },
-        { nombre: 'Control deslizante de avance (colaborador)', explicacion: 'Ajusta tu % de avance en un curso asignado y presiona "Guardar avance".' },
-        { nombre: 'Marcar como completado (colaborador)', explicacion: 'Pone el curso en 100% y lo cierra como completado de una vez.' },
+        { nombre: 'Gestionar (admin_th)', explicacion: 'Lleva a la pantalla de preguntas del quiz de ese curso (ver "Quiz de un curso" más abajo).' },
+        { nombre: 'Control deslizante de avance (colaborador, cursos sin quiz)', explicacion: 'Ajusta tu % de avance en un curso asignado y presiona "Guardar avance", o "Marcar como completado" para ponerlo en 100% de una vez.' },
+        { nombre: 'Tomar el quiz (colaborador, cursos con quiz)', explicacion: 'Si el curso tiene preguntas configuradas, en vez de la barra deslizante aparece este botón: abre las preguntas de opción múltiple, y al enviarlas muestra el puntaje. Si no alcanzas el % mínimo, puedes reintentar.' },
       ],
       notas: [
-        'El estado del curso (asignado/en curso/completado) se calcula solo, según el % de avance — no hay que cambiarlo a mano.',
+        'El estado del curso (asignado/en curso/completado) se calcula solo. En cursos con quiz, se completa automáticamente al aprobar (alcanzar el % mínimo definido por admin_th); en cursos sin quiz, al llegar al 100% de avance o marcarlo como completado.',
+      ],
+    },
+    {
+      slug: 'quiz-curso',
+      ruta: '/nexa/formacion/*/quiz',
+      titulo: 'Quiz de un curso',
+      resumen: 'Solo admin_th. Arma las preguntas de opción múltiple que verifican si la persona realmente aprendió el contenido del curso, en vez de solo autorreportar su avance.',
+      camposYBotones: [
+        { nombre: '% mínimo para aprobar', explicacion: 'Umbral configurable por curso (70% por defecto). Si el colaborador no lo alcanza, el curso no se marca como completado y puede reintentar el quiz.' },
+        { nombre: 'Agregar pregunta', explicacion: 'Enunciado más hasta 4 opciones; marca con el punto cuál es la correcta. Se necesitan al menos 2 opciones con texto.' },
+        { nombre: 'Ícono de basura junto a una pregunta', explicacion: 'La elimina del quiz (y sus opciones) permanentemente.' },
+      ],
+      notas: [
+        'Un curso sin ninguna pregunta sigue funcionando con el % de avance autorreportado de siempre — el quiz es opcional por curso.',
+        'La respuesta correcta nunca se le muestra al colaborador ni siquiera técnicamente (no viaja a su navegador) — solo se calcula al enviar las respuestas.',
       ],
     },
     {
@@ -100,8 +116,31 @@ export const moduloNexa: ModuloAyuda = {
       slug: 'asistente-ia',
       ruta: '/nexa/asistente',
       titulo: 'Asistente IA',
-      resumen: 'Chat entrenado con las políticas y procedimientos internos de la empresa, para resolver dudas normativas y de procedimiento.',
-      camposYBotones: [{ nombre: 'Campo de pregunta', explicacion: 'Escribe tu duda y presiona enviar; la respuesta aparece en el chat.' }],
+      resumen:
+        'Chat que responde dudas normativas y de procedimiento apoyándose en los documentos de políticas propias que admin_th haya cargado (reglamento SST, manual interno), además del propósito/valores de la empresa. Si no tiene ningún documento relevante para una pregunta normativa, lo dice en vez de inventar una respuesta.',
+      camposYBotones: [
+        { nombre: 'Campo de pregunta', explicacion: 'Escribe tu duda y presiona enviar; la respuesta aparece en el chat.' },
+        { nombre: 'Base documental (admin_th)', explicacion: 'Botón que lleva a la pantalla donde se cargan los documentos que usa el asistente (ver "Base documental del asistente" más abajo).' },
+      ],
+      notas: [
+        'Requiere que Talento Humano/soporte técnico haya configurado la clave de la IA en el servidor. Si no está configurada, el chat lo avisa en vez de fallar en silencio.',
+        'Cada pregunta y respuesta queda registrada para trazabilidad, aunque no es visible dentro de la app para ningún rol todavía.',
+      ],
+    },
+    {
+      slug: 'documentos-politica',
+      ruta: '/nexa/asistente/documentos',
+      titulo: 'Base documental del asistente',
+      resumen: 'Solo admin_th. Aquí se cargan los documentos propios (reglamento SST, manual interno, políticas) que el Asistente IA usa como referencia antes de responder.',
+      camposYBotones: [
+        { nombre: 'Subir el PDF', explicacion: 'El texto se extrae automáticamente del archivo — no hace falta transcribirlo a mano.' },
+        { nombre: 'Pegar el texto', explicacion: 'Alternativa a subir un PDF: pega directamente el texto de la política (útil si no tienes el archivo a mano, o solo quieres cargar un fragmento).' },
+        { nombre: 'Categoría', explicacion: 'SST, Políticas, Procedimientos u Otro — solo de referencia, no cambia cómo el asistente busca en el documento.' },
+        { nombre: 'Casilla Activo/Inactivo', explicacion: 'Desactiva un documento para que el asistente deje de usarlo, sin borrarlo.' },
+      ],
+      notas: [
+        'El asistente busca automáticamente los documentos más relacionados con cada pregunta — no hay que indicarle a mano cuál usar.',
+      ],
     },
   ],
 };

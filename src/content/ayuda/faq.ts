@@ -136,4 +136,29 @@ export const preguntasFrecuentes: PreguntaFrecuente[] = [
     respuesta:
       'Solo el equipo interno de la alianza Flowando/Nexus/V&E (cuentas marcadas como superadmin). Ninguna empresa cliente lo ve, ni siquiera con el rol admin_th.',
   },
+  {
+    pregunta: '¿Cómo instalo la app en mi celular?',
+    respuesta:
+      'En Android/Chrome: abre la app en el navegador y busca la opción "Agregar a pantalla de inicio" o "Instalar app" en el menú del navegador. En iPhone/Safari: toca el botón de compartir y elige "Agregar a pantalla de inicio". Queda como un ícono más, se abre a pantalla completa sin las barras del navegador.',
+  },
+  {
+    pregunta: '¿Qué es el tablero (kanban) de un proceso, y en qué se diferencia del de Planes de Desarrollo?',
+    respuesta:
+      'En Procesos y Sistemas de Gestión, cada proceso tiene su propio tablero con columnas que admin_th puede crear, renombrar y reordenar a su gusto (por ejemplo: "Por hacer", "En revisión", "Listo"). En Planes de Desarrollo Individual, en cambio, las columnas son siempre las mismas cuatro (Pendiente/En curso/Cumplido/Vencido) y no se pueden cambiar — son el estado real del PDI, no una configuración libre.',
+  },
+  {
+    pregunta: '¿Cómo tomo el quiz de un curso en Nexa?',
+    respuesta:
+      'Si el curso tiene quiz configurado, en vez de la barra de avance verás un botón "Tomar el quiz". Responde todas las preguntas y envíalas: si alcanzas el % mínimo que definió Talento Humano, el curso queda completado de una vez; si no, puedes reintentarlo.',
+  },
+  {
+    pregunta: '¿Dónde registro mi aniversario de bodas, mi baby shower o mi embarazo?',
+    respuesta:
+      'En Mi Perfil, sección "Mis fechas personales". El aniversario de bodas y el baby shower le avisan a tu líder para celebrar contigo (aparecen en Alertas). El embarazo y la fecha probable de parto son privados: solo los ves tú y Talento Humano, ni tu líder ni gerencia tienen acceso a ese dato.',
+  },
+  {
+    pregunta: '¿Cómo hago que el Asistente IA conozca nuestras políticas y reglamentos reales?',
+    respuesta:
+      'Solo admin_th puede cargarlos, desde Nexa → Asistente IA → "Base documental". Se sube el PDF (el texto se extrae solo) o se pega el texto directamente. El asistente busca automáticamente el documento más relacionado con cada pregunta que le hagan.',
+  },
 ];

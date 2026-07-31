@@ -207,14 +207,16 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
       ruta: '/circulo-crecimiento/pdi',
       titulo: 'Planes de Desarrollo Individual (PDI)',
       resumen:
-        'El entregable central del Encuentro de Crecimiento: cada acción de desarrollo indica si la brecha viene de Hacer, Deber, Saber, Ser, o es mixta.',
+        'El entregable central del Encuentro de Crecimiento, en forma de tablero kanban: cada acción de desarrollo indica si la brecha viene de Hacer, Deber, Saber, Ser, o es mixta, y se arrastra entre columnas según su estado.',
       camposYBotones: [
-        { nombre: 'Origen', explicacion: 'De qué dimensión viene la brecha detectada (Hacer/Deber/Saber/Ser/Mixto).' },
-        { nombre: 'Estado', explicacion: 'Pendiente, en curso, cumplido o vencido, con su fecha de compromiso.' },
+        { nombre: 'Columnas del tablero', explicacion: 'Pendiente, En curso, Cumplido y Vencido — son fijas (no configurables, a diferencia del tablero de Procesos y Sistemas de Gestión).' },
+        { nombre: 'Arrastrar tarjeta', explicacion: 'Mueve el PDI a otra columna para cambiar su estado. Al soltarlo en "Cumplido" se guarda automáticamente la fecha de cumplimiento.' },
+        { nombre: 'Origen (badge de color)', explicacion: 'De qué dimensión viene la brecha detectada (Hacer/Deber/Saber/Ser/Mixto).' },
         { nombre: 'Insignia "Automático"', explicacion: 'Marca los PDI que generó solo el sistema (ver nota siguiente), para distinguirlos de los que redactó admin_th o el líder a mano.' },
+        { nombre: 'Fecha de compromiso en rojo', explicacion: 'Se resalta en rojo cuando ya venció y la tarjeta todavía no está en la columna "Cumplido".' },
       ],
       notas: [
-        'Un colaborador solo ve su propio PDI; admin_th, líder y gerencia ven el de su alcance correspondiente.',
+        'Un colaborador solo ve su propio PDI (y puede arrastrar sus propias tarjetas para reportar avance); admin_th, líder y gerencia ven el de su alcance correspondiente. Gerencia ve el tablero de solo lectura, sin poder arrastrar.',
         'Motor automático de brechas: cuando un Encuentro de Crecimiento queda 100% respondido y el semáforo de Hacer o de Deber sale en "bajo", el sistema crea aquí un PDI automático y asigna al colaborador los cursos de Nexa configurados para esa dimensión — sin que nadie tenga que redactarlo a mano. Los cursos que dispara cada dimensión se configuran en Administración → Configuración.',
       ],
     },

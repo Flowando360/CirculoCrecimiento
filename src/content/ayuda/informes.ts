@@ -3,7 +3,7 @@ import type { ModuloAyuda } from '@/types/ayuda';
 export const moduloInformes: ModuloAyuda = {
   slug: 'informes',
   titulo: 'Informes',
-  descripcion: 'Los nueve informes del sistema. Los primeros cuatro (360°, PDI, SST, Brechas) se pueden exportar a PDF y Excel; los cuatro siguientes (Formación, Cultura y Engagement, Consolidado Gerencial, Histórico Comparativo) por ahora solo se consultan en pantalla; el noveno (Evidencia de auditoría) descarga un paquete ZIP para entregar a un auditor externo.',
+  descripcion: 'Los nueve informes del sistema. Los primeros ocho (360°, PDI, SST, Brechas, Formación, Cultura y Engagement, Consolidado Gerencial, Histórico Comparativo) se pueden exportar a PDF y Excel; el noveno (Evidencia de auditoría) descarga un paquete ZIP para entregar a un auditor externo.',
   paginas: [
     {
       slug: 'indice',
@@ -57,6 +57,7 @@ export const moduloInformes: ModuloAyuda = {
       resumen: 'Cursos y rutas de aprendizaje asignados en Nexa, con su estado y % de avance, persona por persona.',
       camposYBotones: [
         { nombre: 'Tarjetas de resumen', explicacion: 'Total de asignaciones, cuántas están completadas y el % de cumplimiento general.' },
+        { nombre: 'Exportar PDF / Exportar Excel', explicacion: 'Descarga del informe.' },
       ],
       notas: ['admin_th y gerencia ven toda la empresa; líder ve su equipo; colaborador ve solo lo propio.'],
     },
@@ -65,6 +66,7 @@ export const moduloInformes: ModuloAyuda = {
       ruta: '/informes/cultura',
       titulo: 'Informe de Cultura y Engagement',
       resumen: 'Reconocimientos recibidos, reacciones dadas en el feed corporativo y formación de cultura completada, por persona — combina las señales reales que registra Nexa en vez de inventar un puntaje único de "cultura".',
+      camposYBotones: [{ nombre: 'Exportar PDF / Exportar Excel', explicacion: 'Descarga del informe.' }],
       notas: ['Visible para admin_th, líder (su equipo) y gerencia.'],
     },
     {
@@ -72,6 +74,7 @@ export const moduloInformes: ModuloAyuda = {
       ruta: '/informes/consolidado',
       titulo: 'Informe Consolidado Gerencial',
       resumen: 'Los mismos indicadores del dashboard de Inicio, con un desglose por área — pensado para presentar o imprimir en una reunión de junta, no para navegar el día a día.',
+      camposYBotones: [{ nombre: 'Exportar PDF / Exportar Excel', explicacion: 'Descarga del informe.' }],
       notas: ['Visible solo para admin_th y gerencia.'],
     },
     {
@@ -79,6 +82,7 @@ export const moduloInformes: ModuloAyuda = {
       ruta: '/informes/historico',
       titulo: 'Histórico Comparativo entre Ciclos',
       resumen: 'Evolución del promedio de Hacer y Deber de un Ciclo de Crecimiento al siguiente, con la variación marcada (↑/↓) contra el ciclo anterior.',
+      camposYBotones: [{ nombre: 'Exportar PDF / Exportar Excel', explicacion: 'Descarga del informe.' }],
       notas: [
         'Visible para admin_th, líder (su equipo) y gerencia.',
         'Un resumen de los dos ciclos más recientes también aparece como widget en el dashboard de Inicio.',

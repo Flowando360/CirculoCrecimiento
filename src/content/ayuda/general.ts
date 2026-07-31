@@ -32,9 +32,11 @@ export const moduloGeneral: ModuloAyuda = {
         { nombre: 'Encabezado', explicacion: 'Nombre, cargo, área, fecha de ingreso y líder directo.' },
         { nombre: 'Tarjetas SER / SABER / HACER / DEBER', explicacion: 'Estado de cada dimensión: si tu Guía del Flow está completa, tu % de cumplimiento de Saber, y el semáforo (Alto/Medio/Bajo) de Hacer y Deber según tu último Encuentro de Crecimiento.' },
         { nombre: 'Mi Guía del Flow', explicacion: 'Si ya se cargó tu Guía del Flow, aquí ves tus talentos naturales y tu propósito, tal como quedaron documentados.' },
+        { nombre: 'Mis fechas personales', explicacion: 'Fecha de matrimonio y de baby shower (si aplica) — el sistema le avisa a tu líder para celebrar contigo. Y, aparte, si estás en embarazo y tu fecha probable de parto: esto es privado, solo lo ves tú y Talento Humano, tu líder no tiene acceso.' },
       ],
       notas: [
         'Si ves el mensaje de que tu usuario no está vinculado a una ficha, pide a Talento Humano que te asocie desde Administración → Usuarios.',
+        'Cada quien registra sus propias fechas personales — ni siquiera admin_th puede cargarlas por otra persona todavía.',
       ],
     },
   ],
