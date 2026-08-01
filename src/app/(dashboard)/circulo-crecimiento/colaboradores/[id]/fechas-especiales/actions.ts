@@ -5,18 +5,20 @@ import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
-async function esAdminThDeEsteColaborador(colaboradorId: string) {
+/** admin_th de la empresa, o el líder directo de este colaborador. */
+async function puedeAdministrarFechasDe(colaboradorId: string) {
   const perfil = await getPerfilActual();
-  if (!perfil || perfil.rol !== 'admin_th') return null;
+  if (!perfil || (perfil.rol !== 'admin_th' && perfil.rol !== 'lider')) return null;
 
   const supabase = createClient();
   const { data: colaborador } = await supabase
     .from('colaboradores')
-    .select('id, empresa_id')
+    .select('id, empresa_id, lider_id')
     .eq('id', colaboradorId)
     .maybeSingle();
 
   if (!colaborador || colaborador.empresa_id !== perfil.empresa_id) return null;
+  if (perfil.rol === 'lider' && colaborador.lider_id !== perfil.colaborador_id) return null;
   return perfil;
 }
 
@@ -30,12 +32,12 @@ const FechaEspecialSchema = z.object({
   fecha: z.string().min(1, 'La fecha es requerida'),
 });
 
-/** Talento Humano registra una fecha especial de un colaborador. */
+/** Talento Humano o el líder directo registran una fecha especial de un colaborador. */
 export async function agregarFechaEspecial(input: z.infer<typeof FechaEspecialSchema>) {
   const parsed = FechaEspecialSchema.safeParse(input);
   if (!parsed.success) return { ok: false as const, error: parsed.error.issues[0]?.message ?? 'Datos inválidos' };
 
-  const perfil = await esAdminThDeEsteColaborador(parsed.data.colaboradorId);
+  const perfil = await puedeAdministrarFechasDe(parsed.data.colaboradorId);
   if (!perfil) return { ok: false as const, error: 'No autorizado' };
 
   const supabase = createClient();
@@ -64,7 +66,7 @@ export async function eliminarFechaEspecial(input: z.infer<typeof EliminarSchema
   const parsed = EliminarSchema.safeParse(input);
   if (!parsed.success) return { ok: false as const, error: 'Datos inválidos' };
 
-  const perfil = await esAdminThDeEsteColaborador(parsed.data.colaboradorId);
+  const perfil = await puedeAdministrarFechasDe(parsed.data.colaboradorId);
   if (!perfil) return { ok: false as const, error: 'No autorizado' };
 
   const supabase = createClient();

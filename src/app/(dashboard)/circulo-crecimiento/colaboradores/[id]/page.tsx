@@ -46,9 +46,10 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
   const puedeVerDocumentos = perfil.rol === 'admin_th' || (perfil.rol === 'colaborador' && perfil.colaborador_id === colaborador.id);
 
   // Fechas especiales (cumpleaños, día de la profesión, etc.): Talento
-  // Humano las administra desde la ficha; el propio colaborador las
-  // administra desde Mi Perfil, no desde aquí.
-  const puedeVerFechasEspeciales = perfil.rol === 'admin_th';
+  // Humano y el líder directo las administran desde la ficha; el propio
+  // colaborador las administra desde Mi Perfil, no desde aquí.
+  const puedeVerFechasEspeciales =
+    perfil.rol === 'admin_th' || (perfil.rol === 'lider' && colaborador.lider_id === perfil.colaborador_id);
 
   const [{ data: ultimoResultado }, { data: saber }, { data: ser }, { data: pdi }, { data: hojaVida }, { data: induccionItems }] =
     await Promise.all([

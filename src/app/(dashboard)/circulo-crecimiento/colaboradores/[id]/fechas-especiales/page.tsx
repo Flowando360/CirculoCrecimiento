@@ -8,17 +8,20 @@ import { ArrowLeft, CalendarHeart } from 'lucide-react';
 export default async function FechasEspecialesColaboradorPage({ params }: { params: { id: string } }) {
   const perfil = await getPerfilActual();
   if (!perfil) return null;
-  if (perfil.rol !== 'admin_th') notFound();
 
   const supabase = createClient();
 
   const { data: colaborador } = await supabase
     .from('colaboradores')
-    .select('id, nombre_completo, empresa_id')
+    .select('id, nombre_completo, empresa_id, lider_id')
     .eq('id', params.id)
     .maybeSingle();
 
   if (!colaborador || colaborador.empresa_id !== perfil.empresa_id) notFound();
+
+  const puedeAdministrar =
+    perfil.rol === 'admin_th' || (perfil.rol === 'lider' && colaborador.lider_id === perfil.colaborador_id);
+  if (!puedeAdministrar) notFound();
 
   const { data: fechasEspeciales } = await supabase
     .from('fechas_especiales_colaborador')
