@@ -904,6 +904,262 @@ export type Database = {
           },
         ]
       }
+      clima_participaciones: {
+        Row: {
+          colaborador_id: string
+          created_at: string
+          id: string
+          ronda_id: string
+        }
+        Insert: {
+          colaborador_id: string
+          created_at?: string
+          id?: string
+          ronda_id: string
+        }
+        Update: {
+          colaborador_id?: string
+          created_at?: string
+          id?: string
+          ronda_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clima_participaciones_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clima_participaciones_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_alineacion_talento_rol"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "clima_participaciones_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_indicadores_equipo"
+            referencedColumns: ["lider_id"]
+          },
+          {
+            foreignKeyName: "clima_participaciones_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_lideres_de_linea_sin_lider_interno"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "clima_participaciones_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_a_cargo_id"]
+          },
+          {
+            foreignKeyName: "clima_participaciones_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "clima_participaciones_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "clima_participaciones_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["par_id"]
+          },
+          {
+            foreignKeyName: "clima_participaciones_ronda_id_fkey"
+            columns: ["ronda_id"]
+            isOneToOne: false
+            referencedRelation: "clima_rondas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clima_participaciones_ronda_id_fkey"
+            columns: ["ronda_id"]
+            isOneToOne: false
+            referencedRelation: "v_clima_ronda_resumen"
+            referencedColumns: ["ronda_id"]
+          },
+        ]
+      }
+      clima_respuestas: {
+        Row: {
+          comentario: string | null
+          comunicacion: number
+          condiciones: number
+          created_at: string
+          desarrollo: number
+          enps: number
+          equipo_lider_id: string | null
+          id: string
+          liderazgo: number
+          pertenencia: number
+          reconocimiento: number
+          ronda_id: string
+        }
+        Insert: {
+          comentario?: string | null
+          comunicacion: number
+          condiciones: number
+          created_at?: string
+          desarrollo: number
+          enps: number
+          equipo_lider_id?: string | null
+          id?: string
+          liderazgo: number
+          pertenencia: number
+          reconocimiento: number
+          ronda_id: string
+        }
+        Update: {
+          comentario?: string | null
+          comunicacion?: number
+          condiciones?: number
+          created_at?: string
+          desarrollo?: number
+          enps?: number
+          equipo_lider_id?: string | null
+          id?: string
+          liderazgo?: number
+          pertenencia?: number
+          reconocimiento?: number
+          ronda_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clima_respuestas_equipo_lider_id_fkey"
+            columns: ["equipo_lider_id"]
+            isOneToOne: false
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_equipo_lider_id_fkey"
+            columns: ["equipo_lider_id"]
+            isOneToOne: false
+            referencedRelation: "v_alineacion_talento_rol"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_equipo_lider_id_fkey"
+            columns: ["equipo_lider_id"]
+            isOneToOne: false
+            referencedRelation: "v_indicadores_equipo"
+            referencedColumns: ["lider_id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_equipo_lider_id_fkey"
+            columns: ["equipo_lider_id"]
+            isOneToOne: false
+            referencedRelation: "v_lideres_de_linea_sin_lider_interno"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_equipo_lider_id_fkey"
+            columns: ["equipo_lider_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_a_cargo_id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_equipo_lider_id_fkey"
+            columns: ["equipo_lider_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_equipo_lider_id_fkey"
+            columns: ["equipo_lider_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_equipo_lider_id_fkey"
+            columns: ["equipo_lider_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["par_id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_ronda_id_fkey"
+            columns: ["ronda_id"]
+            isOneToOne: false
+            referencedRelation: "clima_rondas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_ronda_id_fkey"
+            columns: ["ronda_id"]
+            isOneToOne: false
+            referencedRelation: "v_clima_ronda_resumen"
+            referencedColumns: ["ronda_id"]
+          },
+        ]
+      }
+      clima_rondas: {
+        Row: {
+          creada_por: string | null
+          created_at: string
+          empresa_id: string
+          estado: Database["public"]["Enums"]["estado_ronda_clima"]
+          fecha_apertura: string
+          fecha_cierre: string | null
+          id: string
+          nombre: string
+        }
+        Insert: {
+          creada_por?: string | null
+          created_at?: string
+          empresa_id: string
+          estado?: Database["public"]["Enums"]["estado_ronda_clima"]
+          fecha_apertura?: string
+          fecha_cierre?: string | null
+          id?: string
+          nombre: string
+        }
+        Update: {
+          creada_por?: string | null
+          created_at?: string
+          empresa_id?: string
+          estado?: Database["public"]["Enums"]["estado_ronda_clima"]
+          fecha_apertura?: string
+          fecha_cierre?: string | null
+          id?: string
+          nombre?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clima_rondas_creada_por_fkey"
+            columns: ["creada_por"]
+            isOneToOne: false
+            referencedRelation: "perfiles_usuario"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clima_rondas_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       colaborador_induccion_items: {
         Row: {
           asignado_en: string
@@ -4485,8 +4741,126 @@ export type Database = {
           },
         ]
       }
+      v_clima_equipo_resumen: {
+        Row: {
+          empresa_id: string | null
+          enps: number | null
+          indice_clima_general: number | null
+          lider_id: string | null
+          num_respuestas: number | null
+          ronda_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clima_respuestas_equipo_lider_id_fkey"
+            columns: ["lider_id"]
+            isOneToOne: false
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_equipo_lider_id_fkey"
+            columns: ["lider_id"]
+            isOneToOne: false
+            referencedRelation: "v_alineacion_talento_rol"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_equipo_lider_id_fkey"
+            columns: ["lider_id"]
+            isOneToOne: false
+            referencedRelation: "v_indicadores_equipo"
+            referencedColumns: ["lider_id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_equipo_lider_id_fkey"
+            columns: ["lider_id"]
+            isOneToOne: false
+            referencedRelation: "v_lideres_de_linea_sin_lider_interno"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_equipo_lider_id_fkey"
+            columns: ["lider_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_a_cargo_id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_equipo_lider_id_fkey"
+            columns: ["lider_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_equipo_lider_id_fkey"
+            columns: ["lider_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_equipo_lider_id_fkey"
+            columns: ["lider_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["par_id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_ronda_id_fkey"
+            columns: ["ronda_id"]
+            isOneToOne: false
+            referencedRelation: "clima_rondas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clima_respuestas_ronda_id_fkey"
+            columns: ["ronda_id"]
+            isOneToOne: false
+            referencedRelation: "v_clima_ronda_resumen"
+            referencedColumns: ["ronda_id"]
+          },
+          {
+            foreignKeyName: "clima_rondas_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_clima_ronda_resumen: {
+        Row: {
+          empresa_id: string | null
+          enps: number | null
+          estado: Database["public"]["Enums"]["estado_ronda_clima"] | null
+          fecha_apertura: string | null
+          fecha_cierre: string | null
+          indice_clima_general: number | null
+          nombre: string | null
+          num_respuestas: number | null
+          prom_comunicacion: number | null
+          prom_condiciones: number | null
+          prom_desarrollo: number | null
+          prom_liderazgo: number | null
+          prom_pertenencia: number | null
+          prom_reconocimiento: number | null
+          ronda_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clima_rondas_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v_indicadores_empresa: {
         Row: {
+          activos_hace_12_meses: number | null
           alertas_abiertas: number | null
           alertas_criticas: number | null
           empresa_id: string | null
@@ -4495,6 +4869,10 @@ export type Database = {
           promedio_deber_empresa: number | null
           promedio_hacer_empresa: number | null
           promedio_saber_empresa: number | null
+          salidas_ultimo_anio: number | null
+          salidas_voluntarias_ultimo_anio: number | null
+          tasa_rotacion_anual: number | null
+          tasa_rotacion_voluntaria: number | null
           total_activos: number | null
         }
         Relationships: [
@@ -4574,6 +4952,23 @@ export type Database = {
           par_id: string | null
         }
         Relationships: []
+      }
+      v_rotacion_mensual: {
+        Row: {
+          empresa_id: string | null
+          mes: string | null
+          salidas: number | null
+          salidas_voluntarias: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "colaboradores_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       v_saber_cumplimiento: {
         Row: {
@@ -4797,6 +5192,7 @@ export type Database = {
         | "completado"
         | "vencido"
       estado_pdi: "pendiente" | "en_curso" | "cumplido" | "vencido"
+      estado_ronda_clima: "abierta" | "cerrada"
       estado_verificacion: "cumple" | "cumple_parcial" | "no_cumple_pendiente"
       nivel_esperado: "bajo" | "medio" | "alto"
       nivel_riesgo_cargo: "alto" | "medio" | "bajo"
@@ -5032,6 +5428,7 @@ export const Constants = {
         "vencido",
       ],
       estado_pdi: ["pendiente", "en_curso", "cumplido", "vencido"],
+      estado_ronda_clima: ["abierta", "cerrada"],
       estado_verificacion: ["cumple", "cumple_parcial", "no_cumple_pendiente"],
       nivel_esperado: ["bajo", "medio", "alto"],
       nivel_riesgo_cargo: ["alto", "medio", "bajo"],
