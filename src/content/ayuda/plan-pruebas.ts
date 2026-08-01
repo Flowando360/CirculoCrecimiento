@@ -601,6 +601,14 @@ export const planPruebas: SeccionPlanPruebas[] = [
         ],
       },
       {
+        titulo: 'Un colaborador (no solo admin_th) ve a toda la empresa en "Nuevo mensaje"',
+        rolNecesario: 'Colaborador',
+        pasos: [
+          { paso: 'Inicia sesión como colaborador y entra a Mensajes → "Nuevo mensaje".', resultadoEsperado: 'El selector trae el listado completo de personas activas de la empresa, no solo de tu equipo — y no aparece nadie con cuenta retirada.' },
+          { paso: 'Entra a una conversación que ya tenías con alguien.', resultadoEsperado: 'Se ve el nombre real de esa persona (no la palabra genérica "Usuario").' },
+        ],
+      },
+      {
         titulo: 'Notificaciones y marcado de leídas',
         rolNecesario: 'Cualquier usuario',
         pasos: [
