@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation';
 import { responderClima } from '@/app/(dashboard)/nexa/clima/actions';
 import { cn } from '@/lib/utils';
 
-const DIMENSIONES: { clave: 'reconocimiento' | 'liderazgo' | 'desarrollo' | 'comunicacion' | 'condiciones' | 'pertenencia'; label: string }[] = [
+type ClaveDimension = 'reconocimiento' | 'liderazgo' | 'desarrollo' | 'comunicacion' | 'condiciones' | 'pertenencia';
+
+const DIMENSIONES_DEFECTO: { clave: ClaveDimension; label: string }[] = [
   { clave: 'reconocimiento', label: 'Me siento reconocido/a por mi trabajo' },
   { clave: 'liderazgo', label: 'Confío en el liderazgo de mi jefe directo' },
   { clave: 'desarrollo', label: 'Tengo oportunidades reales de crecer y aprender' },
@@ -14,9 +16,33 @@ const DIMENSIONES: { clave: 'reconocimiento' | 'liderazgo' | 'desarrollo' | 'com
   { clave: 'pertenencia', label: 'Siento que pertenezco a esta empresa' },
 ];
 
-type Respuestas = Record<(typeof DIMENSIONES)[number]['clave'], number | null>;
+export const ENPS_PREGUNTA_DEFECTO =
+  '¿Qué tan probable es que recomiendes esta empresa como un buen lugar para trabajar? (0 = nada probable, 10 = muy probable)';
 
-export function FormularioClima({ rondaId }: { rondaId: string }) {
+type Respuestas = Record<ClaveDimension, number | null>;
+
+export interface PreguntasClimaPersonalizadas {
+  enps?: string | null;
+  reconocimiento?: string | null;
+  liderazgo?: string | null;
+  desarrollo?: string | null;
+  comunicacion?: string | null;
+  condiciones?: string | null;
+  pertenencia?: string | null;
+}
+
+export function FormularioClima({
+  rondaId,
+  preguntas,
+}: {
+  rondaId: string;
+  preguntas?: PreguntasClimaPersonalizadas;
+}) {
+  const preguntaEnps = preguntas?.enps || ENPS_PREGUNTA_DEFECTO;
+  const DIMENSIONES = DIMENSIONES_DEFECTO.map((d) => ({
+    ...d,
+    label: preguntas?.[d.clave] || d.label,
+  }));
   const router = useRouter();
   const [enps, setEnps] = useState<number | null>(null);
   const [respuestas, setRespuestas] = useState<Respuestas>({
@@ -72,9 +98,7 @@ export function FormularioClima({ rondaId }: { rondaId: string }) {
   return (
     <div className="card p-5 space-y-5 max-w-2xl">
       <div>
-        <p className="text-sm font-medium text-marmol-800 mb-2">
-          ¿Qué tan probable es que recomiendes esta empresa como un buen lugar para trabajar? (0 = nada probable, 10 = muy probable)
-        </p>
+        <p className="text-sm font-medium text-marmol-800 mb-2">{preguntaEnps}</p>
         <div className="flex flex-wrap gap-1.5">
           {Array.from({ length: 11 }, (_, i) => i).map((n) => (
             <button

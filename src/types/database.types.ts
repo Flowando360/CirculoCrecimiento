@@ -1622,6 +1622,13 @@ export type Database = {
         Row: {
           activo: boolean
           ciudad: string | null
+          clima_pregunta_comunicacion: string | null
+          clima_pregunta_condiciones: string | null
+          clima_pregunta_desarrollo: string | null
+          clima_pregunta_enps: string | null
+          clima_pregunta_liderazgo: string | null
+          clima_pregunta_pertenencia: string | null
+          clima_pregunta_reconocimiento: string | null
           color_marca: string | null
           created_at: string
           direccion: string | null
@@ -1642,6 +1649,13 @@ export type Database = {
         Insert: {
           activo?: boolean
           ciudad?: string | null
+          clima_pregunta_comunicacion?: string | null
+          clima_pregunta_condiciones?: string | null
+          clima_pregunta_desarrollo?: string | null
+          clima_pregunta_enps?: string | null
+          clima_pregunta_liderazgo?: string | null
+          clima_pregunta_pertenencia?: string | null
+          clima_pregunta_reconocimiento?: string | null
           color_marca?: string | null
           created_at?: string
           direccion?: string | null
@@ -1662,6 +1676,13 @@ export type Database = {
         Update: {
           activo?: boolean
           ciudad?: string | null
+          clima_pregunta_comunicacion?: string | null
+          clima_pregunta_condiciones?: string | null
+          clima_pregunta_desarrollo?: string | null
+          clima_pregunta_enps?: string | null
+          clima_pregunta_liderazgo?: string | null
+          clima_pregunta_pertenencia?: string | null
+          clima_pregunta_reconocimiento?: string | null
           color_marca?: string | null
           created_at?: string
           direccion?: string | null

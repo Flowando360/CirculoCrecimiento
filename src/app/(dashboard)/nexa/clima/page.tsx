@@ -15,12 +15,21 @@ export default async function ClimaPage() {
   const esGerencia = perfil.rol === 'gerencia';
   const esLider = perfil.rol === 'lider';
 
-  const { data: rondaAbierta } = await supabase
-    .from('clima_rondas')
-    .select('id, nombre, estado, fecha_apertura')
-    .eq('empresa_id', perfil.empresa_id)
-    .eq('estado', 'abierta')
-    .maybeSingle();
+  const [{ data: rondaAbierta }, { data: empresa }] = await Promise.all([
+    supabase
+      .from('clima_rondas')
+      .select('id, nombre, estado, fecha_apertura')
+      .eq('empresa_id', perfil.empresa_id)
+      .eq('estado', 'abierta')
+      .maybeSingle(),
+    supabase
+      .from('empresas')
+      .select(
+        'clima_pregunta_enps, clima_pregunta_reconocimiento, clima_pregunta_liderazgo, clima_pregunta_desarrollo, clima_pregunta_comunicacion, clima_pregunta_condiciones, clima_pregunta_pertenencia'
+      )
+      .eq('id', perfil.empresa_id)
+      .maybeSingle(),
+  ]);
 
   let yaRespondio = false;
   if (rondaAbierta && perfil.colaborador_id) {
@@ -106,7 +115,18 @@ export default async function ClimaPage() {
               <p className="text-sm font-medium text-marmol-800">Ya respondiste esta ronda. ¡Gracias! 🙌</p>
             </div>
           ) : (
-            <FormularioClima rondaId={rondaAbierta.id} />
+            <FormularioClima
+              rondaId={rondaAbierta.id}
+              preguntas={{
+                enps: empresa?.clima_pregunta_enps,
+                reconocimiento: empresa?.clima_pregunta_reconocimiento,
+                liderazgo: empresa?.clima_pregunta_liderazgo,
+                desarrollo: empresa?.clima_pregunta_desarrollo,
+                comunicacion: empresa?.clima_pregunta_comunicacion,
+                condiciones: empresa?.clima_pregunta_condiciones,
+                pertenencia: empresa?.clima_pregunta_pertenencia,
+              }}
+            />
           )}
         </div>
       )}

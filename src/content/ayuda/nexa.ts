@@ -120,6 +120,7 @@ export const moduloNexa: ModuloAyuda = {
         'Anonimato real, no solo de nombre: la tabla que registra quién ya respondió (para no dejar responder dos veces) está separada de la tabla que guarda qué respondió, y no hay ninguna columna que las conecte entre sí.',
         'Los resultados de una empresa o de un equipo se ocultan (aparecen como "—") mientras haya menos de 5 respuestas en ese grupo — así nunca se puede deducir la respuesta de una sola persona en un equipo chico.',
         'Los comentarios de texto libre —lo más fácil de reconocer a simple vista— solo los puede leer Talento Humano; ni el líder directo ni gerencia tienen acceso a ellos, aunque sí ven los números agregados.',
+        'El enunciado de las 7 preguntas (eNPS + 6 dimensiones) se puede adaptar al lenguaje de la empresa desde Administración → Configuración — las preguntas en sí (cuántas y cuáles) se mantienen fijas para poder comparar el índice de clima de una ronda a otra.',
       ],
     },
     {

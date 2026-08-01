@@ -128,6 +128,49 @@ export async function agregarCursoRecomendado(dimension: 'hacer' | 'deber', curs
   return { ok: true };
 }
 
+const PreguntasClimaSchema = z.object({
+  enps: z.string().trim().max(500).optional(),
+  reconocimiento: z.string().trim().max(300).optional(),
+  liderazgo: z.string().trim().max(300).optional(),
+  desarrollo: z.string().trim().max(300).optional(),
+  comunicacion: z.string().trim().max(300).optional(),
+  condiciones: z.string().trim().max(300).optional(),
+  pertenencia: z.string().trim().max(300).optional(),
+});
+
+/**
+ * Guarda el enunciado personalizado de cada pregunta de Clima Organizacional
+ * (eNPS + 6 dimensiones fijas — ver 0049). Un campo vacío borra la
+ * personalización y vuelve a usar el texto por defecto del formulario.
+ */
+export async function guardarPreguntasClima(input: z.infer<typeof PreguntasClimaSchema>) {
+  const perfil = await getPerfilActual();
+  if (!perfil || perfil.rol !== 'admin_th') return { ok: false, error: 'No autorizado' };
+
+  const parsed = PreguntasClimaSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? 'Datos inválidos' };
+
+  const supabase = createClient();
+  const { error } = await supabase
+    .from('empresas')
+    .update({
+      clima_pregunta_enps: parsed.data.enps || null,
+      clima_pregunta_reconocimiento: parsed.data.reconocimiento || null,
+      clima_pregunta_liderazgo: parsed.data.liderazgo || null,
+      clima_pregunta_desarrollo: parsed.data.desarrollo || null,
+      clima_pregunta_comunicacion: parsed.data.comunicacion || null,
+      clima_pregunta_condiciones: parsed.data.condiciones || null,
+      clima_pregunta_pertenencia: parsed.data.pertenencia || null,
+    })
+    .eq('id', perfil.empresa_id);
+
+  if (error) return { ok: false, error: error.message };
+
+  revalidatePath('/administracion/configuracion');
+  revalidatePath('/nexa/clima');
+  return { ok: true };
+}
+
 export async function eliminarCursoRecomendado(id: string) {
   const perfil = await getPerfilActual();
   if (!perfil || perfil.rol !== 'admin_th') return { ok: false, error: 'No autorizado' };

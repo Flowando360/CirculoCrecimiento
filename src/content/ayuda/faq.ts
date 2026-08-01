@@ -228,4 +228,14 @@ export const preguntasFrecuentes: PreguntaFrecuente[] = [
     pregunta: '¿Puedo responder la encuesta de Clima Organizacional más de una vez en la misma ronda?',
     respuesta: 'No. Cada persona responde una sola vez por ronda; si ya respondiste, la pantalla te lo indica en vez de mostrarte el formulario de nuevo.',
   },
+  {
+    pregunta: 'Ya se registraron respuestas de Clima Organizacional pero el eNPS y el índice siguen en "—". ¿Es un error?',
+    respuesta:
+      'No, es a propósito. Por debajo de 5 respuestas en un grupo (toda la empresa o un equipo), el sistema no calcula ningún número agregado, para que nunca se pueda deducir la respuesta de una sola persona en un grupo chico. El número aparece solo en cuanto se llega a 5 respuestas.',
+  },
+  {
+    pregunta: '¿Puedo cambiar las preguntas de la encuesta de Clima Organizacional?',
+    respuesta:
+      'Puedes editar el texto de cada una (la pregunta de eNPS y las 6 afirmaciones) desde Administración → Configuración, sección "Preguntas de Clima Organizacional". Lo que no se puede cambiar es cuántas preguntas hay ni cuáles dimensiones miden — eso queda fijo a propósito, para que el índice de clima se pueda comparar de una ronda a otra.',
+  },
 ];

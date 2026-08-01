@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { EmptyState } from '@/components/ui/empty-state';
 import { FormularioPonderaciones } from '@/components/administracion/formulario-ponderaciones';
 import { FormularioDatosEmpresa } from '@/components/administracion/formulario-datos-empresa';
+import { FormularioPreguntasClima } from '@/components/administracion/formulario-preguntas-clima';
 import { ListaCursosRecomendados } from '@/components/administracion/lista-cursos-recomendados';
 import { SlidersHorizontal } from 'lucide-react';
 
@@ -16,7 +17,9 @@ export default async function AdminConfiguracionPage() {
 
   const { data: empresa } = await supabase
     .from('empresas')
-    .select('nit, direccion, telefono, ciudad, firmante_nombre, firmante_cargo')
+    .select(
+      'nit, direccion, telefono, ciudad, firmante_nombre, firmante_cargo, clima_pregunta_enps, clima_pregunta_reconocimiento, clima_pregunta_liderazgo, clima_pregunta_desarrollo, clima_pregunta_comunicacion, clima_pregunta_condiciones, clima_pregunta_pertenencia'
+    )
     .eq('id', perfil.empresa_id)
     .maybeSingle();
 
@@ -64,6 +67,18 @@ export default async function AdminConfiguracionPage() {
           ciudad: empresa?.ciudad ?? '',
           firmanteNombre: empresa?.firmante_nombre ?? '',
           firmanteCargo: empresa?.firmante_cargo ?? '',
+        }}
+      />
+
+      <FormularioPreguntasClima
+        inicial={{
+          enps: empresa?.clima_pregunta_enps ?? '',
+          reconocimiento: empresa?.clima_pregunta_reconocimiento ?? '',
+          liderazgo: empresa?.clima_pregunta_liderazgo ?? '',
+          desarrollo: empresa?.clima_pregunta_desarrollo ?? '',
+          comunicacion: empresa?.clima_pregunta_comunicacion ?? '',
+          condiciones: empresa?.clima_pregunta_condiciones ?? '',
+          pertenencia: empresa?.clima_pregunta_pertenencia ?? '',
         }}
       />
 

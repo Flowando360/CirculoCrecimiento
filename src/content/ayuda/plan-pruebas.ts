@@ -413,6 +413,15 @@ export const planPruebas: SeccionPlanPruebas[] = [
         ],
       },
       {
+        titulo: 'Editar el texto de las preguntas',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Entra a Administración → Configuración → "Preguntas de Clima Organizacional" y cambia el texto de la afirmación de "reconocimiento".', resultadoEsperado: 'Guarda correctamente con el aviso "Guardado".' },
+          { paso: 'Con una ronda abierta, entra a Nexa → Clima Organizacional (sin haber respondido esa ronda).', resultadoEsperado: 'El formulario muestra el nuevo texto para esa afirmación, en vez del texto por defecto.' },
+          { paso: 'Vuelve a Configuración y borra el texto de esa misma pregunta, dejando el campo vacío, y guarda.', resultadoEsperado: 'El formulario de Clima Organizacional vuelve a mostrar el texto por defecto de esa pregunta.' },
+        ],
+      },
+      {
         titulo: 'Cerrar una ronda',
         rolNecesario: 'admin_th',
         pasos: [
