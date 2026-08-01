@@ -3,7 +3,8 @@ import type { TerminoGlosario } from '@/types/ayuda';
 export const glosario: TerminoGlosario[] = [
   { termino: 'Acompañante', definicion: 'Quien valora al colaborador en crecimiento en un ciclo: puede ser autoevaluación, el líder, un par (mismo líder), o un colaborador a cargo.' },
   { termino: 'Acuerdo de crecimiento', definicion: 'Los compromisos que quedan de la sesión de retroalimentación (del colaborador y de la empresa), firmados por ambas partes con casilla + fecha.' },
-  { termino: 'Alerta', definicion: 'Aviso automático de una fecha próxima a vencer: contrato, SST (examen/certificación/EPP), formación, Ciclo de Crecimiento o cultura (cumpleaños, aniversario).' },
+  { termino: 'Alerta', definicion: 'Aviso automático de una fecha próxima a vencer: contrato, SST (examen/certificación/EPP), formación, Ciclo de Crecimiento o cultura (cumpleaños, aniversario, fecha especial).' },
+  { termino: 'Apodo (Cómo te gusta que te llamen)', definicion: 'Nombre opcional que cada persona puede definir desde Mi Perfil (o admin_th desde Usuarios y roles) para que aparezca en el saludo de Inicio y en el encabezado, en vez de su primer nombre legal.' },
   { termino: 'Auditor externo', definicion: 'Rol de solo lectura pensado para una persona ajena a la empresa (ej. un auditor de certificación): ve nombre/cargo de los colaboradores y sus certificaciones, y puede descargar Evidencia de auditoría. No accede a ningún otro módulo.' },
   { termino: 'Brief de retroalimentación', definicion: 'Documento de preparación que el líder escribe antes de dar retroalimentación a su colaborador. Privado, solo lo ve quien lo escribe y Talento Humano.' },
   { termino: 'Cargo', definicion: 'El puesto de trabajo, con su propio perfil de exigencias (formación, habilidades, experiencia) definido en Administración → Cargos.' },
@@ -16,6 +17,7 @@ export const glosario: TerminoGlosario[] = [
   { termino: 'Documentos (del colaborador)', definicion: 'Pantalla en la ficha del colaborador con la hoja de vida (archivo), el contrato y el generador del certificado laboral. Acceso exclusivo de admin_th y el propio colaborador.' },
   { termino: 'EPP', definicion: 'Elementos de Protección Personal — equipo de seguridad exigido según el cargo (ej. casco, guantes, arnés).' },
   { termino: 'Evidencia de auditoría', definicion: 'Informe que empaqueta en un ZIP (PDF de portada + Excel + archivos adjuntos) los datos de Procesos y Sistemas de Gestión y de SST, listos para entregar a un auditor.' },
+  { termino: 'Fecha especial', definicion: 'Fecha personalizada de texto libre (cumpleaños, día de la profesión, cualquier aniversario) que una persona, su líder directo o admin_th pueden registrar desde Mi Perfil o la ficha del colaborador. A diferencia de las fechas personales fijas, se pueden agregar cuantas se quieran, y cada una genera su propia alerta.' },
   { termino: 'Guía del Flow', definicion: 'Instrumento de autoconocimiento (dimensión Ser): talentos naturales, propósito y aspectos organizados en 4 bloques, diseñado por FlowAndo.' },
   { termino: 'Hacer', definicion: 'Dimensión del desempeño en comportamientos observables de una persona, valorada por ciclo.' },
   { termino: 'Hoja de vida', definicion: 'Tiene dos sentidos en el sistema: (1) el archivo del CV, cargado en Documentos; (2) el registro de formación/cursos/certificaciones con vencimiento, en la pantalla "Hoja de vida y certificaciones". Son pantallas distintas.' },

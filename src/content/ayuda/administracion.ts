@@ -70,10 +70,14 @@ export const moduloAdministracion: ModuloAyuda = {
       resumen: 'Crea cuentas de acceso para los colaboradores y administra sus roles.',
       camposYBotones: [
         { nombre: 'Nuevo usuario', explicacion: 'Elige un colaborador sin cuenta todavía, su correo, rol (admin_th/líder/colaborador/gerencia/auditor_externo) y una contraseña temporal.' },
-        { nombre: 'Tabla de usuarios', explicacion: 'Nombre, correo, rol y si la cuenta está activa.' },
+        { nombre: 'Tabla de usuarios', explicacion: 'Nombre (con el apodo debajo si esa persona ya definió uno), correo, rol, si la cuenta está activa, y una columna de Acciones.' },
+        { nombre: 'Editar', explicacion: 'Cambia nombre, apodo ("cómo le gusta que le llamen"), correo o rol de una cuenta ya existente, sin salir de la tabla.' },
+        { nombre: 'Retirar / Reactivar', explicacion: 'Deja la cuenta inactiva y le bloquea el acceso de verdad (no puede volver a iniciar sesión) — es reversible, "Reactivar" la devuelve al estado normal en cualquier momento. No aparece sobre tu propia cuenta.' },
+        { nombre: 'Eliminar', explicacion: 'Borra la cuenta por completo — a diferencia de "Retirar", esto NO se puede deshacer. Puede fallar si esa persona tiene actividad registrada en el sistema (por ejemplo, certificó una verificación de Saber, resolvió una alerta, o publicó en el feed de Nexa); en ese caso no borra nada y sugiere usar "Retirar" en su lugar. No aparece sobre tu propia cuenta.' },
       ],
       notas: [
         'Roles y su alcance: admin_th ve y edita todo; líder ve su equipo y su propia información; colaborador se ve solo a sí mismo; gerencia ve reportes agregados; auditor_externo solo ve, de solo lectura, nombre/cargo de los colaboradores y sus certificaciones de hoja de vida — pensado para entregar evidencia a una auditoría sin exponer el resto del sistema.',
+        'El apodo también lo puede fijar cada persona por sí misma desde Mi Perfil — ver Inicio y Mi Perfil.',
       ],
     },
     {

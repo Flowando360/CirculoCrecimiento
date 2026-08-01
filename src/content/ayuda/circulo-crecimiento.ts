@@ -33,6 +33,7 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
         { nombre: 'Plan de Desarrollo Individual', explicacion: 'Las acciones de desarrollo activas de la persona, con su origen (Hacer/Deber/Saber/Ser) y estado.' },
         { nombre: 'Documentos y certificado laboral', explicacion: 'Solo visible para admin_th y el propio colaborador. Lleva a la hoja de vida, el contrato y el generador del certificado laboral.' },
         { nombre: 'Ver historial y línea de tiempo', explicacion: 'Solo visible para admin_th y el líder directo. Lleva a movimientos de cargo y, si aplica, entrevista de salida.' },
+        { nombre: 'Fechas especiales', explicacion: 'Solo visible para admin_th y el líder directo. Cumpleaños, día de la profesión o cualquier otra fecha que valga la pena celebrar de esta persona — la propia persona también puede agregar las suyas desde Mi Perfil.' },
       ],
       notas: [
         'Quién puede ver esta ficha: admin_th y gerencia (todas), líder (su equipo directo y él mismo), colaborador (solo la propia).',
@@ -87,6 +88,22 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
       ],
       notas: [
         'Acceso exclusivo: admin_th (toda la empresa) y el líder directo (su equipo, sin ver la entrevista de salida). Gerencia y el propio colaborador no tienen acceso a esta pantalla.',
+      ],
+    },
+    {
+      slug: 'fechas-especiales',
+      ruta: '/circulo-crecimiento/colaboradores/*/fechas-especiales',
+      titulo: 'Fechas especiales',
+      resumen:
+        'Lista abierta de fechas personalizadas de esta persona — cumpleaños, día de su profesión, cualquier aniversario que valga la pena celebrar —, cada una con una descripción libre.',
+      camposYBotones: [
+        { nombre: 'Descripción y fecha', explicacion: 'Texto libre (ej. "Día del profesional en Contaduría") más una fecha, que se repite cada año.' },
+        { nombre: 'Agregar', explicacion: 'Suma una fecha nueva a la lista, sin límite de cuántas.' },
+        { nombre: 'Eliminar (ícono de basura)', explicacion: 'Quita esa fecha de la lista, pidiendo confirmación primero.' },
+      ],
+      notas: [
+        'Puede administrar las fechas de esta persona: admin_th y su líder directo. La propia persona administra las suyas desde Mi Perfil, no desde aquí.',
+        'Cada fecha genera una alerta con el próximo aniversario, visible en Alertas — si editas o eliminas la fecha, la alerta se actualiza o desaparece con ella.',
       ],
     },
     {

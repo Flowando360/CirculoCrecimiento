@@ -9,6 +9,7 @@ export const planPruebas: SeccionPlanPruebas[] = [
         rolNecesario: 'Cualquier usuario',
         pasos: [
           { paso: 'Entra a la URL del aplicativo sin haber iniciado sesión.', resultadoEsperado: 'Redirige a la pantalla de login.' },
+          { paso: 'Ingresa un correo válido con la contraseña equivocada.', resultadoEsperado: 'Muestra "Correo o contraseña incorrectos. Verifica con Talento Humano si no tienes acceso." y te deja en la misma pantalla.' },
           { paso: 'Ingresa correo y contraseña correctos.', resultadoEsperado: 'Entra a Inicio, con el menú lateral acorde a tu rol.' },
           { paso: 'Presiona el botón de cerrar sesión (ícono de salida, arriba a la derecha).', resultadoEsperado: 'Vuelve a la pantalla de login.' },
         ],
@@ -32,11 +33,109 @@ export const planPruebas: SeccionPlanPruebas[] = [
         ],
       },
       {
+        titulo: 'Retirar a alguien le bloquea el acceso de verdad',
+        rolNecesario: 'admin_th y una cuenta de prueba retirada',
+        pasos: [
+          { paso: 'Como admin_th, entra a Usuarios y roles y retira una cuenta de prueba (ver el escenario de "Retirar y reactivar una cuenta" en Administración).', resultadoEsperado: 'Su Estado pasa a "Inactivo".' },
+          { paso: 'Con esa cuenta ya con sesión abierta en otra pestaña o navegador (sin haber cerrado sesión), intenta navegar a cualquier pantalla del dashboard.', resultadoEsperado: 'Se le corta el acceso y termina redirigida a login, aunque nunca haya presionado "Cerrar sesión".' },
+          { paso: 'Intenta iniciar sesión de nuevo con esa cuenta, usando su contraseña correcta.', resultadoEsperado: 'No logra entrar — muestra el mismo mensaje genérico de error que una contraseña incorrecta (el mensaje no distingue el motivo, a propósito).' },
+          { paso: 'Como admin_th, reactiva esa cuenta desde Usuarios y roles.', resultadoEsperado: 'Puede volver a iniciar sesión con normalidad, con la misma contraseña de siempre.' },
+        ],
+      },
+      {
         titulo: 'El panel Meta-Admin es exclusivo del equipo interno',
         rolNecesario: 'admin_th (para confirmar que NO entra) y una cuenta superadmin',
         pasos: [
           { paso: 'Inicia sesión como admin_th y escribe la URL /meta-admin directamente en el navegador.', resultadoEsperado: 'Redirige a Inicio — admin_th no tiene acceso, aunque sea el rol más alto dentro de su empresa.' },
           { paso: 'Inicia sesión con una cuenta marcada como superadmin (equipo interno de la alianza) y entra a /meta-admin.', resultadoEsperado: 'Carga la tabla de "Cuentas y membresías" con todas las empresas cliente del sistema, no solo la propia.' },
+        ],
+      },
+    ],
+  },
+  {
+    modulo: 'Administración',
+    escenarios: [
+      {
+        titulo: 'Crear un usuario',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Entra a Usuarios y roles → "Nuevo usuario".', resultadoEsperado: 'Pide colaborador sin cuenta, correo, rol y contraseña temporal. El selector de rol incluye admin_th, líder, colaborador, gerencia y auditor_externo.' },
+          { paso: 'Completa y guarda, eligiendo el rol auditor_externo.', resultadoEsperado: 'Aparece en la tabla de usuarios con ese rol; esa persona ya puede iniciar sesión con la contraseña temporal y solo ve lo permitido para auditor_externo.' },
+        ],
+      },
+      {
+        titulo: 'Editar los datos de un usuario existente (incluido su apodo)',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'En Usuarios y roles, presiona "Editar" en la fila de un usuario.', resultadoEsperado: 'La fila se convierte en un formulario con nombre, apodo, correo y rol editables.' },
+          { paso: 'Cambia el rol de esa persona (por ejemplo, de colaborador a líder) y guarda.', resultadoEsperado: 'El cambio queda guardado; esa persona ve el menú de su nuevo rol la próxima vez que inicie sesión.' },
+          { paso: 'Escribe algo en "Cómo le gusta que le llamen" y guarda.', resultadoEsperado: 'Debajo del nombre, en la tabla, aparece \'se hace llamar "..."\'.' },
+          { paso: 'Cambia el correo de esa persona por uno nuevo y guarda.', resultadoEsperado: 'Queda actualizado en la tabla; esa persona debe usar el correo nuevo para iniciar sesión de ahí en adelante.' },
+        ],
+      },
+      {
+        titulo: 'Retirar y reactivar una cuenta',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'En la fila de un usuario de prueba (que no seas tú), presiona "Retirar" y confirma la advertencia.', resultadoEsperado: 'El botón cambia a "Reactivar" y la columna Estado pasa a "Inactivo".' },
+          { paso: 'Busca esa misma opción sobre tu propia fila.', resultadoEsperado: 'No aparece — no te puedes retirar a ti mismo.' },
+          { paso: 'Presiona "Reactivar" sobre la cuenta que retiraste.', resultadoEsperado: 'Vuelve a "Activo" y puede iniciar sesión de nuevo con normalidad.' },
+        ],
+      },
+      {
+        titulo: 'Eliminar una cuenta definitivamente',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Presiona "Eliminar" sobre una cuenta de prueba recién creada, sin actividad registrada en el sistema, y confirma la advertencia de que no se puede deshacer.', resultadoEsperado: 'La fila desaparece por completo de la tabla — a diferencia de "Retirar", que solo la deja inactiva.' },
+          { paso: 'Presiona "Eliminar" sobre una cuenta que sí tiene actividad registrada (por ejemplo, alguien que ya certificó una Verificación de Saber, resolvió una alerta o publicó en el feed de Nexa).', resultadoEsperado: 'Aparece un mensaje explicando que no se pudo eliminar por tener actividad registrada, sugiriendo usar "Retirar" en su lugar; la cuenta sigue existiendo intacta, no queda nada a medias.' },
+          { paso: 'Busca esa misma opción sobre tu propia fila.', resultadoEsperado: 'No aparece — no te puedes eliminar a ti mismo.' },
+        ],
+      },
+      {
+        titulo: 'Importar el perfil de un cargo desde Excel',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Entra a Cargos y perfiles → "Importar desde Excel" y sube un archivo con el formato correcto.', resultadoEsperado: 'Muestra una vista previa con conteos y advertencias (si algo no se pudo leer).' },
+          { paso: 'Confirma la importación.', resultadoEsperado: 'El cargo queda creado o actualizado, visible en el detalle del cargo.' },
+        ],
+      },
+      {
+        titulo: 'Detalle de un cargo y su plan de inducción específico',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Entra a Cargos y perfiles y haz clic en el nombre de un cargo con perfil ya importado.', resultadoEsperado: 'Abre el detalle con formación, habilidades, funciones, riesgos, EPP y exámenes médicos requeridos.' },
+          { paso: 'Revisa el "Plan de inducción específico" ya generado.', resultadoEsperado: 'Trae puntos derivados automáticamente del perfil (funciones, riesgos, EPP, exámenes, formación mínima).' },
+          { paso: 'Agrega un punto manual al plan de inducción de ese cargo y guarda.', resultadoEsperado: 'Queda agregado a la lista, y de ahí en adelante se asigna a cualquier persona que ingrese o cambie a ese cargo.' },
+        ],
+      },
+      {
+        titulo: 'Cargar la Guía del Flow en PDF de una persona',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Entra a Guías de colaboradores, elige una persona y sube su PDF de Guía del Flow.', resultadoEsperado: 'Aparece en la lista de "Guías ya cargadas" con la fecha de hoy.' },
+          { paso: 'Entra a la ficha de esa persona → Guía del Flow.', resultadoEsperado: 'El link "Ver PDF" funciona y abre el documento cargado.' },
+          { paso: 'Inicia sesión como esa persona y entra a Mi Perfil.', resultadoEsperado: 'También puede ver ahí su propia Guía del Flow, sin necesitar que nadie se la reenvíe.' },
+        ],
+      },
+      {
+        titulo: 'Editar el organigrama',
+        rolNecesario: 'admin_th',
+        pasos: [{ paso: 'Cambia el líder directo de una persona.', resultadoEsperado: 'Se refleja de inmediato en Colaboradores → Organigrama y en quién acompaña a quién.' }],
+      },
+      {
+        titulo: 'Editar la identidad organizacional',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Edita el propósito superior y guarda.', resultadoEsperado: 'Se guarda y es visible para todos los roles.' },
+          { paso: 'Agrega un valor a la lista.', resultadoEsperado: 'Aparece en la lista de valores.' },
+        ],
+      },
+      {
+        titulo: 'Editar ponderaciones antes de abrir un ciclo',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Con un ciclo en estado "planeado", entra a Configuración y cambia los pesos.', resultadoEsperado: 'Guarda correctamente si los porcentajes suman 100% en cada grupo.' },
+          { paso: 'Abre ese ciclo y vuelve a Configuración.', resultadoEsperado: 'Ya no aparece ese ciclo como editable (mensaje de "no hay ningún ciclo planeado" si era el único).' },
         ],
       },
     ],
@@ -171,6 +270,78 @@ export const planPruebas: SeccionPlanPruebas[] = [
         pasos: [
           { paso: 'Entra a Administración → Configuración → "Datos de la empresa" y cambia, por ejemplo, el nombre de quien firma.', resultadoEsperado: 'Guarda correctamente.' },
           { paso: 'Genera un certificado laboral nuevo de cualquier colaborador.', resultadoEsperado: 'El PDF ya muestra el nuevo dato guardado.' },
+        ],
+      },
+    ],
+  },
+  {
+    modulo: 'Círculo de Crecimiento — Organigrama e Indicadores',
+    escenarios: [
+      {
+        titulo: 'Consultar el organigrama en árbol',
+        rolNecesario: 'admin_th, líder o gerencia',
+        pasos: [
+          { paso: 'Entra a Círculo de Crecimiento → Organigrama.', resultadoEsperado: 'Se ve la jerarquía completa en forma de árbol, empezando por quienes no tienen líder (nivel 1).' },
+          { paso: 'Ubica a una persona con varios colaboradores a cargo.', resultadoEsperado: 'Aparecen desplegados debajo de ella, coincidiendo con lo configurado en Administración → Editar organigrama.' },
+          { paso: 'Inicia sesión como colaborador y busca esta opción en el menú.', resultadoEsperado: 'No aparece — ese rol no tiene acceso a la vista de organigrama.' },
+        ],
+      },
+      {
+        titulo: 'Revisar el panorama de Indicadores',
+        rolNecesario: 'admin_th, líder o gerencia',
+        pasos: [
+          { paso: 'Entra a Círculo de Crecimiento → Indicadores.', resultadoEsperado: 'Carga el índice general de Hacer/Deber, cumplimiento de Saber y alineación talento-rol, según tu alcance (equipo o toda la empresa).' },
+          { paso: 'Revisa el mapa de equipos.', resultadoEsperado: 'Compara el promedio de Hacer, Deber y Saber de cada equipo, agrupado por líder.' },
+          { paso: 'Inicia sesión como líder y entra a Indicadores.', resultadoEsperado: 'Solo ve los datos de su propio equipo, no de toda la empresa.' },
+        ],
+      },
+    ],
+  },
+  {
+    modulo: 'Mi Perfil, apodo y Mis fechas especiales',
+    escenarios: [
+      {
+        titulo: 'Fijar tu apodo y verlo reflejado en la app',
+        rolNecesario: 'Cualquier usuario con ficha de colaborador',
+        pasos: [
+          { paso: 'Entra a Mi Perfil → "Cómo te gusta que te llamen" y escribe un apodo (ej. "Vale" en vez de "Valentina").', resultadoEsperado: 'Guarda y muestra confirmación.' },
+          { paso: 'Ve a Inicio.', resultadoEsperado: 'El saludo usa tu apodo ("Hola, Vale") en vez de tu primer nombre legal.' },
+          { paso: 'Revisa la esquina superior derecha del encabezado.', resultadoEsperado: 'También muestra tu apodo ahí.' },
+          { paso: 'Borra el apodo y guarda vacío.', resultadoEsperado: 'El saludo y el encabezado vuelven a mostrar tu primer nombre legal.' },
+        ],
+      },
+      {
+        titulo: 'Cada persona administra sus propias fechas especiales',
+        rolNecesario: 'Cualquier usuario con ficha de colaborador',
+        pasos: [
+          { paso: 'Entra a Mi Perfil → "Mis fechas especiales" y agrega una (ej. "Día de mi profesión" con una fecha).', resultadoEsperado: 'Aparece en la lista de inmediato.' },
+          { paso: 'Agrega una segunda fecha especial distinta.', resultadoEsperado: 'Ambas quedan en la lista, ordenadas por fecha.' },
+          { paso: 'Elimina una de las dos.', resultadoEsperado: 'Desaparece de la lista al confirmar.' },
+        ],
+      },
+      {
+        titulo: 'admin_th y el líder directo registran fechas especiales del equipo',
+        rolNecesario: 'admin_th y, por separado, un líder',
+        pasos: [
+          { paso: 'Como admin_th, entra a la ficha de cualquier colaborador de la empresa → "Fechas especiales" y agrega una.', resultadoEsperado: 'Se guarda y aparece en la lista.' },
+          { paso: 'Inicia sesión como el líder directo de esa persona y entra a la misma ficha.', resultadoEsperado: 'También ve la pestaña "Fechas especiales" y puede agregar/eliminar fechas de esa persona.' },
+        ],
+      },
+      {
+        titulo: 'Un líder no puede tocar las fechas especiales de alguien fuera de su equipo',
+        rolNecesario: 'Líder',
+        pasos: [
+          { paso: 'Inicia sesión como líder y entra a la ficha de alguien que NO es de su equipo directo.', resultadoEsperado: 'No aparece la pestaña "Fechas especiales" (igual que el resto de secciones restringidas de esa ficha).' },
+          { paso: 'Si conoces la URL directa de fechas especiales de esa persona (copiándola de otra ficha y cambiando el id) e intentas entrar así.', resultadoEsperado: 'No carga ni permite agregar nada — queda bloqueado igual que por el menú.' },
+        ],
+      },
+      {
+        titulo: 'La fecha especial aparece en Alertas con el próximo aniversario',
+        rolNecesario: 'Cualquier usuario con una fecha especial registrada',
+        pasos: [
+          { paso: 'Con una fecha especial ya guardada (propia o de tu equipo), entra a Alertas.', resultadoEsperado: 'Aparece con el badge "Fecha especial" y la fecha del próximo aniversario.' },
+          { paso: 'Edita esa fecha (cámbiala) desde donde la registraste originalmente.', resultadoEsperado: 'La alerta se actualiza con la nueva fecha, sin quedar una alerta vieja duplicada.' },
+          { paso: 'Elimina la fecha especial.', resultadoEsperado: 'La alerta correspondiente desaparece también de Alertas.' },
         ],
       },
     ],
@@ -402,48 +573,6 @@ export const planPruebas: SeccionPlanPruebas[] = [
           { paso: 'Entra a /meta-admin y localiza una empresa en la tabla.', resultadoEsperado: 'Ve usuarios activos y colaboradores activos de esa empresa (conteos de solo lectura).' },
           { paso: 'Cambia su Plan a "Premium", ajusta el precio mensual, el estado de facturación a "Pendiente" y la fecha de próximo pago, y presiona "Guardar" en esa fila.', resultadoEsperado: 'El botón muestra "Guardando…" y luego "Guardado"; al recargar la página, los valores nuevos siguen ahí.' },
           { paso: 'Repite el cambio en otra fila (otra empresa).', resultadoEsperado: 'Solo se actualiza esa empresa — las demás filas no cambian.' },
-        ],
-      },
-    ],
-  },
-  {
-    modulo: 'Administración',
-    escenarios: [
-      {
-        titulo: 'Crear un usuario',
-        rolNecesario: 'admin_th',
-        pasos: [
-          { paso: 'Entra a Usuarios y roles → "Nuevo usuario".', resultadoEsperado: 'Pide colaborador sin cuenta, correo, rol y contraseña temporal. El selector de rol incluye admin_th, líder, colaborador, gerencia y auditor_externo.' },
-          { paso: 'Completa y guarda, eligiendo el rol auditor_externo.', resultadoEsperado: 'Aparece en la tabla de usuarios con ese rol; esa persona ya puede iniciar sesión con la contraseña temporal y solo ve lo permitido para auditor_externo.' },
-        ],
-      },
-      {
-        titulo: 'Importar el perfil de un cargo desde Excel',
-        rolNecesario: 'admin_th',
-        pasos: [
-          { paso: 'Entra a Cargos y perfiles → "Importar desde Excel" y sube un archivo con el formato correcto.', resultadoEsperado: 'Muestra una vista previa con conteos y advertencias (si algo no se pudo leer).' },
-          { paso: 'Confirma la importación.', resultadoEsperado: 'El cargo queda creado o actualizado, visible en el detalle del cargo.' },
-        ],
-      },
-      {
-        titulo: 'Editar el organigrama',
-        rolNecesario: 'admin_th',
-        pasos: [{ paso: 'Cambia el líder directo de una persona.', resultadoEsperado: 'Se refleja de inmediato en Colaboradores → Organigrama y en quién acompaña a quién.' }],
-      },
-      {
-        titulo: 'Editar la identidad organizacional',
-        rolNecesario: 'admin_th',
-        pasos: [
-          { paso: 'Edita el propósito superior y guarda.', resultadoEsperado: 'Se guarda y es visible para todos los roles.' },
-          { paso: 'Agrega un valor a la lista.', resultadoEsperado: 'Aparece en la lista de valores.' },
-        ],
-      },
-      {
-        titulo: 'Editar ponderaciones antes de abrir un ciclo',
-        rolNecesario: 'admin_th',
-        pasos: [
-          { paso: 'Con un ciclo en estado "planeado", entra a Configuración y cambia los pesos.', resultadoEsperado: 'Guarda correctamente si los porcentajes suman 100% en cada grupo.' },
-          { paso: 'Abre ese ciclo y vuelve a Configuración.', resultadoEsperado: 'Ya no aparece ese ciclo como editable (mensaje de "no hay ningún ciclo planeado" si era el único).' },
         ],
       },
     ],

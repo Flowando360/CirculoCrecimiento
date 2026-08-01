@@ -66,6 +66,15 @@ export const preguntasFrecuentes: PreguntaFrecuente[] = [
     respuesta: 'El rol que ves reflejado es el que quedó guardado al crear la cuenta en Administración → Usuarios. Si no coincide, pide a Talento Humano que lo revise y corrija ahí — no se edita desde ningún otro lugar.',
   },
   {
+    pregunta: '¿Puedo editar los datos de un usuario después de creado?',
+    respuesta: 'Sí. admin_th puede presionar "Editar" en la fila de esa persona, en Administración → Usuarios y roles, y cambiar su nombre, apodo, correo o rol.',
+  },
+  {
+    pregunta: '¿Qué diferencia hay entre "Retirar" y "Eliminar" un usuario?',
+    respuesta:
+      '"Retirar" deja la cuenta inactiva y le bloquea el acceso, pero es reversible — se puede "Reactivar" en cualquier momento. "Eliminar" borra la cuenta por completo y no se puede deshacer; si esa persona tiene actividad registrada en el sistema (certificaciones, alertas resueltas, publicaciones, etc.), la eliminación no procede y te sugiere usar "Retirar" en su lugar. Ninguna de las dos opciones aparece sobre tu propia cuenta.',
+  },
+  {
     pregunta: '¿Qué diferencia hay entre "Descartar" un aliado del directorio y no hacer nada?',
     respuesta: 'Eliminar un aliado del Directorio de aliados lo borra permanentemente de la lista — pide confirmación antes de hacerlo.',
   },
@@ -155,6 +164,16 @@ export const preguntasFrecuentes: PreguntaFrecuente[] = [
     pregunta: '¿Dónde registro mi aniversario de bodas, mi baby shower o mi embarazo?',
     respuesta:
       'En Mi Perfil, sección "Mis fechas personales". El aniversario de bodas y el baby shower le avisan a tu líder para celebrar contigo (aparecen en Alertas). El embarazo y la fecha probable de parto son privados: solo los ves tú y Talento Humano, ni tu líder ni gerencia tienen acceso a ese dato.',
+  },
+  {
+    pregunta: '¿Qué diferencia hay entre "Mis fechas personales" y "Mis fechas especiales"?',
+    respuesta:
+      '"Mis fechas personales" son campos fijos y privados (matrimonio, baby shower, embarazo) que solo cada persona registra sobre sí misma. "Mis fechas especiales" es una lista abierta de texto libre (cumpleaños, día de tu profesión, cualquier aniversario que se te ocurra) — puedes agregar cuantas quieras, y a diferencia de las personales, tu líder directo y Talento Humano también te pueden agregar fechas especiales desde tu ficha.',
+  },
+  {
+    pregunta: '¿Cómo cambio el nombre con el que me saluda la app?',
+    respuesta:
+      'En Mi Perfil, sección "Cómo te gusta que te llamen", escribe tu apodo o diminutivo y guarda. Reemplaza tu primer nombre legal en el saludo de Inicio y en el encabezado. Si lo dejas vacío, vuelve a usar tu primer nombre. admin_th también puede fijarlo por ti desde Administración → Usuarios y roles.',
   },
   {
     pregunta: '¿Cómo hago que el Asistente IA conozca nuestras políticas y reglamentos reales?',
