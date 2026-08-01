@@ -160,6 +160,16 @@ export const planPruebas: SeccionPlanPruebas[] = [
           { paso: 'Abre ese ciclo y vuelve a Configuración.', resultadoEsperado: 'Ya no aparece ese ciclo como editable (mensaje de "no hay ningún ciclo planeado" si era el único).' },
         ],
       },
+      {
+        titulo: 'Alza salarial masiva',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Entra a Salarios, elige "igual a" e ingresa el salario actual de un colaborador de prueba, con acción "Fijar el salario en un nuevo valor" y un valor más alto.', resultadoEsperado: 'Al presionar "Ver a quiénes afecta" aparece ese colaborador en la tabla, con su salario actual y el nuevo.' },
+          { paso: 'Presiona "Aplicar a N colaboradores".', resultadoEsperado: 'Muestra el mensaje de éxito con la cantidad actualizada; en la ficha de ese colaborador (Historial) aparece un nuevo movimiento "Aumento salarial" con el detalle del cambio.' },
+          { paso: 'Repite el filtro con la acción "Subir un porcentaje" sobre un grupo con salarios distintos entre sí.', resultadoEsperado: 'En la vista previa, cada persona recibe un salario nuevo distinto (el mismo porcentaje aplicado sobre su propio salario actual, no un valor único para todos).' },
+          { paso: 'Usa un filtro que no coincida con nadie (ej. un monto que nadie gana).', resultadoEsperado: 'Muestra "Nadie cumple ese filtro — nada para actualizar" y no hay botón para aplicar.' },
+        ],
+      },
     ],
   },
   {

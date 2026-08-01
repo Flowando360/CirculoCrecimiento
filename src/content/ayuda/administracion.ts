@@ -83,6 +83,31 @@ export const moduloAdministracion: ModuloAyuda = {
       ],
     },
     {
+      slug: 'salarios',
+      ruta: '/administracion/salarios',
+      titulo: 'Salarios',
+      resumen:
+        'Actualiza el salario registrado de varios colaboradores a la vez — pensado para las alzas anuales de salario mínimo (legal o el que fije la empresa), no para gestión de nómina.',
+      camposYBotones: [
+        { nombre: 'Colaboradores con salario actual…', explicacion: 'Filtro que decide a quién afecta el cambio: igual a, menor o igual a, o mayor o igual a un monto de referencia.' },
+        { nombre: 'Acción', explicacion: '"Fijar el salario en un nuevo valor" deja a todos los que cumplen el filtro con el mismo salario nuevo. "Subir un porcentaje" incrementa el salario de cada quien sobre su propio valor actual (no queda igual para todos).' },
+        { nombre: 'Fecha de vigencia', explicacion: 'Fecha del alza; queda como fecha del movimiento en el historial de cada persona.' },
+        { nombre: 'Nota', explicacion: 'Opcional, texto libre (ej. "Ajuste salario mínimo legal 2027"); se agrega a la descripción del movimiento en el historial.' },
+        { nombre: 'Ver a quiénes afecta', explicacion: 'Muestra la lista de colaboradores que cumplen el filtro con su salario actual y el nuevo, antes de aplicar nada.' },
+        { nombre: 'Aplicar a N colaboradores', explicacion: 'Confirma el cambio: actualiza el salario de cada persona en la lista y deja un movimiento "Aumento salarial" en su historial.' },
+      ],
+      proceso: [
+        'Define el filtro (comparador + monto) y la acción (fijar valor o subir porcentaje), con su fecha de vigencia.',
+        'Haz clic en "Ver a quiénes afecta" y revisa la tabla de salario actual → salario nuevo.',
+        'Si todo se ve correcto, haz clic en "Aplicar a N colaboradores" para confirmar.',
+      ],
+      notas: [
+        'Solo afecta a colaboradores activos e internos (no contratistas externos, no gente ya retirada).',
+        'El cambio se vuelve a calcular en el servidor al aplicar (no depende de lo que se veía en pantalla), así que si alguien cambió de salario justo antes de confirmar, igual queda correcto.',
+        'Este sistema no calcula nómina, prestaciones ni topes legales (SMMLV, auxilio de transporte, UVT) — el salario es un dato de referencia que aquí solo se edita en bloque, igual que se podría editar uno por uno desde la ficha de cada colaborador (Documentos → Contrato).',
+      ],
+    },
+    {
       slug: 'configuracion',
       ruta: '/administracion/configuracion',
       titulo: 'Configuración',
