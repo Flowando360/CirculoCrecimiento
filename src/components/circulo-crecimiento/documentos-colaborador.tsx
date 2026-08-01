@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { subirHojaVida, guardarContrato } from '@/app/(dashboard)/circulo-crecimiento/colaboradores/[id]/documentos/actions';
-import { FileText, Upload, FileDown, Check } from 'lucide-react';
+import { subirHojaVida, guardarContrato, guardarAfiliaciones } from '@/app/(dashboard)/circulo-crecimiento/colaboradores/[id]/documentos/actions';
+import { FileText, Upload, FileDown, Check, ShieldPlus } from 'lucide-react';
 
 export function DocumentosColaborador({
   colaboradorId,
@@ -10,18 +10,105 @@ export function DocumentosColaborador({
   hojaVidaUrl,
   contratoUrl,
   salarioInicial,
+  afiliaciones,
 }: {
   colaboradorId: string;
   puedeEditar: boolean;
   hojaVidaUrl: string | null;
   contratoUrl: string | null;
   salarioInicial: number | null;
+  afiliaciones: { eps: string | null; arl: string | null; afp: string | null; caja_compensacion: string | null };
 }) {
   return (
     <div className="space-y-4">
       <BloqueHojaVida colaboradorId={colaboradorId} puedeEditar={puedeEditar} urlActual={hojaVidaUrl} />
       <BloqueContrato colaboradorId={colaboradorId} puedeEditar={puedeEditar} urlActual={contratoUrl} salarioInicial={salarioInicial} />
+      <BloqueAfiliaciones colaboradorId={colaboradorId} puedeEditar={puedeEditar} inicial={afiliaciones} />
       {puedeEditar && <BloqueCertificado colaboradorId={colaboradorId} />}
+    </div>
+  );
+}
+
+function BloqueAfiliaciones({
+  colaboradorId,
+  puedeEditar,
+  inicial,
+}: {
+  colaboradorId: string;
+  puedeEditar: boolean;
+  inicial: { eps: string | null; arl: string | null; afp: string | null; caja_compensacion: string | null };
+}) {
+  const [eps, setEps] = useState(inicial.eps ?? '');
+  const [arl, setArl] = useState(inicial.arl ?? '');
+  const [afp, setAfp] = useState(inicial.afp ?? '');
+  const [cajaCompensacion, setCajaCompensacion] = useState(inicial.caja_compensacion ?? '');
+  const [pending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+  const [ok, setOk] = useState(false);
+
+  function guardar() {
+    setError(null);
+    setOk(false);
+    startTransition(async () => {
+      const res = await guardarAfiliaciones({ colaboradorId, eps, arl, afp, cajaCompensacion });
+      if (res.ok) setOk(true);
+      else setError(res.error);
+    });
+  }
+
+  const campos: { etiqueta: string; valor: string; set: (v: string) => void }[] = [
+    { etiqueta: 'EPS', valor: eps, set: setEps },
+    { etiqueta: 'ARL', valor: arl, set: setArl },
+    { etiqueta: 'AFP (pensión)', valor: afp, set: setAfp },
+    { etiqueta: 'Caja de compensación', valor: cajaCompensacion, set: setCajaCompensacion },
+  ];
+
+  return (
+    <div className="card p-5">
+      <h2 className="font-display font-semibold text-secundario mb-1 flex items-center gap-1.5">
+        <ShieldPlus size={16} /> Afiliaciones
+      </h2>
+      <p className="text-xs text-marmol-400 mb-3">
+        EPS, ARL, fondo de pensiones y caja de compensación. Solo lo ven Talento Humano y el propio colaborador.
+      </p>
+
+      {puedeEditar ? (
+        <div className="grid grid-cols-2 gap-2">
+          {campos.map((c) => (
+            <div key={c.etiqueta}>
+              <label className="block text-xs text-marmol-500 mb-1">{c.etiqueta}</label>
+              <input
+                type="text"
+                value={c.valor}
+                onChange={(e) => c.set(e.target.value)}
+                className="w-full rounded-lg border border-marmol-200 px-2.5 py-1.5 text-sm"
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <dl className="grid grid-cols-2 gap-2 text-sm">
+          {campos.map((c) => (
+            <div key={c.etiqueta}>
+              <dt className="text-xs text-marmol-400">{c.etiqueta}</dt>
+              <dd className="text-marmol-700">{c.valor || '—'}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+
+      {puedeEditar && (
+        <button
+          type="button"
+          onClick={guardar}
+          disabled={pending}
+          className="inline-flex items-center gap-1.5 rounded-lg bg-flow-500 hover:bg-flow-600 disabled:opacity-50 text-white text-sm font-medium px-3 py-1.5 transition mt-3"
+        >
+          {pending ? 'Guardando…' : 'Guardar'}
+        </button>
+      )}
+      {ok && <p className="text-xs text-alto mt-1.5 flex items-center gap-1"><Check size={12} /> Guardado</p>}
+      {error && <p className="text-xs text-bajo mt-1.5">{error}</p>}
     </div>
   );
 }

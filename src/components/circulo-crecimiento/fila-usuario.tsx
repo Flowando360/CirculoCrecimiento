@@ -17,20 +17,17 @@ export interface UsuarioFila {
   id: string;
   nombre_completo: string;
   nombre_preferido: string | null;
+  usuario: string;
   email: string;
   rol: RolUsuario;
   activo: boolean;
-}
-
-/** Lo que hay que escribir en el login (antes del "@") para entrar con usuario en vez de correo. */
-function usuarioDeLogin(email: string) {
-  return email.split('@')[0] ?? email;
 }
 
 export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila; esUsuarioActual: boolean }) {
   const [editando, setEditando] = useState(false);
   const [nombreCompleto, setNombreCompleto] = useState(usuario.nombre_completo);
   const [nombrePreferido, setNombrePreferido] = useState(usuario.nombre_preferido ?? '');
+  const [usuarioLogin, setUsuarioLogin] = useState(usuario.usuario);
   const [email, setEmail] = useState(usuario.email);
   const [rol, setRol] = useState<RolUsuario>(usuario.rol);
   const [error, setError] = useState<string | null>(null);
@@ -48,6 +45,7 @@ export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila
         usuarioId: usuario.id,
         nombreCompleto,
         nombrePreferido: nombrePreferido || undefined,
+        usuario: usuarioLogin,
         email,
         rol,
       });
@@ -62,6 +60,7 @@ export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila
   function cancelar() {
     setNombreCompleto(usuario.nombre_completo);
     setNombrePreferido(usuario.nombre_preferido ?? '');
+    setUsuarioLogin(usuario.usuario);
     setEmail(usuario.email);
     setRol(usuario.rol);
     setError(null);
@@ -138,7 +137,15 @@ export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila
             className="w-full rounded-lg border border-marmol-200 px-2 py-1 text-sm"
           />
         </td>
-        <td className="px-4 py-2.5 text-marmol-500 font-mono text-xs">{usuarioDeLogin(email)}</td>
+        <td className="px-4 py-2.5">
+          <input
+            type="text"
+            value={usuarioLogin}
+            onChange={(e) => setUsuarioLogin(e.target.value.toLowerCase())}
+            placeholder="nombre.apellido"
+            className="w-full rounded-lg border border-marmol-200 px-2 py-1 text-xs font-mono"
+          />
+        </td>
         <td className="px-4 py-2.5">
           <select
             value={rol}
@@ -158,7 +165,7 @@ export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila
             <button
               type="button"
               onClick={guardar}
-              disabled={pending || !nombreCompleto || !email}
+              disabled={pending || !nombreCompleto || !email || !usuarioLogin}
               className="inline-flex items-center gap-1 rounded-lg bg-flow-500 hover:bg-flow-600 disabled:opacity-40 text-white text-xs font-medium px-2.5 py-1.5"
             >
               <Check size={12} /> {pending ? 'Guardando…' : 'Guardar'}
@@ -235,7 +242,7 @@ export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila
           )}
         </td>
         <td className="px-4 py-3 text-marmol-600">{usuario.email}</td>
-        <td className="px-4 py-3 text-marmol-500 font-mono text-xs">{usuarioDeLogin(usuario.email)}</td>
+        <td className="px-4 py-3 text-marmol-500 font-mono text-xs">{usuario.usuario}</td>
         <td className="px-4 py-3">
           <span className="text-xs rounded-full bg-flow-50 text-flow-700 px-2 py-0.5 font-medium">
             {etiquetaRol[usuario.rol] ?? usuario.rol}

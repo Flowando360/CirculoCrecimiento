@@ -14,7 +14,7 @@ export default async function AdminUsuariosPage() {
   const [{ data: usuarios }, { data: sinCuentaRaw }] = await Promise.all([
     supabase
       .from('perfiles_usuario')
-      .select('id, nombre_completo, nombre_preferido, email, rol, activo')
+      .select('id, nombre_completo, nombre_preferido, usuario, email, rol, activo')
       .eq('empresa_id', perfil.empresa_id)
       .order('nombre_completo'),
     supabase
@@ -65,6 +65,7 @@ export default async function AdminUsuariosPage() {
                   id: u.id,
                   nombre_completo: u.nombre_completo,
                   nombre_preferido: u.nombre_preferido,
+                  usuario: u.usuario,
                   email: u.email,
                   rol: u.rol as UsuarioFila['rol'],
                   activo: u.activo,

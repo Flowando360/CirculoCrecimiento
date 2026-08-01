@@ -92,3 +92,31 @@ export async function guardarContrato(formData: FormData) {
   revalidar(colaboradorId);
   return { ok: true as const };
 }
+
+/** Guarda las afiliaciones a EPS/ARL/AFP/caja de compensación (admin_th). */
+export async function guardarAfiliaciones(input: {
+  colaboradorId: string;
+  eps?: string;
+  arl?: string;
+  afp?: string;
+  cajaCompensacion?: string;
+}) {
+  const perfil = await esAdminThDeEsteColaborador(input.colaboradorId);
+  if (!perfil) return { ok: false as const, error: 'No autorizado' };
+
+  const supabase = createClient();
+  const { error } = await supabase
+    .from('colaboradores')
+    .update({
+      eps: input.eps?.trim() || null,
+      arl: input.arl?.trim() || null,
+      afp: input.afp?.trim() || null,
+      caja_compensacion: input.cajaCompensacion?.trim() || null,
+    })
+    .eq('id', input.colaboradorId);
+
+  if (error) return { ok: false as const, error: error.message };
+
+  revalidar(input.colaboradorId);
+  return { ok: true as const };
+}

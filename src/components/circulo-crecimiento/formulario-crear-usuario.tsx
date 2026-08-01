@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { crearCuentaUsuario } from '@/app/(dashboard)/administracion/usuarios/actions';
-import { etiquetaRol, cn, generarPassword } from '@/lib/utils';
+import { etiquetaRol, cn, generarPassword, usuarioSugerido } from '@/lib/utils';
 import { Check, Copy, UserPlus } from 'lucide-react';
 import type { RolUsuario } from '@/types/colaborador';
 
@@ -17,6 +17,8 @@ export function FormularioCrearUsuario({
   const [modo, setModo] = useState<'vincular' | 'nueva'>('vincular');
   const [colaboradorId, setColaboradorId] = useState('');
   const [nombreCompleto, setNombreCompleto] = useState('');
+  const [usuario, setUsuarioState] = useState('');
+  const [usuarioTocado, setUsuarioTocado] = useState(false);
   const [email, setEmail] = useState('');
   const [rol, setRol] = useState<RolUsuario>('colaborador');
   const [password, setPassword] = useState(generarPassword());
@@ -24,15 +26,29 @@ export function FormularioCrearUsuario({
   const [resultado, setResultado] = useState<{ ok: boolean; error?: string } | null>(null);
   const [copiado, setCopiado] = useState(false);
 
+  // El usuario se sugiere solo a partir del nombre, siempre que admin_th no
+  // lo haya editado a mano todavía (para no pisarle una corrección).
+  function actualizarNombre(valor: string) {
+    setNombreCompleto(valor);
+    if (!usuarioTocado) setUsuarioState(usuarioSugerido(valor));
+  }
+
+  function actualizarUsuario(valor: string) {
+    setUsuarioState(valor.toLowerCase());
+    setUsuarioTocado(true);
+  }
+
   function seleccionarColaborador(id: string) {
     setColaboradorId(id);
     const co = colaboradoresSinCuenta.find((c) => c.id === id);
-    if (co) setNombreCompleto(co.nombre_completo);
+    if (co) actualizarNombre(co.nombre_completo);
   }
 
   function limpiar() {
     setColaboradorId('');
     setNombreCompleto('');
+    setUsuarioState('');
+    setUsuarioTocado(false);
     setEmail('');
     setRol('colaborador');
     setPassword(generarPassword());
@@ -44,6 +60,7 @@ export function FormularioCrearUsuario({
     startTransition(async () => {
       const res = await crearCuentaUsuario({
         nombreCompleto,
+        usuario,
         email,
         rol,
         password,
@@ -170,9 +187,24 @@ export function FormularioCrearUsuario({
             <input
               type="text"
               value={nombreCompleto}
-              onChange={(e) => setNombreCompleto(e.target.value)}
+              onChange={(e) => actualizarNombre(e.target.value)}
               className="w-full rounded-lg border border-marmol-200 px-2.5 py-1.5 text-sm"
             />
+          </div>
+
+          <div>
+            <label className="block text-xs text-marmol-500 mb-1">Usuario (para iniciar sesión)</label>
+            <input
+              type="text"
+              value={usuario}
+              onChange={(e) => actualizarUsuario(e.target.value)}
+              placeholder="nombre.apellido"
+              className="w-full rounded-lg border border-marmol-200 px-2.5 py-1.5 text-sm font-mono"
+            />
+            <p className="text-[11px] text-marmol-400 mt-1">
+              Se sugiere solo a partir del nombre — independiente del correo. Puedes corregirlo si hay un
+              choque con otra persona o el nombre trae algún error.
+            </p>
           </div>
 
           <div>
@@ -224,7 +256,7 @@ export function FormularioCrearUsuario({
 
           <button
             type="button"
-            disabled={pending || !nombreCompleto || !email || password.length < 8}
+            disabled={pending || !nombreCompleto || !usuario || !email || password.length < 8}
             onClick={crear}
             className="rounded-lg bg-flow-500 hover:bg-flow-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium px-4 py-2 transition"
           >

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
+import { obtenerUrlFirmadaDocumentoColaborador } from '@/lib/supabase/storage';
 import { ListaHistorialMovimientos, type MovimientoItem } from '@/components/circulo-crecimiento/lista-historial-movimientos';
 import { EntrevistaSalida } from '@/components/circulo-crecimiento/entrevista-salida';
 import { notFound } from 'next/navigation';
@@ -31,7 +32,7 @@ export default async function HistorialColaboradorPage({ params }: { params: { i
   const [{ data: movimientosRaw }, { data: cargos }, { data: entrevista }] = await Promise.all([
     supabase
       .from('historial_movimientos')
-      .select('id, tipo, fecha, descripcion, cargo_anterior:cargo_anterior_id(nombre), cargo_nuevo:cargo_nuevo_id(nombre)')
+      .select('id, tipo, fecha, descripcion, gravedad, soporte_url, cargo_anterior:cargo_anterior_id(nombre), cargo_nuevo:cargo_nuevo_id(nombre)')
       .eq('colaborador_id', params.id)
       .order('fecha', { ascending: false }),
     esAdminTh
@@ -41,6 +42,13 @@ export default async function HistorialColaboradorPage({ params }: { params: { i
       ? supabase.from('entrevistas_salida').select('*').eq('colaborador_id', params.id).maybeSingle()
       : Promise.resolve({ data: null }),
   ]);
+
+  const itemsConSoporte: MovimientoItem[] = await Promise.all(
+    (movimientosRaw ?? []).map(async (m) => ({
+      ...(m as unknown as MovimientoItem),
+      soporteUrl: await obtenerUrlFirmadaDocumentoColaborador((m as any).soporte_url),
+    }))
+  );
 
   return (
     <div className="space-y-6 max-w-2xl">
@@ -61,7 +69,7 @@ export default async function HistorialColaboradorPage({ params }: { params: { i
         <h2 className="font-display font-semibold text-secundario mb-3">Línea de tiempo</h2>
         <ListaHistorialMovimientos
           colaboradorId={params.id}
-          itemsIniciales={(movimientosRaw ?? []) as unknown as MovimientoItem[]}
+          itemsIniciales={itemsConSoporte}
           puedeEditar={esAdminTh}
           cargos={cargos ?? []}
         />

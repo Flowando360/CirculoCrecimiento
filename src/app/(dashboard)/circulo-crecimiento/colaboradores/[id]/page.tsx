@@ -4,7 +4,7 @@ import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { SemaforoBadge } from '@/components/circulo-crecimiento/semaforo-badge';
 import { formatearFecha } from '@/lib/utils';
 import { notFound } from 'next/navigation';
-import { GraduationCap, Briefcase, Sparkles, ShieldCheck, Target, Clock, History, FolderLock, CalendarHeart } from 'lucide-react';
+import { GraduationCap, Briefcase, Sparkles, ShieldCheck, Target, Clock, History, FolderLock, CalendarHeart, HeartPulse } from 'lucide-react';
 
 export default async function FichaColaboradorPage({ params }: { params: { id: string } }) {
   const perfil = await getPerfilActual();
@@ -44,6 +44,10 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
   // Humano y el propio colaborador, ni siquiera el líder — el contrato trae
   // el salario.
   const puedeVerDocumentos = perfil.rol === 'admin_th' || (perfil.rol === 'colaborador' && perfil.colaborador_id === colaborador.id);
+
+  // Incapacidades (dato de salud): mismo nivel que Documentos — admin_th y
+  // el propio colaborador, sin el líder.
+  const puedeVerIncapacidades = puedeVerDocumentos;
 
   // Fechas especiales (cumpleaños, día de la profesión, etc.): Talento
   // Humano y el líder directo las administran desde la ficha; el propio
@@ -258,6 +262,16 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
           >
             <FolderLock size={16} className="text-flow-600" />
             <span className="text-sm font-medium text-marmol-800">Documentos y certificado laboral</span>
+          </Link>
+        )}
+
+        {puedeVerIncapacidades && (
+          <Link
+            href={`/circulo-crecimiento/colaboradores/${params.id}/incapacidades`}
+            className="card p-5 flex items-center gap-2 hover:border-flow-300 transition"
+          >
+            <HeartPulse size={16} className="text-flow-600" />
+            <span className="text-sm font-medium text-marmol-800">Incapacidades</span>
           </Link>
         )}
 

@@ -69,16 +69,17 @@ export const moduloAdministracion: ModuloAyuda = {
       titulo: 'Usuarios y roles',
       resumen: 'Crea cuentas de acceso para los colaboradores y administra sus roles.',
       camposYBotones: [
-        { nombre: 'Nuevo usuario', explicacion: 'Elige un colaborador sin cuenta todavía, su correo, rol (admin_th/líder/colaborador/gerencia/auditor_externo) y una contraseña temporal.' },
-        { nombre: 'Tabla de usuarios', explicacion: 'Nombre (con el apodo debajo si esa persona ya definió uno), correo, Usuario (lo que hay que escribir en el login antes del "@" para entrar sin el correo completo — ver "Usuario o correo" en el login), rol, si la cuenta está activa, y una columna de Acciones.' },
-        { nombre: 'Editar', explicacion: 'Cambia nombre, apodo ("cómo le gusta que le llamen"), correo o rol de una cuenta ya existente, sin salir de la tabla.' },
+        { nombre: 'Nuevo usuario', explicacion: 'Elige un colaborador sin cuenta todavía, su nombre completo (con el usuario ya sugerido a partir del nombre — editable), correo, rol (admin_th/líder/colaborador/gerencia/auditor_externo) y una contraseña temporal.' },
+        { nombre: 'Tabla de usuarios', explicacion: 'Nombre (con el apodo debajo si esa persona ya definió uno), correo, Usuario, rol, si la cuenta está activa, y una columna de Acciones.' },
+        { nombre: 'Usuario', explicacion: 'Lo que la persona escribe en el login en vez del correo completo (ver "Usuario o correo" en el login). Es un dato propio de la cuenta, independiente del correo — siempre primernombre.primerapellido, sugerido automáticamente a partir del nombre, pero editable por admin_th en cualquier momento (por ejemplo si dos personas chocan, o si el nombre trae un error). Cambiarlo no cambia el correo de la cuenta.' },
+        { nombre: 'Editar', explicacion: 'Cambia nombre, apodo ("cómo le gusta que le llamen"), usuario, correo o rol de una cuenta ya existente, sin salir de la tabla.' },
         { nombre: 'Restablecer contraseña', explicacion: 'Genera una nueva contraseña temporal para esa cuenta (editable antes de guardar). Al guardar, se muestra una única vez para copiarla y compartirla con la persona por un canal seguro — igual que al crear la cuenta, no depende de correo de invitación.' },
-        { nombre: 'Retirar / Reactivar', explicacion: 'Deja la cuenta inactiva y le bloquea el acceso de verdad (no puede volver a iniciar sesión) — es reversible, "Reactivar" la devuelve al estado normal en cualquier momento. No aparece sobre tu propia cuenta.' },
+        { nombre: 'Retirar / Reactivar', explicacion: 'Deja la cuenta inactiva y le bloquea el acceso de verdad (no puede volver a iniciar sesión) — es reversible, "Reactivar" la devuelve al estado normal en cualquier momento. No aparece sobre tu propia cuenta. También ocurre automáticamente al registrar la salida de la persona desde el Historial de su ficha (ver Círculo de Crecimiento → Historial).' },
         { nombre: 'Eliminar', explicacion: 'Borra la cuenta por completo — a diferencia de "Retirar", esto NO se puede deshacer. Puede fallar si esa persona tiene actividad registrada en el sistema (por ejemplo, certificó una verificación de Saber, resolvió una alerta, o publicó en el feed de Nexa); en ese caso no borra nada y sugiere usar "Retirar" en su lugar. No aparece sobre tu propia cuenta.' },
       ],
       notas: [
         'Roles y su alcance: admin_th ve y edita todo; líder ve su equipo y su propia información; colaborador se ve solo a sí mismo; gerencia ve reportes agregados; auditor_externo solo ve, de solo lectura, nombre/cargo de los colaboradores y sus certificaciones de hoja de vida — pensado para entregar evidencia a una auditoría sin exponer el resto del sistema.',
-        'El apodo también lo puede fijar cada persona por sí misma desde Mi Perfil — ver Inicio y Mi Perfil.',
+        'El apodo también lo puede fijar cada persona por sí misma desde Mi Perfil — ver Inicio y Mi Perfil. El usuario de login, en cambio, solo lo fija admin_th (no hay autoservicio para eso todavía).',
       ],
     },
     {

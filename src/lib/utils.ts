@@ -41,6 +41,27 @@ export function generarPassword(): string {
   return resultado;
 }
 
+function quitarAcentos(s: string): string {
+  return s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+}
+
+/**
+ * Sugiere el "usuario" de login (primernombre.primerapellido) a partir del
+ * nombre completo — independiente de cuál sea el correo real de la cuenta.
+ * Asume el patrón colombiano [nombre(s)] [apellido1] [apellido2]: toma el
+ * primer token como nombre, y el penúltimo como apellido — salvo que solo
+ * haya 2 tokens (nombre + un solo apellido, sin segundo nombre ni segundo
+ * apellido), caso en el que el apellido es el último token, no el primero.
+ */
+export function usuarioSugerido(nombreCompleto: string): string {
+  const tokens = nombreCompleto.trim().split(/\s+/).filter(Boolean);
+  if (tokens.length === 0) return '';
+  const nombre1 = quitarAcentos(tokens[0]!).toLowerCase().replace(/[^a-z0-9]/g, '');
+  const apellidoToken = tokens.length >= 3 ? tokens[tokens.length - 2]! : tokens[tokens.length - 1]!;
+  const apellido1 = quitarAcentos(apellidoToken).toLowerCase().replace(/[^a-z0-9]/g, '');
+  return apellido1 && apellido1 !== nombre1 ? `${nombre1}.${apellido1}` : nombre1;
+}
+
 export const etiquetaRol: Record<string, string> = {
   admin_th: 'Talento Humano',
   lider: 'Líder',

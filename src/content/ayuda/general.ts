@@ -35,6 +35,7 @@ export const moduloGeneral: ModuloAyuda = {
         { nombre: 'Cómo te gusta que te llamen', explicacion: 'Un apodo o diminutivo opcional (ej. "Vale" en vez de "Valentina"). Si lo defines, reemplaza tu primer nombre en el saludo de Inicio y en el encabezado — en toda la app.' },
         { nombre: 'Mis fechas personales', explicacion: 'Fecha de matrimonio y de baby shower (si aplica) — el sistema le avisa a tu líder para celebrar contigo. Y, aparte, si estás en embarazo y tu fecha probable de parto: esto es privado, solo lo ves tú y Talento Humano, tu líder no tiene acceso.' },
         { nombre: 'Mis fechas especiales', explicacion: 'Una lista abierta de fechas que quieras que se celebren contigo — cumpleaños, día de tu profesión, cualquier aniversario que se te ocurra —, cada una con su propia descripción libre. A diferencia de "Mis fechas personales", puedes agregar cuantas quieras. Tu líder directo y Talento Humano también pueden agregarte fechas especiales desde tu ficha.' },
+        { nombre: 'Mis incapacidades', explicacion: 'Solo aparece si tienes alguna registrada. Las incapacidades y licencias que Talento Humano te haya cargado (tipo, fechas, entidad que la certifica y el soporte, si lo adjuntaron) — de solo lectura, las registra Talento Humano cuando recibe tu certificado.' },
       ],
       notas: [
         'Si ves el mensaje de que tu usuario no está vinculado a una ficha, pide a Talento Humano que te asocie desde Administración → Usuarios.',

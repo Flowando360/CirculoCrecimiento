@@ -31,8 +31,9 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
         { nombre: 'Hoja de vida y certificaciones', explicacion: 'Formación, cursos y certificaciones cargadas, con fecha de vencimiento si aplica.' },
         { nombre: 'Inducción', explicacion: '% de avance del plan de inducción de la persona (comunes + específicos del cargo). Lleva al checklist completo.' },
         { nombre: 'Plan de Desarrollo Individual', explicacion: 'Las acciones de desarrollo activas de la persona, con su origen (Hacer/Deber/Saber/Ser) y estado.' },
-        { nombre: 'Documentos y certificado laboral', explicacion: 'Solo visible para admin_th y el propio colaborador. Lleva a la hoja de vida, el contrato y el generador del certificado laboral.' },
-        { nombre: 'Ver historial y línea de tiempo', explicacion: 'Solo visible para admin_th y el líder directo. Lleva a movimientos de cargo y, si aplica, entrevista de salida.' },
+        { nombre: 'Documentos y certificado laboral', explicacion: 'Solo visible para admin_th y el propio colaborador. Lleva a la hoja de vida, el contrato, las afiliaciones (EPS/ARL/AFP/caja de compensación) y el generador del certificado laboral.' },
+        { nombre: 'Incapacidades', explicacion: 'Solo visible para admin_th y el propio colaborador. Incapacidades y licencias registradas (enfermedad, accidente laboral, maternidad/paternidad), con su soporte adjunto.' },
+        { nombre: 'Ver historial y línea de tiempo', explicacion: 'Solo visible para admin_th y el líder directo. Lleva a movimientos de cargo, sanciones y, si aplica, entrevista de salida.' },
         { nombre: 'Fechas especiales', explicacion: 'Solo visible para admin_th y el líder directo. Cumpleaños, día de la profesión o cualquier otra fecha que valga la pena celebrar de esta persona — la propia persona también puede agregar las suyas desde Mi Perfil.' },
       ],
       notas: [
@@ -81,13 +82,32 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
       slug: 'historial',
       ruta: '/circulo-crecimiento/colaboradores/*/historial',
       titulo: 'Historial y línea de tiempo',
-      resumen: 'Movimientos de cargo (ascensos, traslados, cambios de área) y, para Talento Humano, la entrevista de salida si la persona se retira.',
+      resumen: 'Movimientos de cargo (ascensos, traslados, cambios de área), sanciones, y para Talento Humano, la entrevista de salida si la persona se retira.',
       camposYBotones: [
         { nombre: 'Línea de tiempo', explicacion: 'Cada movimiento con tipo, fecha, cargo anterior y nuevo, y descripción.' },
-        { nombre: 'Entrevista de salida', explicacion: 'Solo visible y editable por admin_th. Se diligencia cuando la persona sale de la empresa.' },
+        { nombre: 'Movimiento "Sanción"', explicacion: 'Además de fecha y descripción, pide la gravedad (leve / grave / gravísima) y permite adjuntar el soporte o descargo firmado.' },
+        { nombre: 'Movimiento "Salida"', explicacion: 'Pide el motivo (renuncia voluntaria, despido, fin de contrato, mutuo acuerdo, jubilación u otro). Al guardarlo, en un solo paso: la ficha queda con estado "Inactivo" y esa fecha/motivo registrados, y si la persona tenía cuenta de acceso, se retira automáticamente (ver Administración → Usuarios y roles) — no hace falta ir aparte a retirarla.' },
+        { nombre: 'Entrevista de salida', explicacion: 'Solo visible y editable por admin_th. Se diligencia cuando la persona sale de la empresa — es un formulario aparte de solo registrar el movimiento "Salida".' },
       ],
       notas: [
         'Acceso exclusivo: admin_th (toda la empresa) y el líder directo (su equipo, sin ver la entrevista de salida). Gerencia y el propio colaborador no tienen acceso a esta pantalla.',
+      ],
+    },
+    {
+      slug: 'incapacidades',
+      ruta: '/circulo-crecimiento/colaboradores/*/incapacidades',
+      titulo: 'Incapacidades',
+      resumen:
+        'Registro de incapacidades y licencias: enfermedad general, accidente laboral, enfermedad laboral, licencia de maternidad o paternidad — con la entidad que la certifica (EPS o ARL) y el soporte adjunto.',
+      camposYBotones: [
+        { nombre: 'Tipo', explicacion: 'Enfermedad general, accidente laboral, enfermedad laboral, licencia de maternidad, licencia de paternidad, u otra.' },
+        { nombre: 'Fecha de inicio / fin', explicacion: 'Los días se calculan solos (inclusive el día de inicio y el de fin).' },
+        { nombre: 'Entidad que certifica', explicacion: 'EPS (enfermedad general) o ARL (accidente/enfermedad laboral) — texto libre.' },
+        { nombre: 'Soporte adjunto', explicacion: 'El certificado de incapacidad en PDF o imagen (opcional al registrar).' },
+      ],
+      notas: [
+        'Dato de salud, sensible: solo lo administran admin_th, y lo consulta también la propia persona (desde aquí o desde Mi Perfil) — ni siquiera el líder directo tiene acceso, igual que Documentos.',
+        'No se guarda el diagnóstico médico como texto — si hace falta el detalle, queda en el soporte adjunto, no en un campo abierto de la base de datos.',
       ],
     },
     {
@@ -131,6 +151,7 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
         { nombre: 'Hoja de vida', explicacion: 'Sube o reemplaza el archivo (PDF/Word) de la hoja de vida de la persona.' },
         { nombre: 'Contrato', explicacion: 'Sube o reemplaza el archivo del contrato, y registra el salario — el salario es la fuente que usa el certificado laboral. El archivo es opcional si solo quieres actualizar el salario.' },
         { nombre: 'Incluir el salario', explicacion: 'Casilla que decide si el certificado laboral que descargues trae o no el salario.' },
+        { nombre: 'Afiliaciones', explicacion: 'EPS, ARL, fondo de pensiones (AFP) y caja de compensación de la persona — texto libre por campo.' },
         { nombre: 'Descargar PDF (certificado laboral)', explicacion: 'Genera al momento el certificado, con el logo de la empresa y los datos configurados en Administración → Configuración.' },
       ],
       notas: [

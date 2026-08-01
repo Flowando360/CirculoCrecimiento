@@ -13,22 +13,20 @@ const LoginSchema = z.object({
 
 /**
  * Si escriben el correo completo, se usa tal cual. Si escriben solo el
- * usuario (ej. "juan.perez", sin "@"), se busca a qué correo corresponde
+ * usuario (ej. "juan.perez", sin "@"), se busca su correo real en la
+ * columna `usuario` (independiente del correo -- ver migración 0041/0042)
  * — necesita el cliente admin porque esto pasa ANTES de autenticar, sin
- * sesión con la que RLS pueda filtrar. Si el usuario no existe o coincide
- * con más de una cuenta (choque entre empresas distintas, hoy no pasa
- * porque solo hay una empresa activa), no se resuelve — nunca se revela
- * cuál fue el motivo exacto, para no delatar qué cuentas existen.
+ * sesión con la que RLS pueda filtrar. Si el usuario no existe, no se
+ * resuelve — nunca se revela el motivo exacto, para no delatar qué
+ * cuentas existen.
  */
 async function resolverCorreo(identificador: string): Promise<string | null> {
-  if (identificador.includes('@')) return identificador;
+  const valor = identificador.trim();
+  if (valor.includes('@')) return valor;
 
   const admin = createAdminClient();
-  const { data } = await admin.from('perfiles_usuario').select('email');
-  if (!data) return null;
-
-  const coincidencias = data.filter((p) => p.email?.split('@')[0]?.toLowerCase() === identificador.toLowerCase());
-  return coincidencias.length === 1 ? coincidencias[0]!.email : null;
+  const { data } = await admin.from('perfiles_usuario').select('email').eq('usuario', valor.toLowerCase()).maybeSingle();
+  return data?.email ?? null;
 }
 
 export async function iniciarSesion(input: { identificador: string; password: string }) {

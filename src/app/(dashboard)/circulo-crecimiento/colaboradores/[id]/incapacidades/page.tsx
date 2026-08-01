@@ -2,11 +2,11 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { obtenerUrlFirmadaDocumentoColaborador } from '@/lib/supabase/storage';
-import { DocumentosColaborador } from '@/components/circulo-crecimiento/documentos-colaborador';
+import { ListaIncapacidades, type IncapacidadItem } from '@/components/circulo-crecimiento/lista-incapacidades';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, FolderLock } from 'lucide-react';
+import { ArrowLeft, HeartPulse } from 'lucide-react';
 
-export default async function DocumentosColaboradorPage({ params }: { params: { id: string } }) {
+export default async function IncapacidadesColaboradorPage({ params }: { params: { id: string } }) {
   const perfil = await getPerfilActual();
   if (!perfil) return null;
 
@@ -14,24 +14,36 @@ export default async function DocumentosColaboradorPage({ params }: { params: { 
 
   const { data: colaborador } = await supabase
     .from('colaboradores')
-    .select('id, nombre_completo, empresa_id, hoja_vida_url, contrato_url, salario, eps, arl, afp, caja_compensacion')
+    .select('id, nombre_completo, empresa_id')
     .eq('id', params.id)
     .maybeSingle();
 
   if (!colaborador || colaborador.empresa_id !== perfil.empresa_id) notFound();
 
-  // Documentos sensibles (el contrato trae el salario): solo Talento Humano
-  // y el propio colaborador — a diferencia de otras secciones de la ficha,
-  // aquí ni el líder directo tiene acceso.
+  // Dato sensible de salud: mismo nivel de acceso que Documentos — solo
+  // Talento Humano y el propio colaborador, ni siquiera el líder directo.
   const puedeVer = perfil.rol === 'admin_th' || (perfil.rol === 'colaborador' && perfil.colaborador_id === colaborador.id);
   if (!puedeVer) notFound();
 
   const puedeEditar = perfil.rol === 'admin_th';
 
-  const [urlHojaVida, urlContrato] = await Promise.all([
-    obtenerUrlFirmadaDocumentoColaborador(colaborador.hoja_vida_url),
-    obtenerUrlFirmadaDocumentoColaborador(colaborador.contrato_url),
-  ]);
+  const { data: incapacidadesRaw } = await supabase
+    .from('incapacidades_colaborador')
+    .select('id, tipo, fecha_inicio, fecha_fin, dias, entidad_emisora, soporte_url')
+    .eq('colaborador_id', params.id)
+    .order('fecha_inicio', { ascending: false });
+
+  const items: IncapacidadItem[] = await Promise.all(
+    (incapacidadesRaw ?? []).map(async (i) => ({
+      id: i.id,
+      tipo: i.tipo,
+      fecha_inicio: i.fecha_inicio,
+      fecha_fin: i.fecha_fin,
+      dias: i.dias ?? 0,
+      entidad_emisora: i.entidad_emisora,
+      soporteUrl: await obtenerUrlFirmadaDocumentoColaborador(i.soporte_url),
+    }))
+  );
 
   return (
     <div className="space-y-6 max-w-2xl">
@@ -43,7 +55,7 @@ export default async function DocumentosColaboradorPage({ params }: { params: { 
           <ArrowLeft size={12} /> Volver a la ficha
         </Link>
         <h1 className="font-display text-2xl font-semibold text-secundario flex items-center gap-2">
-          <FolderLock size={22} className="text-flow-600" /> Documentos
+          <HeartPulse size={22} className="text-flow-600" /> Incapacidades
         </h1>
         <p className="text-sm text-marmol-500 mt-1">{colaborador.nombre_completo}</p>
         <p className="text-xs text-marmol-400 mt-1">
@@ -51,19 +63,9 @@ export default async function DocumentosColaboradorPage({ params }: { params: { 
         </p>
       </div>
 
-      <DocumentosColaborador
-        colaboradorId={params.id}
-        puedeEditar={puedeEditar}
-        hojaVidaUrl={urlHojaVida}
-        contratoUrl={urlContrato}
-        salarioInicial={colaborador.salario}
-        afiliaciones={{
-          eps: colaborador.eps,
-          arl: colaborador.arl,
-          afp: colaborador.afp,
-          caja_compensacion: colaborador.caja_compensacion,
-        }}
-      />
+      <div className="card p-5">
+        <ListaIncapacidades colaboradorId={params.id} itemsIniciales={items} puedeEditar={puedeEditar} />
+      </div>
     </div>
   );
 }

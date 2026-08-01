@@ -1,12 +1,22 @@
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { createClient } from '@/lib/supabase/server';
+import { obtenerUrlFirmadaDocumentoColaborador } from '@/lib/supabase/storage';
 import { SemaforoBadge } from '@/components/circulo-crecimiento/semaforo-badge';
 import { formatearFecha } from '@/lib/utils';
 import { EmptyState } from '@/components/ui/empty-state';
-import { User } from 'lucide-react';
+import { User, HeartPulse, Paperclip } from 'lucide-react';
 import { FechasPersonalesForm } from '@/components/circulo-crecimiento/fechas-personales-form';
 import { NombrePreferidoForm } from '@/components/circulo-crecimiento/nombre-preferido-form';
 import { MisFechasEspeciales } from '@/components/circulo-crecimiento/mis-fechas-especiales';
+
+const ETIQUETA_TIPO_INCAPACIDAD: Record<string, string> = {
+  enfermedad_general: 'Enfermedad general',
+  accidente_laboral: 'Accidente laboral',
+  enfermedad_laboral: 'Enfermedad laboral',
+  licencia_maternidad: 'Licencia de maternidad',
+  licencia_paternidad: 'Licencia de paternidad',
+  otra: 'Otra',
+};
 
 export default async function MiPerfilPage() {
   const perfil = await getPerfilActual();
@@ -59,6 +69,19 @@ export default async function MiPerfilPage() {
       .eq('colaborador_id', perfil.colaborador_id)
       .order('fecha'),
   ]);
+
+  const { data: incapacidadesRaw } = await supabase
+    .from('incapacidades_colaborador')
+    .select('id, tipo, fecha_inicio, fecha_fin, dias, entidad_emisora, soporte_url')
+    .eq('colaborador_id', perfil.colaborador_id)
+    .order('fecha_inicio', { ascending: false });
+
+  const incapacidades = await Promise.all(
+    (incapacidadesRaw ?? []).map(async (i) => ({
+      ...i,
+      soporteUrl: await obtenerUrlFirmadaDocumentoColaborador(i.soporte_url),
+    }))
+  );
 
   const cargo = colaborador?.cargo as any;
   const lider = colaborador?.lider as any;
@@ -129,6 +152,35 @@ export default async function MiPerfilPage() {
       <FechasPersonalesForm datosIniciales={fechasPersonales ?? null} />
 
       <MisFechasEspeciales itemsIniciales={fechasEspeciales ?? []} />
+
+      {incapacidades.length > 0 && (
+        <div className="card p-5">
+          <h3 className="font-display font-semibold text-secundario mb-1 flex items-center gap-1.5">
+            <HeartPulse size={16} /> Mis incapacidades
+          </h3>
+          <p className="text-xs text-marmol-400 mb-3">
+            Las registra Talento Humano cuando recibe tu certificado. Si falta alguna, avísales.
+          </p>
+          <div className="space-y-2">
+            {incapacidades.map((i) => (
+              <div key={i.id} className="flex items-center justify-between border-b border-marmol-100 pb-2 last:border-0">
+                <div>
+                  <p className="text-sm font-medium text-marmol-800">{ETIQUETA_TIPO_INCAPACIDAD[i.tipo] ?? i.tipo}</p>
+                  <p className="text-xs text-marmol-500">
+                    {formatearFecha(i.fecha_inicio)} — {formatearFecha(i.fecha_fin)} · {i.dias} día{i.dias === 1 ? '' : 's'}
+                    {i.entidad_emisora ? ` · ${i.entidad_emisora}` : ''}
+                  </p>
+                </div>
+                {i.soporteUrl && (
+                  <a href={i.soporteUrl} target="_blank" rel="noopener noreferrer" className="text-marmol-400 hover:text-flow-600" title="Ver soporte">
+                    <Paperclip size={14} />
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

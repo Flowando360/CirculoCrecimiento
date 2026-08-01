@@ -1,10 +1,12 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
+import { createClient, createAdminClient } from '@/lib/supabase/server';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { asignarItemsInduccion } from '@/lib/induccion/asignar';
+
+const MOTIVOS_SALIDA = ['renuncia_voluntaria', 'despido', 'fin_contrato', 'mutuo_acuerdo', 'jubilacion', 'otro'] as const;
 
 const TIPOS = [
   'ingreso',
@@ -38,13 +40,22 @@ function revalidar(colaboradorId: string) {
   revalidatePath(`/circulo-crecimiento/colaboradores/${colaboradorId}/induccion`);
 }
 
-const MovimientoSchema = z.object({
-  colaboradorId: z.string().uuid(),
-  tipo: z.enum(TIPOS),
-  fecha: z.string().min(1, 'La fecha es requerida'),
-  descripcion: z.string().trim().optional(),
-  cargoNuevoId: z.string().uuid().optional(),
-});
+const GRAVEDADES = ['leve', 'grave', 'gravisima'] as const;
+
+const MovimientoSchema = z
+  .object({
+    colaboradorId: z.string().uuid(),
+    tipo: z.enum(TIPOS),
+    fecha: z.string().min(1, 'La fecha es requerida'),
+    descripcion: z.string().trim().optional(),
+    cargoNuevoId: z.string().uuid().optional(),
+    motivoSalida: z.enum(MOTIVOS_SALIDA).optional(),
+    gravedad: z.enum(GRAVEDADES).optional(),
+  })
+  .refine((v) => v.tipo !== 'salida' || !!v.motivoSalida, {
+    message: 'Elige el motivo de la salida',
+    path: ['motivoSalida'],
+  });
 
 /** Registra un movimiento en la línea de tiempo del colaborador (admin_th). */
 export async function agregarMovimiento(input: z.infer<typeof MovimientoSchema>) {
@@ -76,6 +87,7 @@ export async function agregarMovimiento(input: z.infer<typeof MovimientoSchema>)
       descripcion: parsed.data.descripcion || null,
       cargo_anterior_id: cargoAnteriorId,
       cargo_nuevo_id: parsed.data.cargoNuevoId || null,
+      gravedad: parsed.data.tipo === 'sancion' ? parsed.data.gravedad || null : null,
       registrado_por: perfil.usuario_id,
     })
     .select('*, cargo_anterior:cargo_anterior_id(nombre), cargo_nuevo:cargo_nuevo_id(nombre)')
@@ -103,8 +115,71 @@ export async function agregarMovimiento(input: z.infer<typeof MovimientoSchema>)
     );
   }
 
+  // Registrar la salida es un solo paso, no dos: además de la línea de
+  // tiempo, deja la ficha en estado inactivo con su fecha/motivo, y retira
+  // (banea) la cuenta de login si la tenía — así Talento Humano no tiene que
+  // acordarse de ir aparte a Usuarios y roles a "Retirar" a la persona.
+  if (parsed.data.tipo === 'salida') {
+    await supabase
+      .from('colaboradores')
+      .update({
+        estado: 'inactivo',
+        fecha_salida: parsed.data.fecha,
+        motivo_salida: parsed.data.motivoSalida,
+      })
+      .eq('id', parsed.data.colaboradorId);
+
+    const { data: colaboradorConCuenta } = await supabase
+      .from('colaboradores')
+      .select('usuario_id')
+      .eq('id', parsed.data.colaboradorId)
+      .maybeSingle();
+
+    if (colaboradorConCuenta?.usuario_id && colaboradorConCuenta.usuario_id !== perfil.usuario_id) {
+      const admin = createAdminClient();
+      await admin.auth.admin.updateUserById(colaboradorConCuenta.usuario_id, { ban_duration: '876000h' });
+      await admin.from('perfiles_usuario').update({ activo: false }).eq('id', colaboradorConCuenta.usuario_id);
+    }
+
+    revalidatePath('/administracion/usuarios');
+  }
+
   revalidar(parsed.data.colaboradorId);
   return { ok: true as const, movimiento: data };
+}
+
+function extensionDe(nombreArchivo: string): string {
+  const partes = nombreArchivo.split('.');
+  return partes.length > 1 ? partes[partes.length - 1]!.toLowerCase() : 'pdf';
+}
+
+/** Adjunta el soporte/descargo de una sanción ya registrada (admin_th). */
+export async function subirSoporteSancion(formData: FormData) {
+  const colaboradorId = formData.get('colaboradorId') as string;
+  const movimientoId = formData.get('movimientoId') as string;
+  const archivo = formData.get('archivo') as File | null;
+  if (!archivo || archivo.size === 0) return { ok: false as const, error: 'Selecciona un archivo' };
+
+  const perfil = await esAdminThDeEsteColaborador(colaboradorId);
+  if (!perfil) return { ok: false as const, error: 'No autorizado' };
+
+  const supabase = createClient();
+  const path = `${perfil.empresa_id}/${colaboradorId}/sancion/soporte-${Date.now()}.${extensionDe(archivo.name)}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from('documentos-colaborador')
+    .upload(path, archivo, { contentType: archivo.type || 'application/pdf', upsert: true });
+  if (uploadError) return { ok: false as const, error: `Error subiendo el soporte: ${uploadError.message}` };
+
+  const { error: dbError } = await supabase
+    .from('historial_movimientos')
+    .update({ soporte_url: path })
+    .eq('id', movimientoId)
+    .eq('colaborador_id', colaboradorId);
+  if (dbError) return { ok: false as const, error: dbError.message };
+
+  revalidar(colaboradorId);
+  return { ok: true as const, soporteUrl: path };
 }
 
 const EntrevistaSchema = z.object({

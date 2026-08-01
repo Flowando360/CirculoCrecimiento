@@ -5,8 +5,18 @@ import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
+// Siempre minúsculas, números y puntos — es lo que la persona escribe en el
+// login (ver login/actions.ts), así que no puede llevar tildes ni espacios.
+const UsuarioSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .min(1, 'El usuario es requerido')
+  .regex(/^[a-z0-9]+(\.[a-z0-9]+)*$/, 'El usuario solo puede tener minúsculas, números y puntos (ej. juan.perez)');
+
 const CrearCuentaSchema = z.object({
   nombreCompleto: z.string().trim().min(1, 'El nombre es requerido'),
+  usuario: UsuarioSchema,
   email: z.string().trim().email('Correo inválido'),
   rol: z.enum(['admin_th', 'lider', 'colaborador', 'gerencia', 'auditor_externo']),
   password: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres'),
@@ -17,9 +27,18 @@ const EditarUsuarioSchema = z.object({
   usuarioId: z.string().uuid(),
   nombreCompleto: z.string().trim().min(1, 'El nombre es requerido'),
   nombrePreferido: z.string().trim().optional(),
+  usuario: UsuarioSchema,
   email: z.string().trim().email('Correo inválido'),
   rol: z.enum(['admin_th', 'lider', 'colaborador', 'gerencia', 'auditor_externo']),
 });
+
+/** Traduce la violación de la restricción UNIQUE de `usuario` a un mensaje entendible. */
+function mensajeErrorUsuarioDuplicado(error: { code?: string; message: string }): string {
+  if (error.code === '23505' && error.message.includes('usuario')) {
+    return 'Ese usuario ya lo tiene otra cuenta — prueba con otro (ej. agregando un número al final).';
+  }
+  return error.message;
+}
 
 /**
  * Crea una cuenta real (admin_th únicamente): usuario de Supabase Auth con
@@ -54,13 +73,14 @@ export async function crearCuentaUsuario(input: z.infer<typeof CrearCuentaSchema
     empresa_id: perfil.empresa_id,
     rol: parsed.data.rol,
     nombre_completo: parsed.data.nombreCompleto,
+    usuario: parsed.data.usuario,
     email: parsed.data.email,
   });
 
   if (perfilError) {
     // No dejar una cuenta de Auth huérfana sin su perfil.
     await admin.auth.admin.deleteUser(authData.user.id);
-    return { ok: false as const, error: perfilError.message };
+    return { ok: false as const, error: mensajeErrorUsuarioDuplicado(perfilError) };
   }
 
   if (parsed.data.colaboradorId) {
@@ -120,13 +140,14 @@ export async function actualizarUsuario(input: z.infer<typeof EditarUsuarioSchem
     .update({
       nombre_completo: parsed.data.nombreCompleto,
       nombre_preferido: parsed.data.nombrePreferido || null,
+      usuario: parsed.data.usuario,
       email: parsed.data.email,
       rol: parsed.data.rol,
     })
     .eq('id', parsed.data.usuarioId)
     .eq('empresa_id', perfil.empresa_id);
 
-  if (perfilError) return { ok: false as const, error: perfilError.message };
+  if (perfilError) return { ok: false as const, error: mensajeErrorUsuarioDuplicado(perfilError) };
 
   revalidatePath('/administracion/usuarios');
   return { ok: true as const };

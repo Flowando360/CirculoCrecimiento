@@ -64,7 +64,12 @@ export const preguntasFrecuentes: PreguntaFrecuente[] = [
   {
     pregunta: '¿Tengo que iniciar sesión con mi correo?',
     respuesta:
-      'No es obligatorio. En la pantalla de ingreso puedes escribir tu usuario (ej. "juan.perez", sin el @dominio) o tu correo completo — ambos funcionan igual. Si no sabes cuál es tu usuario, pregúntale a Talento Humano.',
+      'No es obligatorio. En la pantalla de ingreso puedes escribir tu usuario (ej. "juan.perez") o tu correo completo — ambos funcionan igual. Si no sabes cuál es tu usuario, pregúntale a Talento Humano — lo puede ver en Administración → Usuarios y roles, columna "Usuario".',
+  },
+  {
+    pregunta: 'Intenté entrar con "nombre.apellido" y no funcionó, ¿por qué?',
+    respuesta:
+      'El usuario de login es un dato propio de la cuenta, no siempre es exactamente "primernombre.primerapellido" — por ejemplo, si tu cuenta se creó a mano con un correo personal, tu usuario pudo quedar distinto (ej. sin el punto). Pide a Talento Humano que revise la columna "Usuario" en Administración → Usuarios y roles, o que te lo corrija si hace falta.',
   },
   {
     pregunta: '¿Por qué mi usuario nuevo no aparece con el rol que Talento Humano configuró?',
@@ -109,6 +114,25 @@ export const preguntasFrecuentes: PreguntaFrecuente[] = [
   {
     pregunta: '¿Cómo edito los datos que salen en el certificado laboral (NIT, dirección, quién firma)?',
     respuesta: 'En Administración → Configuración, sección "Datos de la empresa".',
+  },
+  {
+    pregunta: '¿Dónde registro la EPS, ARL, AFP o caja de compensación de alguien?',
+    respuesta: 'En la ficha de la persona → Documentos y certificado laboral, sección "Afiliaciones". Mismo nivel de acceso que el contrato: solo Talento Humano y la propia persona.',
+  },
+  {
+    pregunta: '¿Cómo registro una incapacidad o licencia?',
+    respuesta:
+      'En la ficha de la persona → Incapacidades → "Registrar incapacidad". Elige el tipo (enfermedad general, accidente laboral, licencia de maternidad/paternidad, etc.), las fechas, quién la certifica (EPS o ARL) y, si lo tienes, adjunta el soporte. La persona la puede ver desde ahí o desde su propio Mi Perfil, de solo lectura.',
+  },
+  {
+    pregunta: '¿Cómo registro que alguien renunció o fue despedido?',
+    respuesta:
+      'Entra a la ficha de la persona → Historial → "Agregar movimiento" → tipo "Salida", y elige el motivo (renuncia voluntaria, despido, fin de contrato, mutuo acuerdo, jubilación u otro). Al guardar, en un solo paso: la ficha queda inactiva con esa fecha y motivo, y si la persona tenía cuenta de acceso, se retira automáticamente — no hace falta ir aparte a Usuarios y roles a retirarla. Aparte, puedes diligenciar la Entrevista de salida si quieres registrar sus comentarios.',
+  },
+  {
+    pregunta: '¿Cómo registro una sanción o llamado de atención?',
+    respuesta:
+      'En Historial → "Agregar movimiento" → tipo "Sanción". Además de la fecha y la descripción, elige la gravedad (leve, grave o gravísima) y puedes adjuntar el soporte o descargo firmado.',
   },
   {
     pregunta: '¿Cómo envío un mensaje directo a alguien?',

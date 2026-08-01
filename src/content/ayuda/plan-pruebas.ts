@@ -66,13 +66,24 @@ export const planPruebas: SeccionPlanPruebas[] = [
         ],
       },
       {
-        titulo: 'Editar los datos de un usuario existente (incluido su apodo)',
+        titulo: 'Editar los datos de un usuario existente (incluido su apodo y su usuario de login)',
         rolNecesario: 'admin_th',
         pasos: [
-          { paso: 'En Usuarios y roles, presiona "Editar" en la fila de un usuario.', resultadoEsperado: 'La fila se convierte en un formulario con nombre, apodo, correo y rol editables.' },
+          { paso: 'En Usuarios y roles, presiona "Editar" en la fila de un usuario.', resultadoEsperado: 'La fila se convierte en un formulario con nombre, apodo, usuario, correo y rol editables.' },
           { paso: 'Cambia el rol de esa persona (por ejemplo, de colaborador a líder) y guarda.', resultadoEsperado: 'El cambio queda guardado; esa persona ve el menú de su nuevo rol la próxima vez que inicie sesión.' },
           { paso: 'Escribe algo en "Cómo le gusta que le llamen" y guarda.', resultadoEsperado: 'Debajo del nombre, en la tabla, aparece \'se hace llamar "..."\'.' },
           { paso: 'Cambia el correo de esa persona por uno nuevo y guarda.', resultadoEsperado: 'Queda actualizado en la tabla; esa persona debe usar el correo nuevo para iniciar sesión de ahí en adelante.' },
+          { paso: 'Cambia el campo "Usuario" a algo distinto (ej. le agregas un número al final) y guarda.', resultadoEsperado: 'Queda actualizado en la columna Usuario, sin tocar el correo — esa persona ya debe usar el nuevo usuario para entrar sin escribir el correo completo.' },
+          { paso: 'Intenta poner en "Usuario" el mismo valor que ya tiene otra cuenta.', resultadoEsperado: 'Muestra el mensaje "Ese usuario ya lo tiene otra cuenta — prueba con otro..." y no guarda el cambio.' },
+        ],
+      },
+      {
+        titulo: 'Al crear una cuenta, el usuario se sugiere solo desde el nombre',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Entra a Usuarios y roles → "Crear cuenta" y escribe un nombre completo, sin tocar el campo Usuario.', resultadoEsperado: 'El campo Usuario se llena solo con "primernombre.primerapellido" a medida que escribes el nombre.' },
+          { paso: 'Ahora edita el campo Usuario a mano (por ejemplo, córrigelo o agrégale un número) y luego sigue escribiendo el nombre.', resultadoEsperado: 'El Usuario ya NO se sobreescribe solo — respeta lo que corregiste a mano.' },
+          { paso: 'Completa el resto y crea la cuenta con un correo personal cualquiera (ej. un gmail), distinto del patrón nombre.apellido@empresa.', resultadoEsperado: 'La cuenta se crea igual; el usuario de login queda como lo definiste, sin importar cuál sea el correo real.' },
         ],
       },
       {
@@ -281,6 +292,54 @@ export const planPruebas: SeccionPlanPruebas[] = [
         pasos: [
           { paso: 'Entra a Administración → Configuración → "Datos de la empresa" y cambia, por ejemplo, el nombre de quien firma.', resultadoEsperado: 'Guarda correctamente.' },
           { paso: 'Genera un certificado laboral nuevo de cualquier colaborador.', resultadoEsperado: 'El PDF ya muestra el nuevo dato guardado.' },
+        ],
+      },
+      {
+        titulo: 'Registrar afiliaciones (EPS, ARL, AFP, caja de compensación)',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Entra a la ficha de un colaborador → Documentos → sección "Afiliaciones" y completa los 4 campos.', resultadoEsperado: 'Guarda correctamente y los valores quedan visibles al recargar la página.' },
+          { paso: 'Inicia sesión como esa persona y entra a su propia ficha → Documentos.', resultadoEsperado: 'Ve sus afiliaciones, pero de solo lectura (sin campos editables).' },
+          { paso: 'Inicia sesión como el líder directo de esa persona y entra a su ficha.', resultadoEsperado: 'No aparece la sección de Documentos en absoluto (mismo nivel de restricción que el contrato).' },
+        ],
+      },
+    ],
+  },
+  {
+    modulo: 'Círculo de Crecimiento — Historial, incapacidades y desvinculación',
+    escenarios: [
+      {
+        titulo: 'Registrar una sanción con gravedad y soporte',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Entra a la ficha de un colaborador → Historial → "Agregar movimiento" → tipo "Sanción".', resultadoEsperado: 'Aparece un selector de gravedad (Leve/Grave/Gravísima) y un campo para adjuntar un archivo, además de la fecha y la descripción.' },
+          { paso: 'Elige una gravedad, adjunta un PDF de prueba como soporte, y guarda.', resultadoEsperado: 'La sanción aparece en la línea de tiempo con su badge de gravedad y un ícono de clip para ver el soporte.' },
+          { paso: 'Haz clic en el ícono de clip.', resultadoEsperado: 'Abre el archivo adjunto en una pestaña nueva.' },
+          { paso: 'Inicia sesión como el líder directo de esa persona y entra al Historial.', resultadoEsperado: 'Ve la sanción (gravedad incluida) y puede abrir el soporte — el Historial completo es visible para el líder del equipo, no solo para admin_th.' },
+        ],
+      },
+      {
+        titulo: 'Registrar y consultar una incapacidad',
+        rolNecesario: 'admin_th y, por separado, la propia persona',
+        pasos: [
+          { paso: 'Entra a la ficha de un colaborador → Incapacidades → "Registrar incapacidad".', resultadoEsperado: 'Pide tipo, fecha de inicio, fecha de fin, entidad que certifica (opcional) y soporte (opcional).' },
+          { paso: 'Completa con una fecha de fin anterior a la de inicio e intenta guardar.', resultadoEsperado: 'Muestra un error y no guarda — la fecha de fin no puede ser antes que la de inicio.' },
+          { paso: 'Corrige las fechas y guarda.', resultadoEsperado: 'Aparece en la lista con el tipo, el rango de fechas y la cantidad de días calculada sola.' },
+          { paso: 'Inicia sesión como esa persona y entra a Mi Perfil.', resultadoEsperado: 'Ve la tarjeta "Mis incapacidades" con el registro, de solo lectura (sin poder editarlo ni borrarlo).' },
+          { paso: 'Inicia sesión como el líder directo de esa persona.', resultadoEsperado: 'No tiene ninguna forma de ver esa incapacidad — ni en la ficha ni en ningún otro lugar (dato de salud, mismo nivel que Documentos).' },
+        ],
+      },
+      {
+        titulo: 'Registrar la salida de alguien (renuncia o despido) retira su cuenta en el mismo paso',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Elige un colaborador de prueba que tenga cuenta de acceso activa. Entra a su ficha → Historial → "Agregar movimiento" → tipo "Salida".', resultadoEsperado: 'Aparece un selector de motivo (renuncia voluntaria, despido, fin de contrato, mutuo acuerdo, jubilación, otro) — es obligatorio.' },
+          { paso: 'Intenta guardar sin elegir motivo.', resultadoEsperado: 'Muestra "Elige el motivo de la salida" y no guarda.' },
+          { paso: 'Elige un motivo (ej. "Renuncia voluntaria") y guarda.', resultadoEsperado: 'El movimiento aparece en la línea de tiempo.' },
+          { paso: 'Vuelve a la ficha principal de esa persona.', resultadoEsperado: 'El estado ya muestra "Inactivo".' },
+          { paso: 'Entra a Administración → Usuarios y roles y busca la cuenta de esa persona.', resultadoEsperado: 'Ya aparece como "Inactivo" — se retiró sola, sin que nadie tuviera que ir a presionar "Retirar" aparte.' },
+          { paso: 'Intenta iniciar sesión con esa cuenta.', resultadoEsperado: 'No puede entrar — igual que cualquier cuenta retirada.' },
+          { paso: 'De vuelta en la ficha, diligencia también la Entrevista de salida (fecha, motivo, comentarios).', resultadoEsperado: 'Se guarda por separado — registrar el movimiento "Salida" y diligenciar la Entrevista de salida son dos pasos independientes, ninguno reemplaza al otro.' },
         ],
       },
     ],

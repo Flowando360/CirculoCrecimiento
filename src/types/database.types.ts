@@ -1010,11 +1010,15 @@ export type Database = {
       }
       colaboradores: {
         Row: {
+          afp: string | null
+          arl: string | null
+          caja_compensacion: string | null
           cargo_id: string
           contrato_url: string | null
           created_at: string
           email: string | null
           empresa_id: string
+          eps: string | null
           es_externo: boolean
           estado: Database["public"]["Enums"]["estado_colaborador"]
           fecha_ingreso: string
@@ -1033,11 +1037,15 @@ export type Database = {
           usuario_id: string | null
         }
         Insert: {
+          afp?: string | null
+          arl?: string | null
+          caja_compensacion?: string | null
           cargo_id: string
           contrato_url?: string | null
           created_at?: string
           email?: string | null
           empresa_id: string
+          eps?: string | null
           es_externo?: boolean
           estado?: Database["public"]["Enums"]["estado_colaborador"]
           fecha_ingreso: string
@@ -1056,11 +1064,15 @@ export type Database = {
           usuario_id?: string | null
         }
         Update: {
+          afp?: string | null
+          arl?: string | null
+          caja_compensacion?: string | null
           cargo_id?: string
           contrato_url?: string | null
           created_at?: string
           email?: string | null
           empresa_id?: string
+          eps?: string | null
           es_externo?: boolean
           estado?: Database["public"]["Enums"]["estado_colaborador"]
           fecha_ingreso?: string
@@ -2135,8 +2147,10 @@ export type Database = {
           created_at: string
           descripcion: string | null
           fecha: string
+          gravedad: string | null
           id: string
           registrado_por: string | null
+          soporte_url: string | null
           tipo: string | null
         }
         Insert: {
@@ -2146,8 +2160,10 @@ export type Database = {
           created_at?: string
           descripcion?: string | null
           fecha?: string
+          gravedad?: string | null
           id?: string
           registrado_por?: string | null
+          soporte_url?: string | null
           tipo?: string | null
         }
         Update: {
@@ -2157,8 +2173,10 @@ export type Database = {
           created_at?: string
           descripcion?: string | null
           fecha?: string
+          gravedad?: string | null
           id?: string
           registrado_por?: string | null
+          soporte_url?: string | null
           tipo?: string | null
         }
         Relationships: [
@@ -2344,6 +2362,109 @@ export type Database = {
           {
             foreignKeyName: "hoja_vida_formacion_verificado_por_fkey"
             columns: ["verificado_por"]
+            isOneToOne: false
+            referencedRelation: "perfiles_usuario"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      incapacidades_colaborador: {
+        Row: {
+          colaborador_id: string
+          created_at: string
+          dias: number | null
+          entidad_emisora: string | null
+          fecha_fin: string
+          fecha_inicio: string
+          id: string
+          registrada_por: string | null
+          soporte_url: string | null
+          tipo: Database["public"]["Enums"]["tipo_incapacidad"]
+        }
+        Insert: {
+          colaborador_id: string
+          created_at?: string
+          dias?: number | null
+          entidad_emisora?: string | null
+          fecha_fin: string
+          fecha_inicio: string
+          id?: string
+          registrada_por?: string | null
+          soporte_url?: string | null
+          tipo?: Database["public"]["Enums"]["tipo_incapacidad"]
+        }
+        Update: {
+          colaborador_id?: string
+          created_at?: string
+          dias?: number | null
+          entidad_emisora?: string | null
+          fecha_fin?: string
+          fecha_inicio?: string
+          id?: string
+          registrada_por?: string | null
+          soporte_url?: string | null
+          tipo?: Database["public"]["Enums"]["tipo_incapacidad"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "incapacidades_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "incapacidades_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_alineacion_talento_rol"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "incapacidades_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_indicadores_equipo"
+            referencedColumns: ["lider_id"]
+          },
+          {
+            foreignKeyName: "incapacidades_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_lideres_de_linea_sin_lider_interno"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "incapacidades_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_a_cargo_id"]
+          },
+          {
+            foreignKeyName: "incapacidades_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "incapacidades_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "incapacidades_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["par_id"]
+          },
+          {
+            foreignKeyName: "incapacidades_colaborador_registrada_por_fkey"
+            columns: ["registrada_por"]
             isOneToOne: false
             referencedRelation: "perfiles_usuario"
             referencedColumns: ["id"]
@@ -3501,6 +3622,7 @@ export type Database = {
           nombre_completo: string
           nombre_preferido: string | null
           rol: Database["public"]["Enums"]["rol_usuario"]
+          usuario: string
         }
         Insert: {
           activo?: boolean
@@ -3512,6 +3634,7 @@ export type Database = {
           nombre_completo: string
           nombre_preferido?: string | null
           rol?: Database["public"]["Enums"]["rol_usuario"]
+          usuario: string
         }
         Update: {
           activo?: boolean
@@ -3523,6 +3646,7 @@ export type Database = {
           nombre_completo?: string
           nombre_preferido?: string | null
           rol?: Database["public"]["Enums"]["rol_usuario"]
+          usuario?: string
         }
         Relationships: [
           {
@@ -4711,6 +4835,13 @@ export type Database = {
       tipo_elemento_identidad: "principio" | "valor"
       tipo_evaluador: "autoevaluacion" | "lider" | "par" | "colaborador_a_cargo"
       tipo_habilidad: "funcional" | "tecnica"
+      tipo_incapacidad:
+        | "enfermedad_general"
+        | "accidente_laboral"
+        | "enfermedad_laboral"
+        | "licencia_maternidad"
+        | "licencia_paternidad"
+        | "otra"
       tipo_publicacion:
         | "anuncio"
         | "politica_sst"
@@ -4942,6 +5073,14 @@ export const Constants = {
       tipo_elemento_identidad: ["principio", "valor"],
       tipo_evaluador: ["autoevaluacion", "lider", "par", "colaborador_a_cargo"],
       tipo_habilidad: ["funcional", "tecnica"],
+      tipo_incapacidad: [
+        "enfermedad_general",
+        "accidente_laboral",
+        "enfermedad_laboral",
+        "licencia_maternidad",
+        "licencia_paternidad",
+        "otra",
+      ],
       tipo_publicacion: [
         "anuncio",
         "politica_sst",
