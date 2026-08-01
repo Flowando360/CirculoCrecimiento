@@ -13,6 +13,7 @@ const ETIQUETAS: Record<string, string> = {
   aniversario_ingreso: 'Aniversario',
   aniversario_bodas: 'Aniversario de bodas',
   baby_shower: 'Baby shower',
+  fecha_especial: 'Fecha especial',
   otro: 'Otro',
 };
 

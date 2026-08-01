@@ -68,3 +68,49 @@ export async function actualizarFechasPersonales(input: z.infer<typeof FechasPer
   revalidatePath(RUTA);
   return { ok: true as const };
 }
+
+const FechaEspecialSchema = z.object({
+  descripcion: z.string().trim().min(1, 'Cuéntanos qué se celebra').max(120, 'Máximo 120 caracteres'),
+  fecha: z.string().min(1, 'La fecha es requerida'),
+});
+
+/** Cada persona agrega sus propias fechas especiales (día de la profesión, etc.). */
+export async function agregarFechaEspecialPropia(input: z.infer<typeof FechaEspecialSchema>) {
+  const perfil = await getPerfilActual();
+  if (!perfil || !perfil.colaborador_id) return { ok: false as const, error: 'No autorizado' };
+
+  const parsed = FechaEspecialSchema.safeParse(input);
+  if (!parsed.success) return { ok: false as const, error: parsed.error.issues[0]?.message ?? 'Datos inválidos' };
+
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('fechas_especiales_colaborador')
+    .insert({
+      colaborador_id: perfil.colaborador_id,
+      descripcion: parsed.data.descripcion,
+      fecha: parsed.data.fecha,
+      creado_por: perfil.usuario_id,
+    })
+    .select('id, descripcion, fecha')
+    .single();
+
+  if (error) return { ok: false as const, error: error.message };
+  revalidatePath(RUTA);
+  return { ok: true as const, fechaEspecial: data };
+}
+
+export async function eliminarFechaEspecialPropia(id: string) {
+  const perfil = await getPerfilActual();
+  if (!perfil || !perfil.colaborador_id) return { ok: false as const, error: 'No autorizado' };
+
+  const supabase = createClient();
+  const { error } = await supabase
+    .from('fechas_especiales_colaborador')
+    .delete()
+    .eq('id', id)
+    .eq('colaborador_id', perfil.colaborador_id);
+
+  if (error) return { ok: false as const, error: error.message };
+  revalidatePath(RUTA);
+  return { ok: true as const };
+}

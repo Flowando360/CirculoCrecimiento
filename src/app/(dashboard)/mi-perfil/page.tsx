@@ -6,6 +6,7 @@ import { EmptyState } from '@/components/ui/empty-state';
 import { User } from 'lucide-react';
 import { FechasPersonalesForm } from '@/components/circulo-crecimiento/fechas-personales-form';
 import { NombrePreferidoForm } from '@/components/circulo-crecimiento/nombre-preferido-form';
+import { MisFechasEspeciales } from '@/components/circulo-crecimiento/mis-fechas-especiales';
 
 export default async function MiPerfilPage() {
   const perfil = await getPerfilActual();
@@ -26,7 +27,7 @@ export default async function MiPerfilPage() {
 
   const supabase = createClient();
 
-  const [{ data: colaborador }, { data: resultado }, { data: ser }, { data: saber }, { data: fechasPersonales }] = await Promise.all([
+  const [{ data: colaborador }, { data: resultado }, { data: ser }, { data: saber }, { data: fechasPersonales }, { data: fechasEspeciales }] = await Promise.all([
     supabase
       .from('colaboradores')
       .select('nombre_completo, fecha_ingreso, cargo:cargos(nombre, proceso_area, objetivo_cargo), lider:lider_id(nombre_completo)')
@@ -52,6 +53,11 @@ export default async function MiPerfilPage() {
       .select('fecha_matrimonio, fecha_baby_shower, en_embarazo, fecha_probable_parto')
       .eq('colaborador_id', perfil.colaborador_id)
       .maybeSingle(),
+    supabase
+      .from('fechas_especiales_colaborador')
+      .select('id, descripcion, fecha')
+      .eq('colaborador_id', perfil.colaborador_id)
+      .order('fecha'),
   ]);
 
   const cargo = colaborador?.cargo as any;
@@ -121,6 +127,8 @@ export default async function MiPerfilPage() {
       <NombrePreferidoForm nombrePreferidoInicial={perfil.nombre_preferido} />
 
       <FechasPersonalesForm datosIniciales={fechasPersonales ?? null} />
+
+      <MisFechasEspeciales itemsIniciales={fechasEspeciales ?? []} />
     </div>
   );
 }

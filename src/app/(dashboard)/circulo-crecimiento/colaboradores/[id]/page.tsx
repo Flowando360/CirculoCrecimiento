@@ -4,7 +4,7 @@ import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { SemaforoBadge } from '@/components/circulo-crecimiento/semaforo-badge';
 import { formatearFecha } from '@/lib/utils';
 import { notFound } from 'next/navigation';
-import { GraduationCap, Briefcase, Sparkles, ShieldCheck, Target, Clock, History, FolderLock } from 'lucide-react';
+import { GraduationCap, Briefcase, Sparkles, ShieldCheck, Target, Clock, History, FolderLock, CalendarHeart } from 'lucide-react';
 
 export default async function FichaColaboradorPage({ params }: { params: { id: string } }) {
   const perfil = await getPerfilActual();
@@ -44,6 +44,11 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
   // Humano y el propio colaborador, ni siquiera el líder — el contrato trae
   // el salario.
   const puedeVerDocumentos = perfil.rol === 'admin_th' || (perfil.rol === 'colaborador' && perfil.colaborador_id === colaborador.id);
+
+  // Fechas especiales (cumpleaños, día de la profesión, etc.): Talento
+  // Humano las administra desde la ficha; el propio colaborador las
+  // administra desde Mi Perfil, no desde aquí.
+  const puedeVerFechasEspeciales = perfil.rol === 'admin_th';
 
   const [{ data: ultimoResultado }, { data: saber }, { data: ser }, { data: pdi }, { data: hojaVida }, { data: induccionItems }] =
     await Promise.all([
@@ -262,6 +267,16 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
           >
             <History size={16} className="text-flow-600" />
             <span className="text-sm font-medium text-marmol-800">Ver historial y línea de tiempo</span>
+          </Link>
+        )}
+
+        {puedeVerFechasEspeciales && (
+          <Link
+            href={`/circulo-crecimiento/colaboradores/${params.id}/fechas-especiales`}
+            className="card p-5 flex items-center gap-2 hover:border-flow-300 transition"
+          >
+            <CalendarHeart size={16} className="text-flow-600" />
+            <span className="text-sm font-medium text-marmol-800">Fechas especiales</span>
           </Link>
         )}
       </div>

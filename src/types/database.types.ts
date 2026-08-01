@@ -67,6 +67,7 @@ export type Database = {
           dias_anticipacion: number
           empresa_id: string
           estado: Database["public"]["Enums"]["estado_alerta"]
+          fecha_especial_id: string | null
           fecha_objetivo: string
           hoja_vida_formacion_id: string | null
           id: string
@@ -85,6 +86,7 @@ export type Database = {
           dias_anticipacion?: number
           empresa_id: string
           estado?: Database["public"]["Enums"]["estado_alerta"]
+          fecha_especial_id?: string | null
           fecha_objetivo: string
           hoja_vida_formacion_id?: string | null
           id?: string
@@ -103,6 +105,7 @@ export type Database = {
           dias_anticipacion?: number
           empresa_id?: string
           estado?: Database["public"]["Enums"]["estado_alerta"]
+          fecha_especial_id?: string | null
           fecha_objetivo?: string
           hoja_vida_formacion_id?: string | null
           id?: string
@@ -182,6 +185,13 @@ export type Database = {
             columns: ["empresa_id"]
             isOneToOne: false
             referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "alertas_fecha_especial_id_fkey"
+            columns: ["fecha_especial_id"]
+            isOneToOne: false
+            referencedRelation: "fechas_especiales_colaborador"
             referencedColumns: ["id"]
           },
           {
@@ -1825,6 +1835,97 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_organigrama_pares"
             referencedColumns: ["par_id"]
+          },
+        ]
+      }
+      fechas_especiales_colaborador: {
+        Row: {
+          colaborador_id: string
+          creado_por: string | null
+          created_at: string
+          descripcion: string
+          fecha: string
+          id: string
+        }
+        Insert: {
+          colaborador_id: string
+          creado_por?: string | null
+          created_at?: string
+          descripcion: string
+          fecha: string
+          id?: string
+        }
+        Update: {
+          colaborador_id?: string
+          creado_por?: string | null
+          created_at?: string
+          descripcion?: string
+          fecha?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fechas_especiales_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fechas_especiales_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_alineacion_talento_rol"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "fechas_especiales_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_indicadores_equipo"
+            referencedColumns: ["lider_id"]
+          },
+          {
+            foreignKeyName: "fechas_especiales_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_lideres_de_linea_sin_lider_interno"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "fechas_especiales_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_a_cargo_id"]
+          },
+          {
+            foreignKeyName: "fechas_especiales_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "fechas_especiales_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "fechas_especiales_colaborador_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["par_id"]
+          },
+          {
+            foreignKeyName: "fechas_especiales_colaborador_creado_por_fkey"
+            columns: ["creado_por"]
+            isOneToOne: false
+            referencedRelation: "perfiles_usuario"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -4599,6 +4700,7 @@ export type Database = {
         | "otro"
         | "aniversario_bodas"
         | "baby_shower"
+        | "fecha_especial"
       tipo_contrato:
         | "indefinido"
         | "fijo"
@@ -4827,6 +4929,7 @@ export const Constants = {
         "otro",
         "aniversario_bodas",
         "baby_shower",
+        "fecha_especial",
       ],
       tipo_contrato: [
         "indefinido",
