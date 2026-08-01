@@ -29,6 +29,7 @@ import {
   ClipboardCheck,
   ShieldCheck,
   Building2,
+  Wallet,
 } from 'lucide-react';
 
 interface NavItem {
@@ -96,6 +97,7 @@ const NAV: NavGroup[] = [
       { href: '/administracion/identidad', label: 'Identidad Organizacional', icon: Compass, roles: ['admin_th'] },
       { href: '/administracion/guias-colaboradores', label: 'Guías de colaboradores', icon: FileText, roles: ['admin_th'] },
       { href: '/administracion/usuarios', label: 'Usuarios y roles', icon: Users, roles: ['admin_th'] },
+      { href: '/administracion/salarios', label: 'Salarios', icon: Wallet, roles: ['admin_th'] },
       { href: '/administracion/configuracion', label: 'Configuración', icon: Settings, roles: ['admin_th'] },
     ],
   },

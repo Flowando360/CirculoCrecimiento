@@ -47,6 +47,10 @@ export function diasHasta(fecha: string | Date): number {
   return Math.round((d.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24));
 }
 
+export function formatearCOP(valor: number): string {
+  return `$ ${Math.round(valor).toLocaleString('es-CO')}`;
+}
+
 export function formatearTamanoArchivo(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
