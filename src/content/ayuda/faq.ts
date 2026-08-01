@@ -62,6 +62,11 @@ export const preguntasFrecuentes: PreguntaFrecuente[] = [
     respuesta: 'Pide a Talento Humano que te asigne una nueva contraseña temporal desde Administración → Usuarios y roles.',
   },
   {
+    pregunta: '¿Tengo que iniciar sesión con mi correo?',
+    respuesta:
+      'No es obligatorio. En la pantalla de ingreso puedes escribir tu usuario (ej. "juan.perez", sin el @dominio) o tu correo completo — ambos funcionan igual. Si no sabes cuál es tu usuario, pregúntale a Talento Humano.',
+  },
+  {
     pregunta: '¿Por qué mi usuario nuevo no aparece con el rol que Talento Humano configuró?',
     respuesta: 'El rol que ves reflejado es el que quedó guardado al crear la cuenta en Administración → Usuarios. Si no coincide, pide a Talento Humano que lo revise y corrija ahí — no se edita desde ningún otro lugar.',
   },
