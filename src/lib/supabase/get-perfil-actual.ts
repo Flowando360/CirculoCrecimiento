@@ -47,13 +47,13 @@ export async function getPerfilActual(): Promise<PerfilActual | null> {
   if (BYPASS_AUTH) {
     const { data: perfil } = await supabase
       .from('perfiles_usuario')
-      .select('id, empresa_id, rol, nombre_completo, email')
+      .select('id, empresa_id, rol, nombre_completo, email, activo')
       .eq('empresa_id', EMPRESA_PILOTO_ID)
       .eq('rol', 'admin_th')
       .limit(1)
       .maybeSingle();
 
-    if (!perfil) return null;
+    if (!perfil || perfil.activo === false) return null;
 
     const { data: colaborador } = await supabase
       .from('colaboradores')
@@ -80,11 +80,11 @@ export async function getPerfilActual(): Promise<PerfilActual | null> {
 
   const { data: perfil } = await supabase
     .from('perfiles_usuario')
-    .select('id, empresa_id, rol, nombre_completo, email')
+    .select('id, empresa_id, rol, nombre_completo, email, activo')
     .eq('id', user.id)
     .single();
 
-  if (!perfil) return null;
+  if (!perfil || perfil.activo === false) return null;
 
   const { data: colaborador } = await supabase
     .from('colaboradores')

@@ -13,6 +13,13 @@ const CrearCuentaSchema = z.object({
   colaboradorId: z.string().uuid().optional(),
 });
 
+const EditarUsuarioSchema = z.object({
+  usuarioId: z.string().uuid(),
+  nombreCompleto: z.string().trim().min(1, 'El nombre es requerido'),
+  email: z.string().trim().email('Correo inválido'),
+  rol: z.enum(['admin_th', 'lider', 'colaborador', 'gerencia', 'auditor_externo']),
+});
+
 /**
  * Crea una cuenta real (admin_th únicamente): usuario de Supabase Auth con
  * contraseña temporal asignada por admin_th (sin depender de correo de
@@ -69,6 +76,98 @@ export async function crearCuentaUsuario(input: z.infer<typeof CrearCuentaSchema
       };
     }
   }
+
+  revalidatePath('/administracion/usuarios');
+  return { ok: true as const };
+}
+
+/**
+ * Edita nombre, correo y rol de una cuenta existente (admin_th únicamente).
+ * Actualiza tanto perfiles_usuario como el correo en Supabase Auth, para
+ * que el usuario pueda seguir iniciando sesión con el correo nuevo.
+ */
+export async function actualizarUsuario(input: z.infer<typeof EditarUsuarioSchema>) {
+  const perfil = await getPerfilActual();
+  if (!perfil || perfil.rol !== 'admin_th') return { ok: false as const, error: 'No autorizado' };
+
+  const parsed = EditarUsuarioSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.error.issues[0]?.message ?? 'Datos inválidos' };
+  }
+
+  const admin = createAdminClient();
+
+  const { data: usuario } = await admin
+    .from('perfiles_usuario')
+    .select('id, email')
+    .eq('id', parsed.data.usuarioId)
+    .eq('empresa_id', perfil.empresa_id)
+    .maybeSingle();
+
+  if (!usuario) return { ok: false as const, error: 'Usuario no encontrado' };
+
+  if (usuario.email !== parsed.data.email) {
+    const { error: authError } = await admin.auth.admin.updateUserById(parsed.data.usuarioId, {
+      email: parsed.data.email,
+      user_metadata: { nombre_completo: parsed.data.nombreCompleto },
+    });
+    if (authError) return { ok: false as const, error: authError.message };
+  }
+
+  const { error: perfilError } = await admin
+    .from('perfiles_usuario')
+    .update({
+      nombre_completo: parsed.data.nombreCompleto,
+      email: parsed.data.email,
+      rol: parsed.data.rol,
+    })
+    .eq('id', parsed.data.usuarioId)
+    .eq('empresa_id', perfil.empresa_id);
+
+  if (perfilError) return { ok: false as const, error: perfilError.message };
+
+  revalidatePath('/administracion/usuarios');
+  return { ok: true as const };
+}
+
+/**
+ * Retira o reactiva una cuenta (admin_th únicamente). Además de marcar
+ * perfiles_usuario.activo, banea/desbanea al usuario en Supabase Auth para
+ * que el bloqueo sea real y no solo un dato visual — un usuario retirado
+ * no puede iniciar sesión ni mantener una sesión ya abierta (ver chequeo
+ * de `activo` en getPerfilActual).
+ */
+export async function cambiarEstadoUsuario(usuarioId: string, activo: boolean) {
+  const perfil = await getPerfilActual();
+  if (!perfil || perfil.rol !== 'admin_th') return { ok: false as const, error: 'No autorizado' };
+
+  if (usuarioId === perfil.usuario_id) {
+    return { ok: false as const, error: 'No puedes retirar tu propia cuenta' };
+  }
+
+  const admin = createAdminClient();
+
+  const { data: usuario } = await admin
+    .from('perfiles_usuario')
+    .select('id')
+    .eq('id', usuarioId)
+    .eq('empresa_id', perfil.empresa_id)
+    .maybeSingle();
+
+  if (!usuario) return { ok: false as const, error: 'Usuario no encontrado' };
+
+  const { error: authError } = await admin.auth.admin.updateUserById(usuarioId, {
+    ban_duration: activo ? 'none' : '876000h',
+  });
+  if (authError) return { ok: false as const, error: authError.message };
+
+  const { error: perfilError } = await admin
+    .from('perfiles_usuario')
+    .update({ activo })
+    .eq('id', usuarioId)
+    .eq('empresa_id', perfil.empresa_id);
+
+  if (perfilError) return { ok: false as const, error: perfilError.message };
 
   revalidatePath('/administracion/usuarios');
   return { ok: true as const };

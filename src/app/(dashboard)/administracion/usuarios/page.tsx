@@ -1,8 +1,8 @@
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import { etiquetaRol } from '@/lib/utils';
 import { FormularioCrearUsuario } from '@/components/circulo-crecimiento/formulario-crear-usuario';
+import { FilaUsuario, type UsuarioFila } from '@/components/circulo-crecimiento/fila-usuario';
 
 export default async function AdminUsuariosPage() {
   const perfil = await getPerfilActual();
@@ -53,20 +53,22 @@ export default async function AdminUsuariosPage() {
               <th className="px-4 py-3 font-medium">Correo</th>
               <th className="px-4 py-3 font-medium">Rol</th>
               <th className="px-4 py-3 font-medium">Estado</th>
+              <th className="px-4 py-3 font-medium">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {(usuarios ?? []).map((u) => (
-              <tr key={u.id} className="border-b border-marmol-100 last:border-0">
-                <td className="px-4 py-3 font-medium text-marmol-900">{u.nombre_completo}</td>
-                <td className="px-4 py-3 text-marmol-600">{u.email}</td>
-                <td className="px-4 py-3">
-                  <span className="text-xs rounded-full bg-flow-50 text-flow-700 px-2 py-0.5 font-medium">
-                    {etiquetaRol[u.rol as string] ?? u.rol}
-                  </span>
-                </td>
-                <td className="px-4 py-3 text-marmol-500">{u.activo ? 'Activo' : 'Inactivo'}</td>
-              </tr>
+              <FilaUsuario
+                key={u.id}
+                usuario={{
+                  id: u.id,
+                  nombre_completo: u.nombre_completo,
+                  email: u.email,
+                  rol: u.rol as UsuarioFila['rol'],
+                  activo: u.activo,
+                }}
+                esUsuarioActual={u.id === perfil.usuario_id}
+              />
             ))}
           </tbody>
         </table>
