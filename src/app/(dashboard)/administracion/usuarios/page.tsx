@@ -51,6 +51,7 @@ export default async function AdminUsuariosPage() {
             <tr className="border-b border-marmol-200 text-left text-xs uppercase tracking-wide text-marmol-400">
               <th className="px-4 py-3 font-medium">Nombre</th>
               <th className="px-4 py-3 font-medium">Correo</th>
+              <th className="px-4 py-3 font-medium">Usuario</th>
               <th className="px-4 py-3 font-medium">Rol</th>
               <th className="px-4 py-3 font-medium">Estado</th>
               <th className="px-4 py-3 font-medium">Acciones</th>

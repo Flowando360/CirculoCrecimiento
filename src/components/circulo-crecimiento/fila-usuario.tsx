@@ -22,6 +22,11 @@ export interface UsuarioFila {
   activo: boolean;
 }
 
+/** Lo que hay que escribir en el login (antes del "@") para entrar con usuario en vez de correo. */
+function usuarioDeLogin(email: string) {
+  return email.split('@')[0] ?? email;
+}
+
 export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila; esUsuarioActual: boolean }) {
   const [editando, setEditando] = useState(false);
   const [nombreCompleto, setNombreCompleto] = useState(usuario.nombre_completo);
@@ -133,6 +138,7 @@ export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila
             className="w-full rounded-lg border border-marmol-200 px-2 py-1 text-sm"
           />
         </td>
+        <td className="px-4 py-2.5 text-marmol-500 font-mono text-xs">{usuarioDeLogin(email)}</td>
         <td className="px-4 py-2.5">
           <select
             value={rol}
@@ -175,7 +181,7 @@ export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila
   if (restableciendo) {
     return (
       <tr className="border-b border-marmol-100 last:border-0 bg-flow-50/40">
-        <td colSpan={5} className="px-4 py-3">
+        <td colSpan={6} className="px-4 py-3">
           <p className="text-xs text-marmol-500 mb-1.5">
             Nueva contraseña temporal para {usuario.nombre_completo}:
           </p>
@@ -229,6 +235,7 @@ export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila
           )}
         </td>
         <td className="px-4 py-3 text-marmol-600">{usuario.email}</td>
+        <td className="px-4 py-3 text-marmol-500 font-mono text-xs">{usuarioDeLogin(usuario.email)}</td>
         <td className="px-4 py-3">
           <span className="text-xs rounded-full bg-flow-50 text-flow-700 px-2 py-0.5 font-medium">
             {etiquetaRol[usuario.rol] ?? usuario.rol}
@@ -282,7 +289,7 @@ export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila
       </tr>
       {passwordRevelada && (
         <tr className="border-b border-marmol-100 last:border-0 bg-flow-50/40">
-          <td colSpan={5} className="px-4 py-3">
+          <td colSpan={6} className="px-4 py-3">
             <p className="text-xs text-marmol-500 mb-1">
               Comparte esta contraseña con {usuario.nombre_completo} por un canal seguro — no volverá a
               mostrarse.

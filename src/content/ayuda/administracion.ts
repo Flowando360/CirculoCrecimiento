@@ -70,7 +70,7 @@ export const moduloAdministracion: ModuloAyuda = {
       resumen: 'Crea cuentas de acceso para los colaboradores y administra sus roles.',
       camposYBotones: [
         { nombre: 'Nuevo usuario', explicacion: 'Elige un colaborador sin cuenta todavía, su correo, rol (admin_th/líder/colaborador/gerencia/auditor_externo) y una contraseña temporal.' },
-        { nombre: 'Tabla de usuarios', explicacion: 'Nombre (con el apodo debajo si esa persona ya definió uno), correo, rol, si la cuenta está activa, y una columna de Acciones.' },
+        { nombre: 'Tabla de usuarios', explicacion: 'Nombre (con el apodo debajo si esa persona ya definió uno), correo, Usuario (lo que hay que escribir en el login antes del "@" para entrar sin el correo completo — ver "Usuario o correo" en el login), rol, si la cuenta está activa, y una columna de Acciones.' },
         { nombre: 'Editar', explicacion: 'Cambia nombre, apodo ("cómo le gusta que le llamen"), correo o rol de una cuenta ya existente, sin salir de la tabla.' },
         { nombre: 'Restablecer contraseña', explicacion: 'Genera una nueva contraseña temporal para esa cuenta (editable antes de guardar). Al guardar, se muestra una única vez para copiarla y compartirla con la persona por un canal seguro — igual que al crear la cuenta, no depende de correo de invitación.' },
         { nombre: 'Retirar / Reactivar', explicacion: 'Deja la cuenta inactiva y le bloquea el acceso de verdad (no puede volver a iniciar sesión) — es reversible, "Reactivar" la devuelve al estado normal en cualquier momento. No aparece sobre tu propia cuenta.' },
