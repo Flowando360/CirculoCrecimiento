@@ -209,4 +209,23 @@ export const preguntasFrecuentes: PreguntaFrecuente[] = [
     respuesta:
       'Solo admin_th puede cargarlos, desde Nexa → Asistente IA → "Base documental". Se sube el PDF (el texto se extrae solo) o se pega el texto directamente. El asistente busca automáticamente el documento más relacionado con cada pregunta que le hagan.',
   },
+  {
+    pregunta: '¿Cómo se calcula la tasa de rotación de personal?',
+    respuesta:
+      'En Círculo de Crecimiento → Indicadores: se toman todas las personas que ya estaban activas hace 12 meses, y se calcula qué porcentaje de ellas salió desde entonces (según el movimiento "Salida" registrado en su Historial). Se muestra el total y, aparte, solo las renuncias voluntarias. Si sale "—" es porque todavía no hay suficiente antigüedad registrada para calcularla, no porque haya un error.',
+  },
+  {
+    pregunta: '¿Es de verdad anónima la encuesta de Clima Organizacional?',
+    respuesta:
+      'Sí. El sistema guarda por separado quién ya respondió (para no dejarte responder dos veces la misma ronda) de qué respondiste — son dos tablas distintas, sin ninguna columna que las conecte. Además, ningún resultado agregado (ni de la empresa ni de un equipo) se muestra si hay menos de 5 respuestas en ese grupo, para que nunca se pueda adivinar la respuesta de una sola persona.',
+  },
+  {
+    pregunta: '¿Quién puede leer los comentarios de la encuesta de Clima Organizacional?',
+    respuesta:
+      'Solo Talento Humano (admin_th). Ni el líder directo ni gerencia tienen acceso a los comentarios de texto libre, aunque sí pueden ver los números agregados (eNPS, índice de clima) de su alcance.',
+  },
+  {
+    pregunta: '¿Puedo responder la encuesta de Clima Organizacional más de una vez en la misma ronda?',
+    respuesta: 'No. Cada persona responde una sola vez por ronda; si ya respondiste, la pantalla te lo indica en vez de mostrarte el formulario de nuevo.',
+  },
 ];

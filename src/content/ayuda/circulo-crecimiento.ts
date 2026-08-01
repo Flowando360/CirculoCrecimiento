@@ -235,9 +235,16 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
       slug: 'indicadores',
       ruta: '/circulo-crecimiento/indicadores',
       titulo: 'Indicadores',
-      resumen: 'Panorama de la empresa: índices de Hacer y Deber, cumplimiento de Saber, alineación talento-rol, y un mapa comparativo por equipo.',
+      resumen: 'Panorama de la empresa: índices de Hacer y Deber, cumplimiento de Saber, alineación talento-rol, rotación de personal, y un mapa comparativo por equipo.',
       camposYBotones: [
         { nombre: 'Mapa de equipos', explicacion: 'Gráfico que compara Hacer, Deber y Saber promedio de cada equipo (agrupado por líder).' },
+        { nombre: 'Tasa de rotación anual', explicacion: 'Porcentaje de personas que salieron en los últimos 12 meses, sobre quienes ya estaban activos hace 12 meses. Sale "—" si todavía no hay suficiente antigüedad registrada para calcularla.' },
+        { nombre: 'Rotación voluntaria', explicacion: 'La misma tasa, pero contando solo las salidas registradas con motivo "Renuncia voluntaria" en el Historial de la ficha.' },
+        { nombre: 'Salidas último año / Salidas voluntarias', explicacion: 'El conteo bruto de personas que salieron en los últimos 12 meses (total y solo voluntarias), sin convertir a porcentaje.' },
+        { nombre: 'Tendencia de salidas (12 meses)', explicacion: 'Gráfico de líneas mes a mes, comparando el total de salidas contra las voluntarias.' },
+      ],
+      notas: [
+        'Estos datos salen solos del movimiento "Salida" que ya se registra en el Historial de cada ficha (fecha y motivo) — no hay que capturar nada aparte para que la rotación se calcule.',
       ],
     },
     {

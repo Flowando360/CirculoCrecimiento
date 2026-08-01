@@ -103,6 +103,26 @@ export const moduloNexa: ModuloAyuda = {
       notas: ['Líder y colaborador ven de solo lectura los participantes que la empresa permite ver (su equipo o ellos mismos).'],
     },
     {
+      slug: 'clima',
+      ruta: '/nexa/clima',
+      titulo: 'Clima Organizacional',
+      resumen:
+        'Mediciones periódicas de eNPS y compromiso (6 dimensiones), organizadas por rondas. Diseñado para que las respuestas sean anónimas de verdad: no hay ninguna forma de saber qué respondió una persona en particular.',
+      camposYBotones: [
+        { nombre: 'Abrir nueva ronda de clima (admin_th)', explicacion: 'Le pone nombre a la medición (ej. "Clima 2do semestre 2026") y la deja abierta para que todos respondan. Solo puede haber una ronda abierta a la vez.' },
+        { nombre: 'Cerrar ronda (admin_th)', explicacion: 'Fija los resultados de la ronda abierta. Después de cerrarla ya nadie puede responderla.' },
+        { nombre: 'Tu opinión', explicacion: 'El formulario que responde cualquier persona con ficha de colaborador (incluidos líderes y gerencia): eNPS (0-10) más 6 afirmaciones de acuerdo/desacuerdo (1-5) sobre reconocimiento, liderazgo, desarrollo, comunicación, condiciones de trabajo y pertenencia, y un comentario libre opcional. Solo se puede responder una vez por ronda.' },
+        { nombre: 'Resultados por ronda (admin_th y gerencia)', explicacion: 'Tabla con el eNPS y el índice de clima general de cada ronda, a nivel de toda la empresa.' },
+        { nombre: 'Clima de tu equipo (líder)', explicacion: 'La misma idea que "Resultados por ronda", pero calculada solo con las respuestas del equipo de ese líder.' },
+        { nombre: 'Comentarios (admin_th)', explicacion: 'Los comentarios de texto libre que la gente fue dejando, sin ningún dato de quién los escribió.' },
+      ],
+      notas: [
+        'Anonimato real, no solo de nombre: la tabla que registra quién ya respondió (para no dejar responder dos veces) está separada de la tabla que guarda qué respondió, y no hay ninguna columna que las conecte entre sí.',
+        'Los resultados de una empresa o de un equipo se ocultan (aparecen como "—") mientras haya menos de 5 respuestas en ese grupo — así nunca se puede deducir la respuesta de una sola persona en un equipo chico.',
+        'Los comentarios de texto libre —lo más fácil de reconocer a simple vista— solo los puede leer Talento Humano; ni el líder directo ni gerencia tienen acceso a ellos, aunque sí ven los números agregados.',
+      ],
+    },
+    {
       slug: 'directorio-aliados',
       ruta: '/nexa/directorio',
       titulo: 'Directorio de aliados',

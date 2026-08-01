@@ -372,7 +372,53 @@ export const planPruebas: SeccionPlanPruebas[] = [
         pasos: [
           { paso: 'Entra a Círculo de Crecimiento → Indicadores.', resultadoEsperado: 'Carga el índice general de Hacer/Deber, cumplimiento de Saber y alineación talento-rol, según tu alcance (equipo o toda la empresa).' },
           { paso: 'Revisa el mapa de equipos.', resultadoEsperado: 'Compara el promedio de Hacer, Deber y Saber de cada equipo, agrupado por líder.' },
+          { paso: 'Baja hasta "Rotación de personal".', resultadoEsperado: 'Ves la tasa de rotación anual, la voluntaria, el conteo de salidas y el gráfico de tendencia mensual (12 meses).' },
+          { paso: 'Registra la salida de un colaborador de prueba con antigüedad de más de 12 meses (Historial → "Agregar movimiento" → "Salida"), con motivo "Renuncia voluntaria".', resultadoEsperado: 'Al volver a Indicadores, la tasa de rotación anual y la voluntaria suben, y el mes correspondiente aparece en el gráfico de tendencia.' },
           { paso: 'Inicia sesión como líder y entra a Indicadores.', resultadoEsperado: 'Solo ve los datos de su propio equipo, no de toda la empresa.' },
+        ],
+      },
+    ],
+  },
+  {
+    modulo: 'Nexa — Clima Organizacional',
+    escenarios: [
+      {
+        titulo: 'Abrir una ronda y responder de forma anónima',
+        rolNecesario: 'admin_th (abre la ronda) y cualquier colaborador (responde)',
+        pasos: [
+          { paso: 'Como admin_th, entra a Nexa → Clima Organizacional y presiona "Abrir nueva ronda de clima", con un nombre de prueba.', resultadoEsperado: 'Aparece "Ronda abierta: [nombre]" con el botón "Cerrar ronda".' },
+          { paso: 'Intenta abrir una segunda ronda mientras la primera sigue abierta.', resultadoEsperado: 'El botón para abrir ya no aparece (solo se ve la ronda abierta) — no se puede tener dos rondas abiertas a la vez.' },
+          { paso: 'Inicia sesión como un colaborador con ficha propia y entra a Clima Organizacional.', resultadoEsperado: 'Ve la sección "Tu opinión" con el formulario: eNPS (0-10) y 6 afirmaciones (1-5).' },
+          { paso: 'Intenta enviar el formulario dejando alguna pregunta sin responder.', resultadoEsperado: 'El botón "Enviar respuesta" permanece deshabilitado hasta completar todas las preguntas obligatorias (el comentario es el único campo opcional).' },
+          { paso: 'Completa todo, agrega un comentario, y envía.', resultadoEsperado: 'Muestra el mensaje de agradecimiento; si recargas la página, ya no te vuelve a mostrar el formulario, sino el aviso de que ya respondiste.' },
+          { paso: 'Intenta responder la misma ronda una segunda vez (por ejemplo, llamando de nuevo a enviar sin recargar).', resultadoEsperado: 'Muestra "Ya respondiste esta ronda." y no se guarda una segunda respuesta.' },
+        ],
+      },
+      {
+        titulo: 'El umbral de anonimato oculta resultados con pocas respuestas',
+        rolNecesario: 'admin_th y al menos 5 colaboradores de prueba',
+        pasos: [
+          { paso: 'Con una ronda abierta y menos de 5 respuestas registradas, entra como admin_th o gerencia a "Resultados por ronda".', resultadoEsperado: 'La fila de esa ronda muestra "— (menos de 5 respuestas)" en eNPS y "—" en índice de clima, aunque el conteo de respuestas si sea visible.' },
+          { paso: 'Haz que 5 colaboradores distintos respondan esa ronda.', resultadoEsperado: 'Al llegar a la quinta respuesta, eNPS e índice de clima general ya muestran un número.' },
+          { paso: 'Inicia sesión como el líder de un equipo con menos de 5 respuestas propias en esa ronda y entra a "Clima de tu equipo".', resultadoEsperado: 'Mismo comportamiento: "— (menos de 5 respuestas)" hasta que su equipo llegue a 5.' },
+        ],
+      },
+      {
+        titulo: 'Los comentarios de texto libre son exclusivos de admin_th',
+        rolNecesario: 'admin_th, gerencia y líder',
+        pasos: [
+          { paso: 'Con al menos una respuesta que incluya comentario, entra como admin_th a Clima Organizacional.', resultadoEsperado: 'La sección "Comentarios" (al final de la pantalla) muestra ese texto, sin ningún nombre ni referencia a quién lo escribió.' },
+          { paso: 'Inicia sesión como gerencia y entra a la misma pantalla.', resultadoEsperado: 'Ve "Resultados por ronda" (los números), pero la sección "Comentarios" no aparece en absoluto.' },
+          { paso: 'Inicia sesión como el líder de esa persona y entra a la misma pantalla.', resultadoEsperado: 'Ve "Clima de tu equipo" (los números de su equipo), pero tampoco ve ninguna sección de comentarios.' },
+        ],
+      },
+      {
+        titulo: 'Cerrar una ronda',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Con una ronda abierta, presiona "Cerrar ronda".', resultadoEsperado: 'Desaparece el aviso de "Ronda abierta" y vuelve a aparecer el botón "Abrir nueva ronda de clima".' },
+          { paso: 'Inicia sesión como un colaborador que no había respondido esa ronda y entra a Clima Organizacional.', resultadoEsperado: 'Ya no puede responderla — la sección "Tu opinión" indica que no hay ninguna ronda abierta en este momento.' },
+          { paso: 'Como admin_th, revisa "Resultados por ronda".', resultadoEsperado: 'La ronda cerrada sigue apareciendo en la tabla, con su estado en "cerrada" y sus resultados fijos.' },
         ],
       },
     ],
