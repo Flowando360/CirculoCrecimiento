@@ -22,6 +22,7 @@ export default async function MensajesPage() {
       .from('perfiles_usuario')
       .select('id, nombre_completo')
       .eq('empresa_id', perfil.empresa_id)
+      .eq('activo', true)
       .neq('id', perfil.usuario_id)
       .order('nombre_completo'),
   ]);

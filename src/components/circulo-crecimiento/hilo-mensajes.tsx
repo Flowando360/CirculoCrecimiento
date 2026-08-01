@@ -16,6 +16,7 @@ export interface MensajeItem {
 export function HiloMensajes({ destinatarioId, itemsIniciales }: { destinatarioId: string; itemsIniciales: MensajeItem[] }) {
   const [mensajes, setMensajes] = useState(itemsIniciales);
   const [texto, setTexto] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -23,16 +24,25 @@ export function HiloMensajes({ destinatarioId, itemsIniciales }: { destinatarioI
     const contenido = texto.trim();
     if (!contenido) return;
 
+    const idTemporal = `temp-${Date.now()}`;
     const optimista: MensajeItem = {
-      id: `temp-${Date.now()}`,
+      id: idTemporal,
       contenido,
       created_at: new Date().toISOString(),
       esMio: true,
     };
+    setError(null);
     setMensajes((prev) => [...prev, optimista]);
     setTexto('');
     startTransition(async () => {
-      await enviarMensaje({ destinatarioId, contenido });
+      const res = await enviarMensaje({ destinatarioId, contenido });
+      if (!res.ok) {
+        // Sin esto, un envío rechazado (ej. por permisos) se veía en pantalla
+        // como "enviado" para quien lo escribió, aunque nunca le llegara al
+        // destinatario — quita la burbuja optimista y avisa del error real.
+        setMensajes((prev) => prev.filter((m) => m.id !== idTemporal));
+        setError(res.error);
+      }
     });
   }
 
@@ -59,6 +69,8 @@ export function HiloMensajes({ destinatarioId, itemsIniciales }: { destinatarioI
           ))
         )}
       </div>
+
+      {error && <p className="text-xs text-bajo mt-2">No se pudo enviar: {error}</p>}
 
       <div className="flex items-center gap-2 mt-3">
         <input
