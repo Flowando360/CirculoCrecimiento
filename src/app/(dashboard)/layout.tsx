@@ -32,7 +32,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <Sidebar rol={perfil.rol} esSuperadmin={perfil.es_superadmin} />
       <div className="flex-1 flex flex-col min-w-0">
         <Header
-          nombre={perfil.nombre_completo}
+          nombre={perfil.nombre_preferido?.trim() || perfil.nombre_completo}
           rol={perfil.rol}
           alertasPendientes={count ?? 0}
           notificacionesNoLeidas={countNotificaciones ?? 0}

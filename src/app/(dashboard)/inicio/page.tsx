@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { StatCard } from '@/components/ui/stat-card';
 import { EmptyState } from '@/components/ui/empty-state';
 import { AlertaSeveridadDot, AlertaTipoBadge } from '@/components/alertas/alerta-badge';
-import { formatearFecha } from '@/lib/utils';
+import { formatearFecha, nombreParaSaludo } from '@/lib/utils';
 import { Users, Target, ShieldAlert, TrendingUp, Bell, Compass, TrendingDown, Minus } from 'lucide-react';
 import { obtenerInformeHistorico } from '@/app/(dashboard)/informes/historico/data';
 
@@ -57,7 +57,7 @@ export default async function InicioPage() {
       <div className="space-y-6">
         <div>
           <h1 className="font-display text-2xl font-semibold text-secundario">
-            Hola, {perfil.nombre_completo.split(' ')[0]}
+            Hola, {nombreParaSaludo(perfil.nombre_completo, perfil.nombre_preferido)}
           </h1>
           <p className="text-sm text-marmol-500 mt-1">
             Panorama general de Mármoles y Servicios — Círculo de Crecimiento 360°
@@ -200,7 +200,7 @@ export default async function InicioPage() {
       <div className="space-y-6">
         <div>
           <h1 className="font-display text-2xl font-semibold text-secundario">
-            Hola, {perfil.nombre_completo.split(' ')[0]}
+            Hola, {nombreParaSaludo(perfil.nombre_completo, perfil.nombre_preferido)}
           </h1>
           <p className="text-sm text-marmol-500 mt-1">Resumen de tu equipo</p>
         </div>
@@ -239,7 +239,7 @@ export default async function InicioPage() {
       <div className="space-y-6">
         <div>
           <h1 className="font-display text-2xl font-semibold text-secundario">
-            Hola, {perfil.nombre_completo.split(' ')[0]}
+            Hola, {nombreParaSaludo(perfil.nombre_completo, perfil.nombre_preferido)}
           </h1>
           <p className="text-sm text-marmol-500 mt-1">Acceso de solo lectura a evidencia de auditoría</p>
         </div>
@@ -259,7 +259,7 @@ export default async function InicioPage() {
     <div className="space-y-6">
       <div>
         <h1 className="font-display text-2xl font-semibold text-secundario">
-          Hola, {perfil.nombre_completo.split(' ')[0]}
+          Hola, {nombreParaSaludo(perfil.nombre_completo, perfil.nombre_preferido)}
         </h1>
         <p className="text-sm text-marmol-500 mt-1">Este es tu espacio de crecimiento</p>
       </div>

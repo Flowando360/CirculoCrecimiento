@@ -4,9 +4,10 @@ import { useState, useTransition } from 'react';
 import {
   actualizarUsuario,
   cambiarEstadoUsuario,
+  eliminarUsuarioDefinitivamente,
 } from '@/app/(dashboard)/administracion/usuarios/actions';
 import { etiquetaRol } from '@/lib/utils';
-import { Pencil, Check, X } from 'lucide-react';
+import { Pencil, Check, X, Trash2 } from 'lucide-react';
 import type { RolUsuario } from '@/types/colaborador';
 
 const ROLES: RolUsuario[] = ['admin_th', 'lider', 'colaborador', 'gerencia', 'auditor_externo'];
@@ -14,6 +15,7 @@ const ROLES: RolUsuario[] = ['admin_th', 'lider', 'colaborador', 'gerencia', 'au
 export interface UsuarioFila {
   id: string;
   nombre_completo: string;
+  nombre_preferido: string | null;
   email: string;
   rol: RolUsuario;
   activo: boolean;
@@ -22,6 +24,7 @@ export interface UsuarioFila {
 export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila; esUsuarioActual: boolean }) {
   const [editando, setEditando] = useState(false);
   const [nombreCompleto, setNombreCompleto] = useState(usuario.nombre_completo);
+  const [nombrePreferido, setNombrePreferido] = useState(usuario.nombre_preferido ?? '');
   const [email, setEmail] = useState(usuario.email);
   const [rol, setRol] = useState<RolUsuario>(usuario.rol);
   const [error, setError] = useState<string | null>(null);
@@ -30,7 +33,13 @@ export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila
   function guardar() {
     setError(null);
     startTransition(async () => {
-      const res = await actualizarUsuario({ usuarioId: usuario.id, nombreCompleto, email, rol });
+      const res = await actualizarUsuario({
+        usuarioId: usuario.id,
+        nombreCompleto,
+        nombrePreferido: nombrePreferido || undefined,
+        email,
+        rol,
+      });
       if (res.ok) {
         setEditando(false);
       } else {
@@ -41,6 +50,7 @@ export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila
 
   function cancelar() {
     setNombreCompleto(usuario.nombre_completo);
+    setNombrePreferido(usuario.nombre_preferido ?? '');
     setEmail(usuario.email);
     setRol(usuario.rol);
     setError(null);
@@ -49,7 +59,7 @@ export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila
 
   function retirarOReactivar() {
     const mensaje = usuario.activo
-      ? `¿Retirar a ${usuario.nombre_completo}? No podrá iniciar sesión hasta que se reactive.`
+      ? `¿Retirar a ${usuario.nombre_completo}? Queda inactivo y no podrá iniciar sesión — se puede reactivar cuando quieras.`
       : `¿Reactivar a ${usuario.nombre_completo}?`;
     if (!confirm(mensaje)) return;
     setError(null);
@@ -59,15 +69,33 @@ export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila
     });
   }
 
+  function eliminarDefinitivamente() {
+    const mensaje = `¿Eliminar definitivamente a ${usuario.nombre_completo}? Esto NO se puede deshacer — se borra la cuenta por completo, a diferencia de "Retirar" que solo la deja inactiva.`;
+    if (!confirm(mensaje)) return;
+    setError(null);
+    startTransition(async () => {
+      const res = await eliminarUsuarioDefinitivamente(usuario.id);
+      if (!res.ok) setError(res.error);
+    });
+  }
+
   if (editando) {
     return (
       <tr className="border-b border-marmol-100 last:border-0 bg-flow-50/40">
-        <td className="px-4 py-2.5">
+        <td className="px-4 py-2.5 space-y-1">
           <input
             type="text"
             value={nombreCompleto}
             onChange={(e) => setNombreCompleto(e.target.value)}
+            placeholder="Nombre completo"
             className="w-full rounded-lg border border-marmol-200 px-2 py-1 text-sm"
+          />
+          <input
+            type="text"
+            value={nombrePreferido}
+            onChange={(e) => setNombrePreferido(e.target.value)}
+            placeholder="Cómo le gusta que le llamen (opcional)"
+            className="w-full rounded-lg border border-marmol-200 px-2 py-1 text-xs text-marmol-500"
           />
         </td>
         <td className="px-4 py-2.5">
@@ -119,7 +147,12 @@ export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila
 
   return (
     <tr className="border-b border-marmol-100 last:border-0">
-      <td className="px-4 py-3 font-medium text-marmol-900">{usuario.nombre_completo}</td>
+      <td className="px-4 py-3">
+        <p className="font-medium text-marmol-900">{usuario.nombre_completo}</p>
+        {usuario.nombre_preferido && (
+          <p className="text-xs text-marmol-400">se hace llamar "{usuario.nombre_preferido}"</p>
+        )}
+      </td>
       <td className="px-4 py-3 text-marmol-600">{usuario.email}</td>
       <td className="px-4 py-3">
         <span className="text-xs rounded-full bg-flow-50 text-flow-700 px-2 py-0.5 font-medium">
@@ -137,18 +170,29 @@ export function FilaUsuario({ usuario, esUsuarioActual }: { usuario: UsuarioFila
             <Pencil size={12} /> Editar
           </button>
           {!esUsuarioActual && (
-            <button
-              type="button"
-              onClick={retirarOReactivar}
-              disabled={pending}
-              className={
-                usuario.activo
-                  ? 'text-xs text-marmol-500 hover:text-bajo disabled:opacity-40'
-                  : 'text-xs text-marmol-500 hover:text-alto disabled:opacity-40'
-              }
-            >
-              {pending ? '…' : usuario.activo ? 'Retirar' : 'Reactivar'}
-            </button>
+            <>
+              <button
+                type="button"
+                onClick={retirarOReactivar}
+                disabled={pending}
+                className={
+                  usuario.activo
+                    ? 'text-xs text-marmol-500 hover:text-bajo disabled:opacity-40'
+                    : 'text-xs text-marmol-500 hover:text-alto disabled:opacity-40'
+                }
+              >
+                {pending ? '…' : usuario.activo ? 'Retirar' : 'Reactivar'}
+              </button>
+              <button
+                type="button"
+                onClick={eliminarDefinitivamente}
+                disabled={pending}
+                title="Eliminar definitivamente — no se puede deshacer"
+                className="inline-flex items-center gap-1 text-xs text-marmol-400 hover:text-bajo disabled:opacity-40"
+              >
+                <Trash2 size={12} /> Eliminar
+              </button>
+            </>
           )}
         </div>
         {error && !editando && <p className="mt-1 text-xs text-bajo">{error}</p>}

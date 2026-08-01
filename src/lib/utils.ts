@@ -25,6 +25,11 @@ export function formatearTamanoArchivo(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+/** El apodo/diminutivo que la persona eligió, o si no fijó ninguno, su primer nombre. */
+export function nombreParaSaludo(nombreCompleto: string, nombrePreferido?: string | null): string {
+  return nombrePreferido?.trim() || nombreCompleto.trim().split(' ')[0] || nombreCompleto;
+}
+
 export const etiquetaRol: Record<string, string> = {
   admin_th: 'Talento Humano',
   lider: 'Líder',

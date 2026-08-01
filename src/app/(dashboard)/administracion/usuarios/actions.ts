@@ -16,6 +16,7 @@ const CrearCuentaSchema = z.object({
 const EditarUsuarioSchema = z.object({
   usuarioId: z.string().uuid(),
   nombreCompleto: z.string().trim().min(1, 'El nombre es requerido'),
+  nombrePreferido: z.string().trim().optional(),
   email: z.string().trim().email('Correo inválido'),
   rol: z.enum(['admin_th', 'lider', 'colaborador', 'gerencia', 'auditor_externo']),
 });
@@ -118,6 +119,7 @@ export async function actualizarUsuario(input: z.infer<typeof EditarUsuarioSchem
     .from('perfiles_usuario')
     .update({
       nombre_completo: parsed.data.nombreCompleto,
+      nombre_preferido: parsed.data.nombrePreferido || null,
       email: parsed.data.email,
       rol: parsed.data.rol,
     })
@@ -168,6 +170,52 @@ export async function cambiarEstadoUsuario(usuarioId: string, activo: boolean) {
     .eq('empresa_id', perfil.empresa_id);
 
   if (perfilError) return { ok: false as const, error: perfilError.message };
+
+  revalidatePath('/administracion/usuarios');
+  return { ok: true as const };
+}
+
+/**
+ * Elimina definitivamente la cuenta (Auth + perfiles_usuario) — a diferencia
+ * de cambiarEstadoUsuario, esto NO se puede deshacer. perfiles_usuario.id
+ * referencia a auth.users con "on delete cascade", así que basta con borrar
+ * el usuario de Auth.
+ *
+ * Puede fallar si esta persona quedó referenciada (sin on delete
+ * cascade/set null) desde tablas de auditoría/historial — ej. certificó un
+ * SABER, resolvió una alerta, publicó en el feed, etc. En ese caso Postgres
+ * rechaza el borrado completo (nada queda a medias) y se le sugiere al
+ * admin_th usar "retirar" (inactivo) en su lugar.
+ */
+export async function eliminarUsuarioDefinitivamente(usuarioId: string) {
+  const perfil = await getPerfilActual();
+  if (!perfil || perfil.rol !== 'admin_th') return { ok: false as const, error: 'No autorizado' };
+
+  if (usuarioId === perfil.usuario_id) {
+    return { ok: false as const, error: 'No puedes eliminar tu propia cuenta' };
+  }
+
+  const admin = createAdminClient();
+
+  const { data: usuario } = await admin
+    .from('perfiles_usuario')
+    .select('id')
+    .eq('id', usuarioId)
+    .eq('empresa_id', perfil.empresa_id)
+    .maybeSingle();
+
+  if (!usuario) return { ok: false as const, error: 'Usuario no encontrado' };
+
+  const { error: authError } = await admin.auth.admin.deleteUser(usuarioId);
+  if (authError) {
+    const esConflictoDeReferencias = /foreign key|constraint|violates/i.test(authError.message);
+    return {
+      ok: false as const,
+      error: esConflictoDeReferencias
+        ? 'No se pudo eliminar: esta persona tiene actividad registrada en el sistema (ej. verificaciones, historial, publicaciones). Usa "Retirar" para dejarla inactiva en su lugar.'
+        : authError.message,
+    };
+  }
 
   revalidatePath('/administracion/usuarios');
   return { ok: true as const };

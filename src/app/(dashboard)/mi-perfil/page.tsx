@@ -5,6 +5,7 @@ import { formatearFecha } from '@/lib/utils';
 import { EmptyState } from '@/components/ui/empty-state';
 import { User } from 'lucide-react';
 import { FechasPersonalesForm } from '@/components/circulo-crecimiento/fechas-personales-form';
+import { NombrePreferidoForm } from '@/components/circulo-crecimiento/nombre-preferido-form';
 
 export default async function MiPerfilPage() {
   const perfil = await getPerfilActual();
@@ -12,11 +13,14 @@ export default async function MiPerfilPage() {
 
   if (!perfil.colaborador_id) {
     return (
-      <EmptyState
-        icon={User}
-        titulo="Tu usuario aún no está vinculado a una ficha de colaborador"
-        descripcion="Pide a Talento Humano que asocie tu cuenta a tu ficha en Administración → Usuarios."
-      />
+      <div className="space-y-6 max-w-3xl">
+        <NombrePreferidoForm nombrePreferidoInicial={perfil.nombre_preferido} />
+        <EmptyState
+          icon={User}
+          titulo="Tu usuario aún no está vinculado a una ficha de colaborador"
+          descripcion="Pide a Talento Humano que asocie tu cuenta a tu ficha en Administración → Usuarios."
+        />
+      </div>
     );
   }
 
@@ -113,6 +117,8 @@ export default async function MiPerfilPage() {
           </div>
         </div>
       )}
+
+      <NombrePreferidoForm nombrePreferidoInicial={perfil.nombre_preferido} />
 
       <FechasPersonalesForm datosIniciales={fechasPersonales ?? null} />
     </div>

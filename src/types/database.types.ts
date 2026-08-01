@@ -3398,6 +3398,7 @@ export type Database = {
           es_superadmin: boolean
           id: string
           nombre_completo: string
+          nombre_preferido: string | null
           rol: Database["public"]["Enums"]["rol_usuario"]
         }
         Insert: {
@@ -3408,6 +3409,7 @@ export type Database = {
           es_superadmin?: boolean
           id: string
           nombre_completo: string
+          nombre_preferido?: string | null
           rol?: Database["public"]["Enums"]["rol_usuario"]
         }
         Update: {
@@ -3418,6 +3420,7 @@ export type Database = {
           es_superadmin?: boolean
           id?: string
           nombre_completo?: string
+          nombre_preferido?: string | null
           rol?: Database["public"]["Enums"]["rol_usuario"]
         }
         Relationships: [
