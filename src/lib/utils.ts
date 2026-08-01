@@ -5,14 +5,42 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+const SOLO_FECHA = /^\d{4}-\d{2}-\d{2}$/;
+
+/**
+ * Convierte un string "YYYY-MM-DD" (columna DATE de Postgres, sin hora) en un
+ * Date de medianoche *local* — en vez de dejar que `new Date(string)` lo
+ * interprete como medianoche UTC, que en Colombia (UTC-5) se muestra un día
+ * antes de la fecha real al renderizar en el navegador del usuario.
+ */
+function parsearFechaLocal(fecha: string): Date {
+  const [anio, mes, dia] = fecha.split('-').map(Number);
+  return new Date(anio!, mes! - 1, dia!);
+}
+
 /** Colombia: formatea fechas en formato largo local, ej. "16 de julio de 2026" */
 export function formatearFecha(fecha: string | Date): string {
+  if (typeof fecha === 'string' && SOLO_FECHA.test(fecha)) {
+    return new Intl.DateTimeFormat('es-CO', { day: 'numeric', month: 'long', year: 'numeric' }).format(
+      parsearFechaLocal(fecha)
+    );
+  }
   const d = typeof fecha === 'string' ? new Date(fecha) : fecha;
-  return new Intl.DateTimeFormat('es-CO', { day: 'numeric', month: 'long', year: 'numeric' }).format(d);
+  return new Intl.DateTimeFormat('es-CO', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'America/Bogota',
+  }).format(d);
 }
 
 export function diasHasta(fecha: string | Date): number {
-  const d = typeof fecha === 'string' ? new Date(fecha) : fecha;
+  let d: Date;
+  if (typeof fecha === 'string') {
+    d = SOLO_FECHA.test(fecha) ? parsearFechaLocal(fecha) : new Date(fecha);
+  } else {
+    d = new Date(fecha.getTime());
+  }
   const hoy = new Date();
   hoy.setHours(0, 0, 0, 0);
   d.setHours(0, 0, 0, 0);
