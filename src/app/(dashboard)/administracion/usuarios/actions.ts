@@ -175,6 +175,46 @@ export async function cambiarEstadoUsuario(usuarioId: string, activo: boolean) {
   return { ok: true as const };
 }
 
+const RestablecerPasswordSchema = z.object({
+  usuarioId: z.string().uuid(),
+  password: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres'),
+});
+
+/**
+ * Asigna una nueva contraseña temporal a una cuenta existente (admin_th
+ * únicamente) — mismo mecanismo que la contraseña temporal al crear la
+ * cuenta: no depende de correo de invitación (no está configurado), así
+ * que admin_th la comparte con la persona por un canal seguro. No cambia
+ * nada en perfiles_usuario, solo la credencial en Supabase Auth.
+ */
+export async function restablecerPassword(input: z.infer<typeof RestablecerPasswordSchema>) {
+  const perfil = await getPerfilActual();
+  if (!perfil || perfil.rol !== 'admin_th') return { ok: false as const, error: 'No autorizado' };
+
+  const parsed = RestablecerPasswordSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false as const, error: parsed.error.issues[0]?.message ?? 'Datos inválidos' };
+  }
+
+  const admin = createAdminClient();
+
+  const { data: usuario } = await admin
+    .from('perfiles_usuario')
+    .select('id')
+    .eq('id', parsed.data.usuarioId)
+    .eq('empresa_id', perfil.empresa_id)
+    .maybeSingle();
+
+  if (!usuario) return { ok: false as const, error: 'Usuario no encontrado' };
+
+  const { error } = await admin.auth.admin.updateUserById(parsed.data.usuarioId, {
+    password: parsed.data.password,
+  });
+
+  if (error) return { ok: false as const, error: error.message };
+  return { ok: true as const };
+}
+
 /**
  * Elimina definitivamente la cuenta (Auth + perfiles_usuario) — a diferencia
  * de cambiarEstadoUsuario, esto NO se puede deshacer. perfiles_usuario.id

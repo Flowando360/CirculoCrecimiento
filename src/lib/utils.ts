@@ -30,6 +30,17 @@ export function nombreParaSaludo(nombreCompleto: string, nombrePreferido?: strin
   return nombrePreferido?.trim() || nombreCompleto.trim().split(' ')[0] || nombreCompleto;
 }
 
+const CARACTERES_PASSWORD = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+
+/** Contraseña temporal legible (sin caracteres ambiguos como 0/O o 1/l/I). */
+export function generarPassword(): string {
+  let resultado = '';
+  for (let i = 0; i < 10; i++) {
+    resultado += CARACTERES_PASSWORD[Math.floor(Math.random() * CARACTERES_PASSWORD.length)];
+  }
+  return resultado;
+}
+
 export const etiquetaRol: Record<string, string> = {
   admin_th: 'Talento Humano',
   lider: 'Líder',

@@ -2,20 +2,11 @@
 
 import { useState, useTransition } from 'react';
 import { crearCuentaUsuario } from '@/app/(dashboard)/administracion/usuarios/actions';
-import { etiquetaRol, cn } from '@/lib/utils';
+import { etiquetaRol, cn, generarPassword } from '@/lib/utils';
 import { Check, Copy, UserPlus } from 'lucide-react';
 import type { RolUsuario } from '@/types/colaborador';
 
 const ROLES: RolUsuario[] = ['admin_th', 'lider', 'colaborador', 'gerencia', 'auditor_externo'];
-const CARACTERES_PASSWORD = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
-
-function generarPassword() {
-  let resultado = '';
-  for (let i = 0; i < 10; i++) {
-    resultado += CARACTERES_PASSWORD[Math.floor(Math.random() * CARACTERES_PASSWORD.length)];
-  }
-  return resultado;
-}
 
 export function FormularioCrearUsuario({
   colaboradoresSinCuenta,

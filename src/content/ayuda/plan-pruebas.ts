@@ -92,6 +92,15 @@ export const planPruebas: SeccionPlanPruebas[] = [
         ],
       },
       {
+        titulo: 'Restablecer la contraseña de un usuario',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'En Usuarios y roles, presiona "Restablecer contraseña" en la fila de un usuario de prueba.', resultadoEsperado: 'Aparece una contraseña generada automáticamente, editable, con botones "Generar otra", "Guardar" y "Cancelar".' },
+          { paso: 'Presiona "Generar otra" un par de veces y luego "Guardar".', resultadoEsperado: 'Muestra la contraseña guardada en un recuadro con botón "Copiar", con el aviso de que no se volverá a mostrar.' },
+          { paso: 'Cierra ese aviso con "Listo" e inicia sesión con esa cuenta usando la contraseña nueva.', resultadoEsperado: 'Entra sin problema — la contraseña anterior ya no funciona.' },
+        ],
+      },
+      {
         titulo: 'Importar el perfil de un cargo desde Excel',
         rolNecesario: 'admin_th',
         pasos: [
