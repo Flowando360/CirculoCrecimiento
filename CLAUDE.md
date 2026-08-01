@@ -18,6 +18,26 @@ Usado por RRHH y también por líderes/jefes de área.
 
 
 
+\## Qué NO es (alcance explícitamente fuera)
+
+Esto es un sistema de gestión de Talento Humano (evaluar, desarrollar, formar, cuidar cumplimiento SST/documental) — \*\*no\*\* un sistema de nómina ni un motor de cálculos legales/financieros. Es una frontera decidida a propósito, no un hueco por descuido:
+
+\- No calcula nómina, prestaciones sociales ni liquidación final.
+
+\- No maneja topes legales (salario mínimo, auxilio de transporte, UVT) ni su actualización automática.
+
+\- No controla jornada laboral, horas extra ni turnos.
+
+\- No gestiona embargos judiciales ni libranzas.
+
+\- No genera desprendibles de pago.
+
+\- No se integra con PILA, DIAN ni el sistema de seguridad social real.
+
+Datos como salario, EPS/ARL/AFP/caja de compensación o incapacidades sí se \*\*registran\*\* en el sistema (para el certificado laboral, referencia y trazabilidad), pero son datos de referencia — el sistema nunca calcula nada a partir de ellos ni los valida contra una entidad externa. Si una conversación futura pide construir algo de la lista de arriba, confirmar primero con el usuario que de verdad quiere cruzar esa frontera — no asumirlo.
+
+
+
 \## Tecnologías
 
 \- Frontend: Next.js 14 + TypeScript + Tailwind CSS
