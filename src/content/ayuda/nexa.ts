@@ -121,6 +121,7 @@ export const moduloNexa: ModuloAyuda = {
         'Los resultados de una empresa o de un equipo se ocultan (aparecen como "—") mientras haya menos de 5 respuestas en ese grupo — así nunca se puede deducir la respuesta de una sola persona en un equipo chico.',
         'Los comentarios de texto libre —lo más fácil de reconocer a simple vista— solo los puede leer Talento Humano; ni el líder directo ni gerencia tienen acceso a ellos, aunque sí ven los números agregados.',
         'El enunciado de las 7 preguntas (eNPS + 6 dimensiones) se puede adaptar al lenguaje de la empresa desde Administración → Configuración — las preguntas en sí (cuántas y cuáles) se mantienen fijas para poder comparar el índice de clima de una ronda a otra.',
+        'El umbral de 5 respuestas también es configurable por admin_th (Administración → Configuración): se puede dejar como una cantidad fija distinta, o cambiar a un % de la planta activa de cada grupo, para que el mínimo escale con el tamaño de la empresa.',
       ],
     },
     {

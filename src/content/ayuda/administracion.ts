@@ -117,11 +117,13 @@ export const moduloAdministracion: ModuloAyuda = {
         { nombre: 'Porcentajes por fuente', explicacion: 'Deben sumar 100% en cada grupo (con equipo / sin equipo).' },
         { nombre: 'Cursos para brecha de Hacer / de Deber', explicacion: 'Elige qué curso(s) de Nexa se asignan automáticamente cuando el motor de PDI automático detecta una brecha en esa dimensión. Se puede dejar sin cursos configurados (entonces solo se crea el PDI, sin formación asociada).' },
         { nombre: 'Preguntas de Clima Organizacional', explicacion: 'El enunciado de la pregunta de eNPS y de cada una de las 6 afirmaciones (reconocimiento, liderazgo, desarrollo, comunicación, condiciones, pertenencia) que responde la gente en Nexa → Clima Organizacional. Se puede adaptar el texto al lenguaje de la empresa; dejar un campo vacío usa el texto por defecto.' },
+        { nombre: 'Umbral de anonimato de Clima Organizacional', explicacion: 'El mínimo de respuestas que debe haber en un grupo antes de mostrar resultados agregados. "Cantidad fija" pide un número exacto (5 por defecto); "Porcentaje de la planta" calcula el mínimo como un % de la planta activa de cada grupo (toda la empresa o el equipo de un líder), redondeando siempre hacia arriba y sin bajar nunca de 1.' },
       ],
       notas: [
         'Los porcentajes de ponderación solo se pueden editar mientras el ciclo está en estado "planeado" — una vez abierto un ciclo, sus pesos ya no se pueden cambiar, para no afectar Encuentros de Crecimiento en curso. Los datos de la empresa, en cambio, se pueden editar en cualquier momento.',
         'El motor automático de brechas → formación se explica en detalle en Círculo de Crecimiento → Planes de Desarrollo Individual (PDI).',
         'Las 7 preguntas de Clima Organizacional (eNPS + 6 dimensiones) son fijas en cuanto a cuántas y cuáles son — solo se edita el texto de cada una, no se pueden agregar ni quitar preguntas. Es a propósito: así el índice de clima se puede seguir comparando entre rondas.',
+        'Con "Porcentaje de la planta", el umbral de un equipo se calcula sobre la planta de ESE equipo (no de toda la empresa) — un equipo chico y uno grande pueden terminar con umbrales distintos en la misma ronda.',
       ],
     },
   ],

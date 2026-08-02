@@ -1629,6 +1629,9 @@ export type Database = {
           clima_pregunta_liderazgo: string | null
           clima_pregunta_pertenencia: string | null
           clima_pregunta_reconocimiento: string | null
+          clima_umbral_cantidad: number
+          clima_umbral_porcentaje: number | null
+          clima_umbral_tipo: Database["public"]["Enums"]["tipo_umbral_clima"]
           color_marca: string | null
           created_at: string
           direccion: string | null
@@ -1656,6 +1659,9 @@ export type Database = {
           clima_pregunta_liderazgo?: string | null
           clima_pregunta_pertenencia?: string | null
           clima_pregunta_reconocimiento?: string | null
+          clima_umbral_cantidad?: number
+          clima_umbral_porcentaje?: number | null
+          clima_umbral_tipo?: Database["public"]["Enums"]["tipo_umbral_clima"]
           color_marca?: string | null
           created_at?: string
           direccion?: string | null
@@ -1683,6 +1689,9 @@ export type Database = {
           clima_pregunta_liderazgo?: string | null
           clima_pregunta_pertenencia?: string | null
           clima_pregunta_reconocimiento?: string | null
+          clima_umbral_cantidad?: number
+          clima_umbral_porcentaje?: number | null
+          clima_umbral_tipo?: Database["public"]["Enums"]["tipo_umbral_clima"]
           color_marca?: string | null
           created_at?: string
           direccion?: string | null
@@ -4770,6 +4779,7 @@ export type Database = {
           lider_id: string | null
           num_respuestas: number | null
           ronda_id: string | null
+          umbral_respuestas: number | null
         }
         Relationships: [
           {
@@ -4868,6 +4878,7 @@ export type Database = {
           prom_pertenencia: number | null
           prom_reconocimiento: number | null
           ronda_id: string | null
+          umbral_respuestas: number | null
         }
         Relationships: [
           {
@@ -5134,6 +5145,10 @@ export type Database = {
           umbral: number
         }[]
       }
+      fn_clima_umbral: {
+        Args: { p_empresa_id: string; p_poblacion: number }
+        Returns: number
+      }
       fn_es_mi_equipo: { Args: { p_colaborador_id: string }; Returns: boolean }
       fn_generar_pdi_y_formacion_por_dimension: {
         Args: {
@@ -5265,6 +5280,7 @@ export type Database = {
         | "reconocimiento"
         | "logro"
         | "general"
+      tipo_umbral_clima: "cantidad" | "porcentaje"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -5506,6 +5522,7 @@ export const Constants = {
         "logro",
         "general",
       ],
+      tipo_umbral_clima: ["cantidad", "porcentaje"],
     },
   },
 } as const

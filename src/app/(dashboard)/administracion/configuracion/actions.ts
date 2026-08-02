@@ -171,6 +171,45 @@ export async function guardarPreguntasClima(input: z.infer<typeof PreguntasClima
   return { ok: true };
 }
 
+const UmbralClimaSchema = z
+  .object({
+    tipo: z.enum(['cantidad', 'porcentaje']),
+    cantidad: z.number().int().min(1).optional(),
+    porcentaje: z.number().min(0.1).max(100).optional(),
+  })
+  .refine((v) => v.tipo !== 'cantidad' || v.cantidad != null, { message: 'Indica la cantidad mínima de respuestas' })
+  .refine((v) => v.tipo !== 'porcentaje' || v.porcentaje != null, { message: 'Indica el porcentaje' });
+
+/**
+ * Guarda cómo se calcula el umbral de anonimato de Clima Organizacional
+ * (0050): por cantidad fija de respuestas, o por % de la planta activa de
+ * cada grupo (empresa o equipo). Las vistas v_clima_ronda_resumen y
+ * v_clima_equipo_resumen leen esto en vivo a través de fn_clima_umbral().
+ */
+export async function guardarUmbralClima(input: z.infer<typeof UmbralClimaSchema>) {
+  const perfil = await getPerfilActual();
+  if (!perfil || perfil.rol !== 'admin_th') return { ok: false, error: 'No autorizado' };
+
+  const parsed = UmbralClimaSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? 'Datos inválidos' };
+
+  const supabase = createClient();
+  const { error } = await supabase
+    .from('empresas')
+    .update({
+      clima_umbral_tipo: parsed.data.tipo,
+      clima_umbral_cantidad: parsed.data.tipo === 'cantidad' ? parsed.data.cantidad : 5,
+      clima_umbral_porcentaje: parsed.data.tipo === 'porcentaje' ? parsed.data.porcentaje : null,
+    })
+    .eq('id', perfil.empresa_id);
+
+  if (error) return { ok: false, error: error.message };
+
+  revalidatePath('/administracion/configuracion');
+  revalidatePath('/nexa/clima');
+  return { ok: true };
+}
+
 export async function eliminarCursoRecomendado(id: string) {
   const perfil = await getPerfilActual();
   if (!perfil || perfil.rol !== 'admin_th') return { ok: false, error: 'No autorizado' };

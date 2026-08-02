@@ -52,7 +52,9 @@ export default async function ClimaPage() {
         ).data
       : null;
 
-  let resumenEquipo: { ronda_id: string; num_respuestas: number; enps: number | null; indice_clima_general: number | null; ronda_nombre: string; ronda_fecha: string }[] | null = null;
+  let resumenEquipo:
+    | { ronda_id: string; num_respuestas: number; enps: number | null; indice_clima_general: number | null; umbral_respuestas: number; ronda_nombre: string; ronda_fecha: string }[]
+    | null = null;
   if (esLider && perfil.colaborador_id) {
     const { data: filas } = await supabase
       .from('v_clima_equipo_resumen')
@@ -69,6 +71,7 @@ export default async function ClimaPage() {
         num_respuestas: f.num_respuestas,
         enps: f.enps,
         indice_clima_general: f.indice_clima_general,
+        umbral_respuestas: f.umbral_respuestas,
         ronda_nombre: rondasPorId.get(f.ronda_id)?.nombre ?? '—',
         ronda_fecha: rondasPorId.get(f.ronda_id)?.fecha_apertura ?? null,
       }))
@@ -157,7 +160,7 @@ export default async function ClimaPage() {
                       </td>
                       <td className="px-4 py-3 text-marmol-600 capitalize">{r.estado}</td>
                       <td className="px-4 py-3 text-marmol-600">{r.num_respuestas}</td>
-                      <td className="px-4 py-3 text-marmol-600">{r.enps ?? '— (menos de 5 respuestas)'}</td>
+                      <td className="px-4 py-3 text-marmol-600">{r.enps ?? `— (menos de ${r.umbral_respuestas} respuestas)`}</td>
                       <td className="px-4 py-3 text-marmol-600">{r.indice_clima_general ?? '—'}</td>
                     </tr>
                   ))}
@@ -175,7 +178,7 @@ export default async function ClimaPage() {
             <EmptyState
               icon={HeartHandshake}
               titulo="Aún no hay resultados para tu equipo"
-              descripcion="Se necesitan al menos 5 respuestas de tu equipo en una ronda para calcular resultados, y así proteger el anonimato."
+              descripcion="Se necesita un mínimo de respuestas de tu equipo en una ronda para calcular resultados (definido por Talento Humano), y así proteger el anonimato."
             />
           ) : (
             <div className="card overflow-hidden overflow-x-auto">
@@ -198,7 +201,7 @@ export default async function ClimaPage() {
                         )}
                       </td>
                       <td className="px-4 py-3 text-marmol-600">{r.num_respuestas}</td>
-                      <td className="px-4 py-3 text-marmol-600">{r.enps ?? '— (menos de 5 respuestas)'}</td>
+                      <td className="px-4 py-3 text-marmol-600">{r.enps ?? `— (menos de ${r.umbral_respuestas} respuestas)`}</td>
                       <td className="px-4 py-3 text-marmol-600">{r.indice_clima_general ?? '—'}</td>
                     </tr>
                   ))}

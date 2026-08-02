@@ -413,6 +413,16 @@ export const planPruebas: SeccionPlanPruebas[] = [
         ],
       },
       {
+        titulo: 'Configurar el umbral de anonimato',
+        rolNecesario: 'admin_th',
+        pasos: [
+          { paso: 'Entra a Administración → Configuración → "Umbral de anonimato de Clima Organizacional" y cambia "Cantidad fija" de 5 a 2, guarda.', resultadoEsperado: 'Guarda correctamente con el aviso "Guardado".' },
+          { paso: 'Con una ronda que ya tenga 2 respuestas (menos de 5), entra como admin_th a "Resultados por ronda".', resultadoEsperado: 'Esa ronda ya muestra un número de eNPS e índice de clima, en vez de "—" — el umbral nuevo (2) ya se aplicó.' },
+          { paso: 'Cambia la configuración a "Porcentaje de la planta" con un valor alto (ej. 50%), guarda, y vuelve a "Resultados por ronda".', resultadoEsperado: 'Si el número de respuestas de esa ronda queda por debajo del 50% de la planta activa, el resultado vuelve a mostrar "— (menos de N respuestas)", con el N recalculado según el tamaño real de la empresa.' },
+          { paso: 'Deja la configuración de nuevo en "Cantidad fija" = 5.', resultadoEsperado: 'Vuelve al comportamiento por defecto original.' },
+        ],
+      },
+      {
         titulo: 'Editar el texto de las preguntas',
         rolNecesario: 'admin_th',
         pasos: [

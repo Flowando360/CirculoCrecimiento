@@ -231,11 +231,16 @@ export const preguntasFrecuentes: PreguntaFrecuente[] = [
   {
     pregunta: 'Ya se registraron respuestas de Clima Organizacional pero el eNPS y el índice siguen en "—". ¿Es un error?',
     respuesta:
-      'No, es a propósito. Por debajo de 5 respuestas en un grupo (toda la empresa o un equipo), el sistema no calcula ningún número agregado, para que nunca se pueda deducir la respuesta de una sola persona en un grupo chico. El número aparece solo en cuanto se llega a 5 respuestas.',
+      'No, es a propósito. Por debajo del umbral de anonimato configurado (5 respuestas por defecto) en un grupo (toda la empresa o un equipo), el sistema no calcula ningún número agregado, para que nunca se pueda deducir la respuesta de una sola persona en un grupo chico. El número aparece solo en cuanto se alcanza el umbral.',
   },
   {
     pregunta: '¿Puedo cambiar las preguntas de la encuesta de Clima Organizacional?',
     respuesta:
       'Puedes editar el texto de cada una (la pregunta de eNPS y las 6 afirmaciones) desde Administración → Configuración, sección "Preguntas de Clima Organizacional". Lo que no se puede cambiar es cuántas preguntas hay ni cuáles dimensiones miden — eso queda fijo a propósito, para que el índice de clima se pueda comparar de una ronda a otra.',
+  },
+  {
+    pregunta: '¿El umbral de 5 respuestas de Clima Organizacional se puede cambiar según el tamaño de mi empresa?',
+    respuesta:
+      'Sí. En Administración → Configuración, sección "Umbral de anonimato de Clima Organizacional", puedes dejarlo como una cantidad fija de respuestas (5 por defecto, pero editable a cualquier número) o cambiarlo a un porcentaje de la planta activa de cada grupo — así el mínimo escala solo según el tamaño de la empresa o del equipo, en vez de quedar fijo.',
   },
 ];
