@@ -2,7 +2,12 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { ListaAspectosSer, type AspectoConDatos } from '@/components/circulo-crecimiento/lista-aspectos-ser';
-import { BotonCrearGuiaFlow, BotonGenerarInformes, ComentarioGeneralSer } from '@/components/circulo-crecimiento/panel-guia-flow';
+import {
+  BotonCrearGuiaFlow,
+  BotonGenerarInformes,
+  ComentarioGeneralSer,
+  InvitacionGuiaFlow,
+} from '@/components/circulo-crecimiento/panel-guia-flow';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Sparkles, Lock } from 'lucide-react';
 import type { BloqueSer } from '@/types/colaborador';
@@ -90,6 +95,26 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
     comentarioGeneral = comentariosRaw?.comentario ?? null;
   }
 
+  let invitacionInicial: { link: string; creadaEl: string; usadaEl: string | null } | null = null;
+  if (esAdminTh) {
+    const { data: ultimaInvitacion } = await supabase
+      .from('guia_del_flow_invitaciones')
+      .select('token, created_at, usado_at')
+      .eq('colaborador_id', params.id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (ultimaInvitacion) {
+      const baseUrl = process.env.GUIADELFLOW_URL ?? 'https://guia-del-flow-flow-ando360.vercel.app';
+      invitacionInicial = {
+        link: `${baseUrl}/registro?invitacion=${ultimaInvitacion.token}`,
+        creadaEl: ultimaInvitacion.created_at,
+        usadaEl: ultimaInvitacion.usado_at,
+      };
+    }
+  }
+
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
@@ -111,6 +136,8 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
           </p>
         )}
       </div>
+
+      {esAdminTh && <InvitacionGuiaFlow colaboradorId={params.id} invitacionInicial={invitacionInicial} />}
 
       {!guia ? (
         <div className="card flex flex-col items-center justify-center gap-3 py-16 text-center">

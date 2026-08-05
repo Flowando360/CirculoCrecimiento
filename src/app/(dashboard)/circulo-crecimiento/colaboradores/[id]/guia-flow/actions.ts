@@ -26,6 +26,39 @@ function revalidar(colaboradorId: string) {
   revalidatePath('/informes/brechas');
 }
 
+const InvitarSchema = z.object({ colaboradorId: z.string().uuid() });
+
+/**
+ * Genera una invitación a la Guía del Flow para este colaborador — un link
+ * con un token único, ya asociado a su colaborador_id exacto. Resuelve el
+ * problema de emparejar por correo o por nombre (frágil: errores de
+ * tipeo, correos personales, nombres repetidos entre colaboradores
+ * reales): acá es admin_th quien decide explícitamente a quién le manda
+ * el link, no el sistema quien adivina quién respondió.
+ */
+export async function crearInvitacionGuiaFlow(input: z.infer<typeof InvitarSchema>) {
+  const parsed = InvitarSchema.safeParse(input);
+  if (!parsed.success) return { ok: false as const, error: 'Datos inválidos' };
+
+  const perfil = await esAdminThDeEsteColaborador(parsed.data.colaboradorId);
+  if (!perfil) return { ok: false as const, error: 'No autorizado' };
+
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('guia_del_flow_invitaciones')
+    .insert({ colaborador_id: parsed.data.colaboradorId, creado_por: perfil.usuario_id })
+    .select('token')
+    .single();
+
+  if (error) return { ok: false as const, error: error.message };
+
+  const baseUrl = process.env.GUIADELFLOW_URL ?? 'https://guia-del-flow-flow-ando360.vercel.app';
+  const link = `${baseUrl}/registro?invitacion=${data.token}`;
+
+  revalidar(parsed.data.colaboradorId);
+  return { ok: true as const, link };
+}
+
 const CrearGuiaSchema = z.object({ colaboradorId: z.string().uuid() });
 
 /** Inicia una nueva aplicación de la Guía del Flow (admin_th). */
