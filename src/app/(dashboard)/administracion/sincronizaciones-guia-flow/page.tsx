@@ -4,12 +4,13 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { formatearFecha } from '@/lib/utils';
 import { cn } from '@/lib/utils';
-import { CheckCircle2, HelpCircle, Copy, AlertTriangle } from 'lucide-react';
+import { CheckCircle2, HelpCircle, Copy, AlertTriangle, ShieldOff } from 'lucide-react';
 
 const ETIQUETA_RESULTADO: Record<string, { texto: string; clase: string; icono: typeof CheckCircle2 }> = {
   vinculado: { texto: 'Vinculado', clase: 'badge-alto', icono: CheckCircle2 },
   sin_colaborador: { texto: 'Sin coincidencia', clase: 'bg-marmol-100 text-marmol-500 border border-marmol-200', icono: HelpCircle },
   correo_ambiguo: { texto: 'Correo ambiguo', clase: 'badge-medio', icono: Copy },
+  sin_autorizacion: { texto: 'Sin autorización', clase: 'bg-marmol-100 text-marmol-500 border border-marmol-200', icono: ShieldOff },
   error: { texto: 'Error', clase: 'badge-bajo', icono: AlertTriangle },
 };
 

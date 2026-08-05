@@ -2433,6 +2433,7 @@ export type Database = {
       }
       flow_perfiles: {
         Row: {
+          autorizacion_circulo_en: string | null
           colaborador_circulo_id: string | null
           created_at: string
           email: string
@@ -2441,6 +2442,7 @@ export type Database = {
           nombre_completo: string
         }
         Insert: {
+          autorizacion_circulo_en?: string | null
           colaborador_circulo_id?: string | null
           created_at?: string
           email: string
@@ -2449,6 +2451,7 @@ export type Database = {
           nombre_completo: string
         }
         Update: {
+          autorizacion_circulo_en?: string | null
           colaborador_circulo_id?: string | null
           created_at?: string
           email?: string
@@ -2548,6 +2551,7 @@ export type Database = {
         Row: {
           colaborador_id: string
           created_at: string
+          cuestionario_flow_id: string | null
           documento_pdf_url: string | null
           etapa_evolucion_personal: string | null
           fecha_aplicacion: string
@@ -2569,6 +2573,7 @@ export type Database = {
         Insert: {
           colaborador_id: string
           created_at?: string
+          cuestionario_flow_id?: string | null
           documento_pdf_url?: string | null
           etapa_evolucion_personal?: string | null
           fecha_aplicacion?: string
@@ -2590,6 +2595,7 @@ export type Database = {
         Update: {
           colaborador_id?: string
           created_at?: string
+          cuestionario_flow_id?: string | null
           documento_pdf_url?: string | null
           etapa_evolucion_personal?: string | null
           fecha_aplicacion?: string
