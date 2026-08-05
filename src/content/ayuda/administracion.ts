@@ -54,6 +54,20 @@ export const moduloAdministracion: ModuloAyuda = {
       ],
     },
     {
+      slug: 'sincronizaciones-guia-flow',
+      ruta: '/administracion/sincronizaciones-guia-flow',
+      titulo: 'Sincronizaciones Guía del Flow',
+      resumen:
+        'Bitácora de cada intento automático de vincular una Guía del Flow (generada en guiadelflow) con un colaborador de aquí, por correo — incluidos los intentos que no encontraron a nadie.',
+      camposYBotones: [
+        { nombre: 'Resultado', explicacion: '"Vinculado" (se cargaron sus 18 aspectos e informes), "Sin coincidencia" (ningún colaborador tiene ese correo), "Correo ambiguo" (coincide con más de uno, no se adivina) o "Error".' },
+        { nombre: 'Colaborador vinculado', explicacion: 'Solo aparece cuando el resultado fue "Vinculado". Lleva directo a su Guía del Flow.' },
+      ],
+      notas: [
+        'Si alguien aparece con "Sin coincidencia" y sabes que sí es colaborador de la empresa, revisa que el correo que usó al registrarse en guiadelflow sea exactamente el mismo que tiene cargado en su ficha (Documentos y certificado laboral → o donde se edite el correo del colaborador).',
+      ],
+    },
+    {
       slug: 'usuarios-roles',
       ruta: '/administracion/usuarios',
       titulo: 'Usuarios y roles',

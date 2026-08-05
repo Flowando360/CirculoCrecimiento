@@ -30,6 +30,7 @@ import {
   Building2,
   Wallet,
   HeartHandshake,
+  RefreshCw,
 } from 'lucide-react';
 
 interface NavItem {
@@ -96,6 +97,7 @@ const NAV: NavGroup[] = [
       { href: '/administracion/cargos', label: 'Cargos y perfiles', icon: Sparkles, roles: ['admin_th'] },
       { href: '/administracion/organigrama', label: 'Organigrama (editar)', icon: Network, roles: ['admin_th'] },
       { href: '/administracion/identidad', label: 'Identidad Organizacional', icon: Compass, roles: ['admin_th'] },
+      { href: '/administracion/sincronizaciones-guia-flow', label: 'Sincronizaciones Guía del Flow', icon: RefreshCw, roles: ['admin_th'] },
       { href: '/administracion/usuarios', label: 'Usuarios y roles', icon: Users, roles: ['admin_th'] },
       { href: '/administracion/salarios', label: 'Salarios', icon: Wallet, roles: ['admin_th'] },
       { href: '/administracion/configuracion', label: 'Configuración', icon: Settings, roles: ['admin_th'] },
