@@ -2314,6 +2314,176 @@ export type Database = {
           },
         ]
       }
+      flow_carta_intake: {
+        Row: {
+          created_at: string
+          cuestionamiento_1: string
+          cuestionamiento_2: string
+          cuestionamiento_3: string
+          cuestionario_id: string
+          id: string
+          razon: string
+        }
+        Insert: {
+          created_at?: string
+          cuestionamiento_1: string
+          cuestionamiento_2: string
+          cuestionamiento_3: string
+          cuestionario_id: string
+          id?: string
+          razon: string
+        }
+        Update: {
+          created_at?: string
+          cuestionamiento_1?: string
+          cuestionamiento_2?: string
+          cuestionamiento_3?: string
+          cuestionario_id?: string
+          id?: string
+          razon?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "flow_carta_intake_cuestionario_id_fkey"
+            columns: ["cuestionario_id"]
+            isOneToOne: false
+            referencedRelation: "flow_cuestionarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      flow_cuestionarios: {
+        Row: {
+          completado_at: string | null
+          created_at: string
+          id: string
+          respuestas: Json
+          updated_at: string
+          usuario_id: string
+        }
+        Insert: {
+          completado_at?: string | null
+          created_at?: string
+          id?: string
+          respuestas?: Json
+          updated_at?: string
+          usuario_id: string
+        }
+        Update: {
+          completado_at?: string | null
+          created_at?: string
+          id?: string
+          respuestas?: Json
+          updated_at?: string
+          usuario_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "flow_cuestionarios_usuario_id_fkey"
+            columns: ["usuario_id"]
+            isOneToOne: false
+            referencedRelation: "flow_perfiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      flow_documentos: {
+        Row: {
+          contenido: Json | null
+          created_at: string
+          cuestionario_id: string
+          error_detalle: string | null
+          estado: Database["public"]["Enums"]["flow_documento_estado"]
+          generado_at: string | null
+          id: string
+          storage_path: string | null
+          tipo: Database["public"]["Enums"]["flow_documento_tipo"]
+        }
+        Insert: {
+          contenido?: Json | null
+          created_at?: string
+          cuestionario_id: string
+          error_detalle?: string | null
+          estado?: Database["public"]["Enums"]["flow_documento_estado"]
+          generado_at?: string | null
+          id?: string
+          storage_path?: string | null
+          tipo: Database["public"]["Enums"]["flow_documento_tipo"]
+        }
+        Update: {
+          contenido?: Json | null
+          created_at?: string
+          cuestionario_id?: string
+          error_detalle?: string | null
+          estado?: Database["public"]["Enums"]["flow_documento_estado"]
+          generado_at?: string | null
+          id?: string
+          storage_path?: string | null
+          tipo?: Database["public"]["Enums"]["flow_documento_tipo"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "flow_documentos_cuestionario_id_fkey"
+            columns: ["cuestionario_id"]
+            isOneToOne: false
+            referencedRelation: "flow_cuestionarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      flow_perfiles: {
+        Row: {
+          created_at: string
+          email: string
+          fecha_nacimiento: string | null
+          id: string
+          nombre_completo: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          fecha_nacimiento?: string | null
+          id: string
+          nombre_completo: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          fecha_nacimiento?: string | null
+          id?: string
+          nombre_completo?: string
+        }
+        Relationships: []
+      }
+      flow_resultados: {
+        Row: {
+          aspectos: Json
+          calculado_at: string
+          cuestionario_id: string
+          id: string
+        }
+        Insert: {
+          aspectos: Json
+          calculado_at?: string
+          cuestionario_id: string
+          id?: string
+        }
+        Update: {
+          aspectos?: Json
+          calculado_at?: string
+          cuestionario_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "flow_resultados_cuestionario_id_fkey"
+            columns: ["cuestionario_id"]
+            isOneToOne: false
+            referencedRelation: "flow_cuestionarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       guia_del_flow: {
         Row: {
           colaborador_id: string
@@ -2322,6 +2492,10 @@ export type Database = {
           etapa_evolucion_personal: string | null
           fecha_aplicacion: string
           id: string
+          informe_colaborador: string | null
+          informe_colaborador_generado_at: string | null
+          informe_lider: string | null
+          informe_lider_generado_at: string | null
           manejo_emocional: string | null
           motivaciones_profundas: string | null
           origen_flow: string | null
@@ -2339,6 +2513,10 @@ export type Database = {
           etapa_evolucion_personal?: string | null
           fecha_aplicacion?: string
           id?: string
+          informe_colaborador?: string | null
+          informe_colaborador_generado_at?: string | null
+          informe_lider?: string | null
+          informe_lider_generado_at?: string | null
           manejo_emocional?: string | null
           motivaciones_profundas?: string | null
           origen_flow?: string | null
@@ -2356,6 +2534,10 @@ export type Database = {
           etapa_evolucion_personal?: string | null
           fecha_aplicacion?: string
           id?: string
+          informe_colaborador?: string | null
+          informe_colaborador_generado_at?: string | null
+          informe_lider?: string | null
+          informe_lider_generado_at?: string | null
           manejo_emocional?: string | null
           motivaciones_profundas?: string | null
           origen_flow?: string | null
@@ -4330,6 +4512,7 @@ export type Database = {
           id: string
           nombre: string
           orden: number | null
+          sensible: boolean
         }
         Insert: {
           bloque: Database["public"]["Enums"]["bloque_ser"]
@@ -4337,6 +4520,7 @@ export type Database = {
           id?: string
           nombre: string
           orden?: number | null
+          sensible?: boolean
         }
         Update: {
           bloque?: Database["public"]["Enums"]["bloque_ser"]
@@ -4344,6 +4528,7 @@ export type Database = {
           id?: string
           nombre?: string
           orden?: number | null
+          sensible?: boolean
         }
         Relationships: [
           {
@@ -5230,6 +5415,8 @@ export type Database = {
       estado_pdi: "pendiente" | "en_curso" | "cumplido" | "vencido"
       estado_ronda_clima: "abierta" | "cerrada"
       estado_verificacion: "cumple" | "cumple_parcial" | "no_cumple_pendiente"
+      flow_documento_estado: "pendiente" | "generando" | "listo" | "error"
+      flow_documento_tipo: "guia" | "carta"
       nivel_esperado: "bajo" | "medio" | "alto"
       nivel_riesgo_cargo: "alto" | "medio" | "bajo"
       origen_item_evaluacion: "competencia" | "funcion_cargo"
@@ -5467,6 +5654,8 @@ export const Constants = {
       estado_pdi: ["pendiente", "en_curso", "cumplido", "vencido"],
       estado_ronda_clima: ["abierta", "cerrada"],
       estado_verificacion: ["cumple", "cumple_parcial", "no_cumple_pendiente"],
+      flow_documento_estado: ["pendiente", "generando", "listo", "error"],
+      flow_documento_tipo: ["guia", "carta"],
       nivel_esperado: ["bajo", "medio", "alto"],
       nivel_riesgo_cargo: ["alto", "medio", "bajo"],
       origen_item_evaluacion: ["competencia", "funcion_cargo"],

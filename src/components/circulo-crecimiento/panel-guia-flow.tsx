@@ -4,10 +4,10 @@ import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   crearGuiaDelFlow,
-  subirPdfGuiaDelFlow,
+  generarInformesSer,
   guardarComentarioColaborador,
 } from '@/app/(dashboard)/circulo-crecimiento/colaboradores/[id]/guia-flow/actions';
-import { Upload, Plus, Check } from 'lucide-react';
+import { Plus, Check, Sparkles } from 'lucide-react';
 
 export function BotonCrearGuiaFlow({ colaboradorId }: { colaboradorId: string }) {
   const [pending, startTransition] = useTransition();
@@ -32,43 +32,35 @@ export function BotonCrearGuiaFlow({ colaboradorId }: { colaboradorId: string })
   );
 }
 
-export function SubirPdfGuiaFlow({ colaboradorId, guiaDelFlowId, urlActual }: { colaboradorId: string; guiaDelFlowId: string; urlActual: string | null }) {
+export function BotonGenerarInformes({ colaboradorId, guiaDelFlowId, yaTieneInforme }: { colaboradorId: string; guiaDelFlowId: string; yaTieneInforme: boolean }) {
   const [pending, startTransition] = useTransition();
   const [mensaje, setMensaje] = useState<string | null>(null);
   const router = useRouter();
 
-  function onSubmit(formData: FormData) {
-    formData.set('colaboradorId', colaboradorId);
-    formData.set('guiaDelFlowId', guiaDelFlowId);
+  function generar() {
     setMensaje(null);
     startTransition(async () => {
-      const res = await subirPdfGuiaDelFlow(formData);
+      const res = await generarInformesSer({ colaboradorId, guiaDelFlowId });
       if (res.ok) {
-        setMensaje('PDF subido correctamente.');
         router.refresh();
       } else {
-        setMensaje(`Error: ${res.error}`);
+        setMensaje(res.error);
       }
     });
   }
 
   return (
-    <form action={onSubmit} className="flex items-center gap-2 flex-wrap">
-      {urlActual && (
-        <a href={urlActual} target="_blank" rel="noreferrer" className="text-xs text-flow-600 hover:underline">
-          Ver PDF actual
-        </a>
-      )}
-      <input type="file" name="archivo" accept="application/pdf" required className="text-xs" />
+    <div className="flex items-center gap-2 flex-wrap">
       <button
-        type="submit"
+        type="button"
         disabled={pending}
-        className="inline-flex items-center gap-1.5 rounded-lg border border-marmol-200 hover:border-flow-300 disabled:opacity-50 text-marmol-600 text-xs font-medium px-2.5 py-1.5 transition"
+        onClick={generar}
+        className="inline-flex items-center gap-1.5 rounded-lg bg-flow-500 hover:bg-flow-600 disabled:opacity-50 text-white text-sm font-medium px-3.5 py-2 transition"
       >
-        <Upload size={12} /> {pending ? 'Subiendo…' : urlActual ? 'Reemplazar' : 'Subir PDF'}
+        <Sparkles size={16} /> {pending ? 'Generando…' : yaTieneInforme ? 'Regenerar informes' : 'Generar informes con IA'}
       </button>
       {mensaje && <span className="text-xs text-marmol-500">{mensaje}</span>}
-    </form>
+    </div>
   );
 }
 
@@ -94,7 +86,7 @@ export function ComentarioGeneralSer({
       {puedeComentar ? (
         <>
           <textarea
-            placeholder="Tu reflexión sobre el conjunto de tu Guía del Flow (opcional)…"
+            placeholder="Tu reflexión sobre tu informe de desarrollo (opcional)…"
             defaultValue={comentarioInicial ?? ''}
             onBlur={(e) => {
               const valor = e.target.value;

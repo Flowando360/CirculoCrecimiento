@@ -69,14 +69,15 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
       ruta: '/circulo-crecimiento/colaboradores/*/guia-flow',
       titulo: 'Guía del Flow (dimensión Ser)',
       resumen:
-        'El instrumento de autoconocimiento: talentos naturales, propósito y los aspectos de Ser organizados en 4 bloques (Esencia/Sello, Emociones, Pertenencia y Compromiso, Desafíos), con el PDF original diseñado por FlowAndo.',
+        'La Guía del Flow (diseñada por FlowAndo) es un regalo íntimo del colaborador y le llega por fuera de este sistema — Círculo de Crecimiento nunca guarda el PDF ni los aspectos psicológicos/emocionales, para ningún rol. Lo que sí vive aquí son dos informes cortos generados por IA, a partir solo de los 18 aspectos con relevancia laboral (talentos, propósito, liderazgo, comunicación, trabajo en equipo, compromiso, adaptación al cambio, negociación, recursividad).',
       camposYBotones: [
         { nombre: 'Crear / Nueva aplicación', explicacion: 'Solo admin_th. Abre un nuevo registro de Guía del Flow para la persona.' },
-        { nombre: 'Subir PDF', explicacion: 'Solo admin_th. Carga el documento diseñado por FlowAndo (queda en un bucket privado, se ve con un link temporal).' },
-        { nombre: 'Puntaje por aspecto (1-5)', explicacion: 'Solo admin_th califica cada aspecto dentro de su bloque.' },
-        { nombre: 'Comentario por aspecto y comentario general', explicacion: 'El propio colaborador puede escribir su reflexión sobre cada aspecto y un comentario general.' },
+        { nombre: 'Puntaje por aspecto (1-5)', explicacion: 'Solo admin_th, y solo de los 18 aspectos con relevancia laboral — los 12 aspectos psicológicos/íntimos ni siquiera aparecen aquí.' },
+        { nombre: 'Generar informes con IA', explicacion: 'Solo admin_th. A partir de esos puntajes genera dos textos distintos: uno para el líder (enfoque de PDI) y otro para el propio colaborador (recordatorio de fortalezas y áreas de desarrollo).' },
       ],
-      notas: ['Quién ve esta pantalla: admin_th, el líder directo, y el propio colaborador.'],
+      notas: [
+        'Quién ve qué: el líder y admin_th solo ven el informe para líder. El colaborador solo ve su propio informe (nunca el del líder, ni el PDF, ni el desglose de aspectos) — su Guía del Flow completa la recibió aparte.',
+      ],
     },
     {
       slug: 'historial',

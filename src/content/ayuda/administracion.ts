@@ -54,16 +54,6 @@ export const moduloAdministracion: ModuloAyuda = {
       ],
     },
     {
-      slug: 'guias-colaboradores',
-      ruta: '/administracion/guias-colaboradores',
-      titulo: 'Guías de colaboradores',
-      resumen: 'Carga el PDF de la Guía del Flow (diseñada por FlowAndo) de cada persona, para que quede disponible en su ficha y en Mi Perfil.',
-      camposYBotones: [
-        { nombre: 'Formulario de subida', explicacion: 'Elige el colaborador y el archivo PDF.' },
-        { nombre: 'Guías ya cargadas', explicacion: 'Lista con fecha de carga y link "Ver PDF" (temporal, el archivo está protegido).' },
-      ],
-    },
-    {
       slug: 'usuarios-roles',
       ruta: '/administracion/usuarios',
       titulo: 'Usuarios y roles',

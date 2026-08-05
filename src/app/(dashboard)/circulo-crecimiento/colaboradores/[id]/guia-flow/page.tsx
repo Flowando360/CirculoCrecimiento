@@ -1,11 +1,10 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
-import { obtenerUrlFirmadaGuiaFlow } from '@/lib/supabase/storage';
 import { ListaAspectosSer, type AspectoConDatos } from '@/components/circulo-crecimiento/lista-aspectos-ser';
-import { BotonCrearGuiaFlow, SubirPdfGuiaFlow, ComentarioGeneralSer } from '@/components/circulo-crecimiento/panel-guia-flow';
+import { BotonCrearGuiaFlow, BotonGenerarInformes, ComentarioGeneralSer } from '@/components/circulo-crecimiento/panel-guia-flow';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Sparkles } from 'lucide-react';
+import { ArrowLeft, Sparkles, Lock } from 'lucide-react';
 import type { BloqueSer } from '@/types/colaborador';
 
 const BLOQUES: { valor: BloqueSer; titulo: string }[] = [
@@ -30,38 +29,41 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
   if (!colaborador || colaborador.empresa_id !== perfil.empresa_id) notFound();
 
   const esAdminTh = perfil.rol === 'admin_th';
-  const puedeVer =
-    esAdminTh ||
-    (perfil.rol === 'lider' && colaborador.lider_id === perfil.colaborador_id) ||
-    (perfil.rol === 'colaborador' && perfil.colaborador_id === colaborador.id);
+  const esLider = perfil.rol === 'lider' && colaborador.lider_id === perfil.colaborador_id;
+  const esElPropioColaborador = perfil.rol === 'colaborador' && perfil.colaborador_id === colaborador.id;
+  const puedeVer = esAdminTh || esLider || esElPropioColaborador;
   if (!puedeVer) notFound();
-
-  const puedeComentar = perfil.rol === 'colaborador' && perfil.colaborador_id === colaborador.id;
 
   const { data: guia } = await supabase
     .from('guia_del_flow')
-    .select('id, fecha_aplicacion, documento_pdf_url')
+    .select(
+      'id, fecha_aplicacion, informe_lider, informe_lider_generado_at, informe_colaborador, informe_colaborador_generado_at'
+    )
     .eq('colaborador_id', params.id)
     .order('fecha_aplicacion', { ascending: false })
     .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle();
 
-  const urlFirmada = await obtenerUrlFirmadaGuiaFlow(guia?.documento_pdf_url ?? null);
-
+  // El desglose por aspecto (para cargar puntajes) solo lo necesita admin_th,
+  // y solo de los 18 aspectos con relevancia laboral — los 12 psicológicos/
+  // íntimos ni siquiera se consultan aquí. Ni líder ni colaborador ven esto:
+  // ambos solo ven su informe sintetizado (informe_lider / informe_colaborador).
   let bloques: { titulo: string; aspectos: AspectoConDatos[] }[] = [];
   let comentarioGeneral: string | null = null;
 
-  if (guia) {
-    const [{ data: aspectosRaw }, { data: puntajesRaw }, { data: comentariosRaw }] = await Promise.all([
-      supabase.from('ser_aspectos').select('id, bloque, nombre, orden').eq('empresa_id', perfil.empresa_id).order('orden'),
+  if (guia && esAdminTh) {
+    const [{ data: aspectosRaw }, { data: puntajesRaw }] = await Promise.all([
+      supabase
+        .from('ser_aspectos')
+        .select('id, bloque, nombre, orden')
+        .eq('empresa_id', perfil.empresa_id)
+        .eq('sensible', false)
+        .order('orden'),
       supabase.from('ser_puntajes').select('aspecto_id, puntaje').eq('guia_del_flow_id', guia.id),
-      supabase.from('ser_comentarios_colaborador').select('aspecto_id, comentario').eq('guia_del_flow_id', guia.id),
     ]);
 
     const puntajePorAspecto = new Map(((puntajesRaw ?? []) as any[]).map((p) => [p.aspecto_id, p.puntaje as number]));
-    const comentarioPorAspecto = new Map(((comentariosRaw ?? []) as any[]).map((c) => [c.aspecto_id, c.comentario as string]));
-    comentarioGeneral = comentarioPorAspecto.get(null) ?? null;
 
     bloques = BLOQUES.map(({ valor, titulo }) => ({
       titulo,
@@ -71,9 +73,19 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
           id: a.id,
           nombre: a.nombre,
           puntaje: puntajePorAspecto.get(a.id) ?? null,
-          comentario: comentarioPorAspecto.get(a.id) ?? null,
+          comentario: null,
         })),
-    }));
+    })).filter((b) => b.aspectos.length > 0);
+  }
+
+  if (guia && esElPropioColaborador) {
+    const { data: comentariosRaw } = await supabase
+      .from('ser_comentarios_colaborador')
+      .select('comentario')
+      .eq('guia_del_flow_id', guia.id)
+      .is('aspecto_id', null)
+      .maybeSingle();
+    comentarioGeneral = comentariosRaw?.comentario ?? null;
   }
 
   return (
@@ -89,6 +101,13 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
           <Sparkles size={22} className="text-ser" /> Guía del Flow
         </h1>
         <p className="text-sm text-marmol-500 mt-1">{colaborador.nombre_completo}</p>
+        {!esElPropioColaborador && (
+          <p className="text-xs text-marmol-400 mt-2 flex items-start gap-1.5 max-w-md">
+            <Lock size={12} className="mt-0.5 shrink-0" />
+            La Guía del Flow completa es un regalo íntimo de {esAdminTh ? 'cada colaborador' : 'tu colaborador'} —
+            le llega por fuera de este sistema. Aquí solo se ve un informe con lo que tiene relevancia laboral.
+          </p>
+        )}
       </div>
 
       {!guia ? (
@@ -98,7 +117,7 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
           {esAdminTh && (
             <>
               <p className="text-xs text-marmol-400 max-w-sm">
-                Crea la primera aplicación para empezar a cargar el PDF y los puntajes.
+                Crea la primera aplicación para empezar a cargar los puntajes y generar los informes.
               </p>
               <BotonCrearGuiaFlow colaboradorId={params.id} />
             </>
@@ -106,41 +125,84 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
         </div>
       ) : (
         <>
-          <div className="card p-4 space-y-2">
+          <div className="card p-4 space-y-1">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <p className="text-xs text-marmol-500">Aplicación del {guia.fecha_aplicacion}</p>
-              {esAdminTh && <BotonCrearGuiaFlow colaboradorId={params.id} />}
+              {esAdminTh && (
+                <BotonCrearGuiaFlow colaboradorId={params.id} />
+              )}
             </div>
-            {esAdminTh ? (
-              <SubirPdfGuiaFlow colaboradorId={params.id} guiaDelFlowId={guia.id} urlActual={urlFirmada} />
-            ) : urlFirmada ? (
-              <a href={urlFirmada} target="_blank" rel="noreferrer" className="text-sm text-flow-600 hover:underline">
-                Ver PDF de mi Guía del Flow
-              </a>
-            ) : (
-              <p className="text-sm text-marmol-400">Aún no se ha cargado el PDF.</p>
-            )}
           </div>
 
-          <ComentarioGeneralSer
-            colaboradorId={params.id}
-            guiaDelFlowId={guia.id}
-            comentarioInicial={comentarioGeneral}
-            puedeComentar={puedeComentar}
-          />
+          {esAdminTh && (
+            <>
+              {bloques.map(({ titulo, aspectos }) => (
+                <div key={titulo} className="card p-5">
+                  <h2 className="font-display font-semibold text-secundario mb-3">{titulo}</h2>
+                  <ListaAspectosSer
+                    colaboradorId={params.id}
+                    guiaDelFlowId={guia.id}
+                    aspectos={aspectos}
+                    puedeEditarPuntaje
+                    puedeComentar={false}
+                  />
+                </div>
+              ))}
 
-          {bloques.map(({ titulo, aspectos }) => (
-            <div key={titulo} className="card p-5">
-              <h2 className="font-display font-semibold text-secundario mb-3">{titulo}</h2>
-              <ListaAspectosSer
+              <div className="card p-5 space-y-3">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <h2 className="font-display font-semibold text-secundario">Informes generados por IA</h2>
+                  <BotonGenerarInformes
+                    colaboradorId={params.id}
+                    guiaDelFlowId={guia.id}
+                    yaTieneInforme={Boolean(guia.informe_lider)}
+                  />
+                </div>
+                {guia.informe_lider ? (
+                  <div className="rounded-lg border border-marmol-200 p-3 text-sm text-marmol-700 whitespace-pre-wrap">
+                    {guia.informe_lider}
+                  </div>
+                ) : (
+                  <p className="text-xs text-marmol-400">
+                    Aún no se ha generado. Carga al menos un puntaje arriba y presiona &ldquo;Generar informes con IA&rdquo;.
+                  </p>
+                )}
+              </div>
+            </>
+          )}
+
+          {esLider && (
+            <div className="card p-5 space-y-2">
+              <h2 className="font-display font-semibold text-secundario">Informe de enfoque de desarrollo</h2>
+              {guia.informe_lider ? (
+                <p className="text-sm text-marmol-700 whitespace-pre-wrap">{guia.informe_lider}</p>
+              ) : (
+                <p className="text-sm text-marmol-400">Talento Humano todavía no ha generado este informe.</p>
+              )}
+            </div>
+          )}
+
+          {esElPropioColaborador && (
+            <>
+              <div className="card p-5 space-y-2">
+                <h2 className="font-display font-semibold text-secundario">Tu informe de desarrollo</h2>
+                {guia.informe_colaborador ? (
+                  <p className="text-sm text-marmol-700 whitespace-pre-wrap">{guia.informe_colaborador}</p>
+                ) : (
+                  <p className="text-sm text-marmol-400">
+                    Talento Humano todavía no ha generado este informe. Tu Guía del Flow completa te llega aparte.
+                  </p>
+                )}
+              </div>
+
+              <ComentarioGeneralSer
                 colaboradorId={params.id}
                 guiaDelFlowId={guia.id}
-                aspectos={aspectos}
-                puedeEditarPuntaje={esAdminTh}
-                puedeComentar={puedeComentar}
+                comentarioInicial={comentarioGeneral}
+                puedeComentar
               />
-            </div>
-          ))}
+            </>
+          )}
         </>
       )}
     </div>

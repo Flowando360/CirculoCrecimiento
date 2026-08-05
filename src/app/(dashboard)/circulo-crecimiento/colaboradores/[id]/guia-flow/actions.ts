@@ -49,47 +49,6 @@ export async function crearGuiaDelFlow(input: z.infer<typeof CrearGuiaSchema>) {
   return { ok: true as const, guiaDelFlowId: data.id as string };
 }
 
-const SubirPdfSchema = z.object({
-  colaboradorId: z.string().uuid(),
-  guiaDelFlowId: z.string().uuid(),
-});
-
-/** Sube (o reemplaza) el PDF de una aplicación existente (admin_th). */
-export async function subirPdfGuiaDelFlow(formData: FormData) {
-  const parsed = SubirPdfSchema.safeParse({
-    colaboradorId: formData.get('colaboradorId'),
-    guiaDelFlowId: formData.get('guiaDelFlowId'),
-  });
-  if (!parsed.success) return { ok: false as const, error: 'Datos inválidos' };
-
-  const perfil = await esAdminThDeEsteColaborador(parsed.data.colaboradorId);
-  if (!perfil) return { ok: false as const, error: 'No autorizado' };
-
-  const file = formData.get('archivo') as File;
-  if (!file || file.size === 0) return { ok: false as const, error: 'Selecciona un archivo PDF' };
-
-  const supabase = createClient();
-  const path = `${perfil.empresa_id}/${parsed.data.colaboradorId}/guia-del-flow-${Date.now()}.pdf`;
-
-  const { error: uploadError } = await supabase.storage
-    .from('guias-flow')
-    .upload(path, file, { contentType: 'application/pdf', upsert: true });
-
-  if (uploadError) return { ok: false as const, error: `Error subiendo el archivo: ${uploadError.message}` };
-
-  // El bucket es privado: se guarda la ruta, no una URL pública. Quien la
-  // muestre debe generar un signed URL en el momento (ver lib/supabase/storage.ts).
-  const { error: dbError } = await supabase
-    .from('guia_del_flow')
-    .update({ documento_pdf_url: path })
-    .eq('id', parsed.data.guiaDelFlowId);
-
-  if (dbError) return { ok: false as const, error: dbError.message };
-
-  revalidar(parsed.data.colaboradorId);
-  return { ok: true as const };
-}
-
 const PuntajeSchema = z.object({
   colaboradorId: z.string().uuid(),
   guiaDelFlowId: z.string().uuid(),
@@ -164,6 +123,115 @@ export async function guardarComentarioColaborador(input: z.infer<typeof Comenta
       });
 
   if (error) return { ok: false as const, error: error.message };
+
+  revalidar(parsed.data.colaboradorId);
+  return { ok: true as const };
+}
+
+// ── Informes sintetizados (IA) ──────────────────────────────────────────────
+// Se generan SOLO a partir de los aspectos no sensibles (ver 0051_ser_priva-
+// cidad_organizacional.sql — RLS ya impide leer/escribir puntajes de los 12
+// aspectos psicológicos/íntimos, así que ni siquiera llegan a este código).
+// El PDF de la Guía del Flow no tiene ningún papel aquí: ese documento le
+// llega al colaborador por fuera de este sistema.
+
+const SYSTEM_INFORME_LIDER = `Eres un asistente de Talento Humano. A partir de una lista de aspectos profesionales evaluados en escala 1-5 (talentos, propósito, estilo de liderazgo, comunicación, trabajo en equipo, compromiso, adaptación al cambio, negociación, recursividad), escribe en español un informe breve (200-300 palabras) dirigido al LÍDER de esa persona, para que enfoque su Plan de Desarrollo Individual.
+
+Estructura: (1) talentos a aprovechar, (2) qué la/lo motiva, (3) cómo comunicarse y liderarla/o, (4) 2-3 sugerencias concretas para el PDI. Tono profesional, cálido y orientado a la acción.
+
+IMPORTANTE: solo tienes los aspectos de la lista. No tienes ni debes mencionar infancia, pasado, estabilidad emocional, felicidad, dependencia, sanación, frustración, sentido de pertenencia ni ningún tema psicológico o de vida personal — esa información existe pero es privada y nunca te fue entregada. No la inventes ni sugieras que existe.`;
+
+const SYSTEM_INFORME_COLABORADOR = `Eres un asistente de desarrollo profesional. A partir de una lista de aspectos profesionales evaluados en escala 1-5 (talentos, propósito, estilo de liderazgo, comunicación, trabajo en equipo, compromiso, adaptación al cambio, negociación, recursividad), escribe en español un informe breve (200-300 palabras) dirigido DIRECTAMENTE a esa persona (en segunda persona, tono cercano y alentador), que le ayude a recordar en qué es fuerte profesionalmente y en qué puede seguir trabajando.
+
+Aclara que esto es un complemento breve, no un reemplazo de su Guía del Flow completa (que ya recibió por su cuenta). Cierra con una invitación a seguir explorando esa Guía si quiere profundizar en su autoconocimiento.
+
+IMPORTANTE: solo tienes los aspectos de la lista. No tienes ni debes mencionar infancia, pasado, estabilidad emocional, felicidad, dependencia, sanación, frustración, sentido de pertenencia ni ningún tema psicológico o de vida personal — esa información existe pero es privada y nunca te fue entregada. No la inventes ni sugieras que existe.`;
+
+const GenerarInformesSchema = z.object({
+  colaboradorId: z.string().uuid(),
+  guiaDelFlowId: z.string().uuid(),
+});
+
+async function pedirInformeAClaude(apiKey: string, system: string, listaAspectos: string): Promise<string> {
+  const r = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-5',
+      max_tokens: 700,
+      system,
+      messages: [{ role: 'user', content: `Aspectos evaluados (escala 1-5):\n${listaAspectos}` }],
+    }),
+  });
+  const data = await r.json();
+  if (!r.ok) {
+    console.error('Error de la API de Anthropic (informe Ser):', r.status, JSON.stringify(data));
+    throw new Error('Hubo un problema consultando la IA. Ya quedó registrado para revisión.');
+  }
+  return data?.content?.[0]?.text ?? '';
+}
+
+/**
+ * Genera (o regenera) los dos informes sintetizados de una aplicación de la
+ * Guía del Flow, a partir de los puntajes ya cargados de los aspectos no
+ * sensibles. admin_th únicamente.
+ */
+export async function generarInformesSer(input: z.infer<typeof GenerarInformesSchema>) {
+  const parsed = GenerarInformesSchema.safeParse(input);
+  if (!parsed.success) return { ok: false as const, error: 'Datos inválidos' };
+
+  const perfil = await esAdminThDeEsteColaborador(parsed.data.colaboradorId);
+  if (!perfil) return { ok: false as const, error: 'No autorizado' };
+
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    return { ok: false as const, error: 'Falta configurar ANTHROPIC_API_KEY para poder generar el informe.' };
+  }
+
+  const supabase = createClient();
+  const { data: puntajesRaw } = await supabase
+    .from('ser_puntajes')
+    .select('puntaje, ser_aspectos(nombre)')
+    .eq('guia_del_flow_id', parsed.data.guiaDelFlowId);
+  // RLS de ser_puntajes ya excluye los aspectos sensibles para admin_th, así
+  // que esta lista solo puede traer los 18 con relevancia laboral.
+
+  const aspectos = ((puntajesRaw ?? []) as any[])
+    .filter((p) => p.ser_aspectos?.nombre)
+    .map((p) => `${p.ser_aspectos.nombre}: ${p.puntaje}/5`);
+
+  if (aspectos.length === 0) {
+    return {
+      ok: false as const,
+      error: 'Carga primero al menos un puntaje de los aspectos con relevancia laboral (arriba en esta página).',
+    };
+  }
+
+  const listaAspectos = aspectos.join('\n');
+
+  let informeLider: string;
+  let informeColaborador: string;
+  try {
+    [informeLider, informeColaborador] = await Promise.all([
+      pedirInformeAClaude(apiKey, SYSTEM_INFORME_LIDER, listaAspectos),
+      pedirInformeAClaude(apiKey, SYSTEM_INFORME_COLABORADOR, listaAspectos),
+    ]);
+  } catch (e: any) {
+    return { ok: false as const, error: e.message ?? 'Error generando los informes' };
+  }
+
+  const ahora = new Date().toISOString();
+  const { error: errorUpdate } = await supabase
+    .from('guia_del_flow')
+    .update({
+      informe_lider: informeLider,
+      informe_lider_generado_at: ahora,
+      informe_colaborador: informeColaborador,
+      informe_colaborador_generado_at: ahora,
+    })
+    .eq('id', parsed.data.guiaDelFlowId);
+
+  if (errorUpdate) return { ok: false as const, error: errorUpdate.message };
 
   revalidar(parsed.data.colaboradorId);
   return { ok: true as const };
