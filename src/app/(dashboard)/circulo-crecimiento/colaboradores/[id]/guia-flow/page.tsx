@@ -155,12 +155,7 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
       ) : (
         <>
           <div className="card p-4 space-y-1">
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <p className="text-xs text-marmol-500">Aplicación del {guia.fecha_aplicacion}</p>
-              {esAdminTh && (
-                <BotonCrearGuiaFlow colaboradorId={params.id} />
-              )}
-            </div>
+            <p className="text-xs text-marmol-500">Aplicación del {guia.fecha_aplicacion}</p>
           </div>
 
           {esAdminTh && (
