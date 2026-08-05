@@ -69,14 +69,16 @@ export const moduloCirculoCrecimiento: ModuloAyuda = {
       ruta: '/circulo-crecimiento/colaboradores/*/guia-flow',
       titulo: 'Guía del Flow (dimensión Ser)',
       resumen:
-        'La Guía del Flow (diseñada por FlowAndo) es un regalo íntimo del colaborador y le llega por fuera de este sistema — Círculo de Crecimiento nunca guarda el PDF ni los aspectos psicológicos/emocionales, para ningún rol. Lo que sí vive aquí son dos informes cortos generados por IA, a partir solo de los 18 aspectos con relevancia laboral (talentos, propósito, liderazgo, comunicación, trabajo en equipo, compromiso, adaptación al cambio, negociación, recursividad).',
+        'La Guía del Flow (diseñada por FlowAndo, se genera en la app hermana guiadelflow) es un regalo íntimo del colaborador y le llega por fuera de este sistema — Círculo de Crecimiento nunca guarda el PDF ni los aspectos psicológicos/emocionales, para ningún rol. Lo que sí vive aquí son dos informes cortos generados por IA, a partir solo de los 18 aspectos con relevancia laboral (talentos, propósito, liderazgo, comunicación, trabajo en equipo, compromiso, adaptación al cambio, negociación, recursividad).',
       camposYBotones: [
-        { nombre: 'Crear / Nueva aplicación', explicacion: 'Solo admin_th. Abre un nuevo registro de Guía del Flow para la persona.' },
-        { nombre: 'Puntaje por aspecto (1-5)', explicacion: 'Solo admin_th, y solo de los 18 aspectos con relevancia laboral — los 12 aspectos psicológicos/íntimos ni siquiera aparecen aquí.' },
-        { nombre: 'Generar informes con IA', explicacion: 'Solo admin_th. A partir de esos puntajes genera dos textos distintos: uno para el líder (enfoque de PDI) y otro para el propio colaborador (recordatorio de fortalezas y áreas de desarrollo).' },
+        { nombre: 'Generar invitación', explicacion: 'Solo admin_th. Crea un link único para esta persona (con un token, no con su correo ni su nombre) y lo muestra con botón de copiar. Cuando la persona lo abre, completa el cuestionario en guiadelflow y genera su Guía, sus 18 aspectos y los dos informes se cargan aquí solos — este es el camino recomendado.' },
+        { nombre: 'Crear / Nueva aplicación', explicacion: 'Solo admin_th. Abre un nuevo registro de Guía del Flow para la persona a mano — respaldo para cuando no se usó una invitación (por ejemplo, aplicaciones anteriores a esta integración).' },
+        { nombre: 'Puntaje por aspecto (1-5)', explicacion: 'Solo admin_th, y solo de los 18 aspectos con relevancia laboral — los 12 aspectos psicológicos/íntimos ni siquiera aparecen aquí. Se llena solo si la persona usó una invitación; si no, se carga a mano.' },
+        { nombre: 'Generar informes con IA', explicacion: 'Solo admin_th. A partir de esos puntajes genera dos textos distintos: uno para el líder (enfoque de PDI) y otro para el propio colaborador (recordatorio de fortalezas y áreas de desarrollo). Con invitación, esto también queda automático.' },
       ],
       notas: [
         'Quién ve qué: el líder y admin_th solo ven el informe para líder. El colaborador solo ve su propio informe (nunca el del líder, ni el PDF, ni el desglose de aspectos) — su Guía del Flow completa la recibió aparte.',
+        'Si alguien completó el cuestionario pero no aparece nada acá, revisa Administración → Sincronizaciones Guía del Flow: ahí queda registrado incluso cuando no hubo invitación y el correo no coincidió con ningún colaborador.',
       ],
     },
     {
