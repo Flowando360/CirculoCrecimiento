@@ -44,5 +44,9 @@ supabase/.temp/
 # (público). Se usan una vez para cargar puntajes/notas y se descartan.
 docs/GuiaDelFlow_*.pdf
 
+# Capturas de referencia de apps de OTRAS empresas (con datos reales de sus
+# empleados) — solo insumo visual para diseño, nunca al repo público.
+docs/Captura de pantalla*.png
+
 .vercel
 .env*

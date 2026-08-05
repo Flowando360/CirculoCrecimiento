@@ -462,6 +462,52 @@ export type Database = {
           },
         ]
       }
+      cargo_items_evaluacion_excluidos: {
+        Row: {
+          cargo_funcion_id: string | null
+          cargo_id: string
+          competencia_id: string | null
+          created_at: string
+          id: string
+        }
+        Insert: {
+          cargo_funcion_id?: string | null
+          cargo_id: string
+          competencia_id?: string | null
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          cargo_funcion_id?: string | null
+          cargo_id?: string
+          competencia_id?: string | null
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cargo_items_evaluacion_excluidos_cargo_funcion_id_fkey"
+            columns: ["cargo_funcion_id"]
+            isOneToOne: false
+            referencedRelation: "cargo_funciones_principales"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cargo_items_evaluacion_excluidos_cargo_id_fkey"
+            columns: ["cargo_id"]
+            isOneToOne: false
+            referencedRelation: "cargos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cargo_items_evaluacion_excluidos_competencia_id_fkey"
+            columns: ["competencia_id"]
+            isOneToOne: false
+            referencedRelation: "competencias"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cargos: {
         Row: {
           activo: boolean
@@ -5604,6 +5650,10 @@ export type Database = {
         Args: { p_empresa_id: string; p_poblacion: number }
         Returns: number
       }
+      fn_debo_evaluar_a: {
+        Args: { p_colaborador_id: string }
+        Returns: boolean
+      }
       fn_es_mi_equipo: { Args: { p_colaborador_id: string }; Returns: boolean }
       fn_generar_pdi_y_formacion_por_dimension: {
         Args: {
@@ -5622,6 +5672,10 @@ export type Database = {
       fn_recalcular_resultados_evaluacion: {
         Args: { p_evaluacion_id: string }
         Returns: undefined
+      }
+      fn_soy_evaluador_de: {
+        Args: { p_evaluacion_id: string }
+        Returns: boolean
       }
       limpiar_espacios: { Args: { txt: string }; Returns: string }
       match_enum_label: {

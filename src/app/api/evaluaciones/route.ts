@@ -63,6 +63,15 @@ export async function POST(req: NextRequest) {
   for (const colaborador of colaboradores ?? []) {
     const tenePersonalACargo = Boolean((colaborador.cargo as any)?.tiene_personal_a_cargo);
 
+    // Ítems que TH decidió NO incluir para el cargo de esta persona (ver
+    // /administracion/cargos/[id]/items-evaluacion). Vacío = se incluye todo.
+    const { data: excluidos } = await supabase
+      .from('cargo_items_evaluacion_excluidos')
+      .select('competencia_id, cargo_funcion_id')
+      .eq('cargo_id', colaborador.cargo_id);
+    const competenciasExcluidas = new Set((excluidos ?? []).map((e) => e.competencia_id).filter(Boolean));
+    const funcionesExcluidas = new Set((excluidos ?? []).map((e) => e.cargo_funcion_id).filter(Boolean));
+
     // ── evaluación + tareas (igual que antes) ──
     const { data: evaluacion, error: errEval } = await supabase
       .from('evaluaciones')
@@ -98,7 +107,7 @@ export async function POST(req: NextRequest) {
       .not('bloque', 'is', null);
 
     const competenciasAplicables = (competencias ?? []).filter(
-      (c: any) => !c.solo_con_personal_a_cargo || tenePersonalACargo
+      (c: any) => (!c.solo_con_personal_a_cargo || tenePersonalACargo) && !competenciasExcluidas.has(c.id)
     );
 
     for (const comp of competenciasAplicables) {
@@ -124,7 +133,7 @@ export async function POST(req: NextRequest) {
       .eq('cargo_id', colaborador.cargo_id)
       .order('orden');
 
-    for (const fn of funciones ?? []) {
+    for (const fn of (funciones ?? []).filter((f) => !funcionesExcluidas.has(f.id))) {
       const { error } = await supabase.from('evaluacion_items').upsert(
         {
           evaluacion_id: evaluacion.id,
@@ -138,6 +147,27 @@ export async function POST(req: NextRequest) {
         { onConflict: 'evaluacion_id,cargo_funcion_id' }
       );
       if (!error) itemsCreados++;
+    }
+
+    // Si TH excluyó un ítem DESPUÉS de que esta evaluación ya se había
+    // generado (re-generar un ciclo abierto), desactivarlo ahora — nunca
+    // toca los agregados a mano (agregado_manualmente), esos son decisión
+    // puntual de TH sobre esta evaluación específica, no del catálogo.
+    if (competenciasExcluidas.size > 0) {
+      await supabase
+        .from('evaluacion_items')
+        .update({ activo: false })
+        .eq('evaluacion_id', evaluacion.id)
+        .in('competencia_id', Array.from(competenciasExcluidas))
+        .eq('agregado_manualmente', false);
+    }
+    if (funcionesExcluidas.size > 0) {
+      await supabase
+        .from('evaluacion_items')
+        .update({ activo: false })
+        .eq('evaluacion_id', evaluacion.id)
+        .in('cargo_funcion_id', Array.from(funcionesExcluidas))
+        .eq('agregado_manualmente', false);
     }
   }
 

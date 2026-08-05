@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { redirect, notFound } from 'next/navigation';
 import { formatearFecha, cn } from '@/lib/utils';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ClipboardCheck } from 'lucide-react';
 import { PlanInduccionCargo } from '@/components/circulo-crecimiento/plan-induccion-cargo';
 
 const ETIQUETA_MOMENTO: Record<string, string> = {
@@ -73,13 +73,23 @@ export default async function DetalleCargoPage({ params }: { params: { id: strin
         >
           <ArrowLeft size={12} /> Volver a Cargos y perfiles
         </Link>
-        <h1 className="font-display text-2xl font-semibold text-secundario">{cargo.nombre}</h1>
-        <p className="text-sm text-marmol-500 mt-1">
-          {cargo.proceso_area}
-          {cargo.codigo_documento && ` · ${cargo.codigo_documento}`}
-          {cargo.version_documento && ` v${cargo.version_documento}`}
-          {cargo.fecha_documento && ` · ${formatearFecha(cargo.fecha_documento)}`}
-        </p>
+        <div className="flex items-start justify-between flex-wrap gap-3">
+          <div>
+            <h1 className="font-display text-2xl font-semibold text-secundario">{cargo.nombre}</h1>
+            <p className="text-sm text-marmol-500 mt-1">
+              {cargo.proceso_area}
+              {cargo.codigo_documento && ` · ${cargo.codigo_documento}`}
+              {cargo.version_documento && ` v${cargo.version_documento}`}
+              {cargo.fecha_documento && ` · ${formatearFecha(cargo.fecha_documento)}`}
+            </p>
+          </div>
+          <Link
+            href={`/administracion/cargos/${params.id}/items-evaluacion`}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-marmol-200 hover:border-flow-300 text-marmol-600 text-xs font-medium px-3 py-2 transition shrink-0"
+          >
+            <ClipboardCheck size={14} /> Ítems a evaluar
+          </Link>
+        </div>
       </div>
 
       <Bloque titulo="Identificación del cargo">
