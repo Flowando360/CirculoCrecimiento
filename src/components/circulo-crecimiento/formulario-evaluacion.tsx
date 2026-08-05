@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useMemo, useState, useTransition } from 'react';
 import { guardarRespuesta } from '@/app/(dashboard)/circulo-crecimiento/evaluar/actions';
 import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
@@ -26,11 +26,11 @@ export interface ItemEvaluacion {
 }
 
 const ETIQUETA_BLOQUE: Record<Bloque, { titulo: string; color: string }> = {
-  competencias_organizacionales: { titulo: '1. Competencias Organizacionales', color: 'text-flow-600' },
-  competencias_funcionales: { titulo: '2. Competencias Funcionales del Cargo', color: 'text-hacer' },
-  competencias_liderazgo: { titulo: '3. Competencias de Liderazgo', color: 'text-deber' },
-  roles_y_funciones: { titulo: '4. Roles y Funciones', color: 'text-saber' },
-  cultura: { titulo: '5. Cultura', color: 'text-ser' },
+  competencias_organizacionales: { titulo: 'Competencias Organizacionales', color: 'text-flow-600' },
+  competencias_funcionales: { titulo: 'Competencias Funcionales del Cargo', color: 'text-hacer' },
+  competencias_liderazgo: { titulo: 'Competencias de Liderazgo', color: 'text-deber' },
+  roles_y_funciones: { titulo: 'Roles y Funciones', color: 'text-saber' },
+  cultura: { titulo: 'Cultura', color: 'text-ser' },
 };
 
 const ORDEN_BLOQUES = [
@@ -40,6 +40,11 @@ const ORDEN_BLOQUES = [
   'roles_y_funciones',
   'cultura',
 ] as const;
+
+function promedio(valores: number[]): number | null {
+  if (valores.length === 0) return null;
+  return Math.round((valores.reduce((a, b) => a + b, 0) / valores.length) * 10) / 10;
+}
 
 export function FormularioEvaluacion({
   evaluacionTareaId,
@@ -61,6 +66,7 @@ export function FormularioEvaluacion({
   );
   const [, startTransition] = useTransition();
   const [guardados, setGuardados] = useState<Record<string, boolean>>({});
+  const [expandido, setExpandido] = useState<string | null>(null);
 
   function guardar(itemId: string, nota: number) {
     setNotas((prev) => ({ ...prev, [itemId]: nota }));
@@ -81,100 +87,154 @@ export function FormularioEvaluacion({
     items: items.filter((i) => i.bloque === bloque),
   })).filter((g) => g.items.length > 0);
 
+  const subtotalesPorBloque = useMemo(
+    () =>
+      Object.fromEntries(
+        itemsPorBloque.map(({ bloque, items: itemsBloque }) => [
+          bloque,
+          promedio(itemsBloque.map((i) => notas[i.id]).filter((n): n is number => typeof n === 'number')),
+        ])
+      ),
+    [itemsPorBloque, notas]
+  );
+
+  const totalGeneral = useMemo(
+    () => promedio(items.map((i) => notas[i.id]).filter((n): n is number => typeof n === 'number')),
+    [items, notas]
+  );
+  const totalRespondidos = Object.keys(notas).filter((id) => items.some((i) => i.id === id)).length;
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
+      {/* ── Barra de avance y total ── */}
+      <div className="card p-4 sticky top-2 z-10 backdrop-blur bg-white/90 flex items-center justify-between flex-wrap gap-3">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-full bg-flow-50 flex items-center justify-center">
+            <span className="font-display text-sm font-bold text-flow-700">{totalGeneral ?? '—'}</span>
+          </div>
+          <div>
+            <p className="text-sm font-medium text-marmol-800">Promedio general</p>
+            <p className="text-xs text-marmol-400">
+              {totalRespondidos} de {items.length} ítems respondidos
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-4 flex-wrap">
+          {itemsPorBloque.map(({ bloque, items: itemsBloque }) => (
+            <div key={bloque} className="text-right">
+              <p className={cn('text-xs font-medium', ETIQUETA_BLOQUE[bloque].color)}>{ETIQUETA_BLOQUE[bloque].titulo}</p>
+              <p className="text-sm font-display font-semibold text-marmol-800">
+                {subtotalesPorBloque[bloque] ?? '—'}
+                <span className="text-xs font-normal text-marmol-400"> /{itemsBloque.length}</span>
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {itemsPorBloque.map(({ bloque, items: itemsBloque }) => (
         <div key={bloque}>
-          <h2 className={cn('font-display text-sm font-bold uppercase tracking-wide mb-3', ETIQUETA_BLOQUE[bloque].color)}>
-            {ETIQUETA_BLOQUE[bloque].titulo}
-          </h2>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className={cn('font-display text-sm font-bold uppercase tracking-wide', ETIQUETA_BLOQUE[bloque].color)}>
+              {ETIQUETA_BLOQUE[bloque].titulo}
+            </h2>
+            <span className="text-xs text-marmol-400">
+              Subtotal: <span className="font-semibold text-marmol-700">{subtotalesPorBloque[bloque] ?? '—'}</span>
+            </span>
+          </div>
 
-          <div className="space-y-4">
-            {itemsBloque.map((item) => (
-              <div key={item.id} className="card p-5">
-                <h3 className="font-medium text-marmol-900">{item.titulo}</h3>
-                {item.descripcion && (
-                  <p className="text-sm text-marmol-500 mt-1">
-                    {bloque === 'roles_y_funciones' ? `Resultado esperado: ${item.descripcion}` : item.descripcion}
-                  </p>
-                )}
+          <div className="card divide-y divide-marmol-100 overflow-hidden">
+            {itemsBloque.map((item) => {
+              const nota = notas[item.id];
+              const criterioSeleccionado = item.criterios?.find((c) => c.nivel === nota);
+              const estaExpandido = expandido === item.id;
 
-                {bloque === 'roles_y_funciones' && (
-                  <input
-                    type="text"
-                    placeholder="Resultado real observado…"
-                    defaultValue={resultadosReales[item.id] ?? ''}
-                    onChange={(e) => setResultadosReales((prev) => ({ ...prev, [item.id]: e.target.value }))}
-                    className="mt-2 w-full rounded-lg border border-marmol-200 px-3 py-2 text-sm"
-                  />
-                )}
+              return (
+                <div key={item.id} className="p-4">
+                  <div className="flex items-start justify-between gap-4 flex-wrap sm:flex-nowrap">
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-medium text-marmol-900 text-sm">{item.titulo}</h3>
+                      {item.descripcion && (
+                        <p className="text-xs text-marmol-500 mt-0.5">
+                          {bloque === 'roles_y_funciones' ? `Resultado esperado: ${item.descripcion}` : item.descripcion}
+                        </p>
+                      )}
+                    </div>
 
-                {item.criterios && item.criterios.length > 0 ? (
-                  <div className="space-y-2 mt-3">
-                    {item.criterios
-                      .sort((a, b) => b.nivel - a.nivel)
-                      .map((c) => (
-                        <label
-                          key={c.nivel}
+                    <div className="flex gap-1.5 shrink-0">
+                      {[1, 2, 3, 4, 5].map((n) => (
+                        <button
+                          key={n}
+                          type="button"
+                          onClick={() => {
+                            guardar(item.id, n);
+                            if (item.criterios) setExpandido(item.id);
+                          }}
                           className={cn(
-                            'flex items-start gap-3 rounded-lg border p-3 text-sm cursor-pointer transition',
-                            notas[item.id] === c.nivel ? 'border-flow-400 bg-flow-50' : 'border-marmol-200 hover:border-marmol-300'
+                            'h-8 w-8 rounded-lg border text-sm font-medium transition',
+                            nota === n
+                              ? 'border-flow-500 bg-flow-500 text-white'
+                              : 'border-marmol-200 text-marmol-600 hover:border-flow-300'
                           )}
                         >
-                          <input
-                            type="radio"
-                            name={`item-${item.id}`}
-                            className="mt-1"
-                            checked={notas[item.id] === c.nivel}
-                            onChange={() => guardar(item.id, c.nivel)}
-                          />
-                          <div>
-                            <span className="font-medium text-marmol-800">Nivel {c.nivel}</span>
-                            <p className="text-marmol-600">{c.criterio}</p>
-                          </div>
-                        </label>
+                          {n}
+                        </button>
                       ))}
+                    </div>
                   </div>
-                ) : (
-                  <div className="flex gap-2 mt-3">
-                    {[1, 2, 3, 4, 5].map((n) => (
-                      <button
-                        key={n}
-                        type="button"
-                        onClick={() => guardar(item.id, n)}
-                        className={cn(
-                          'h-9 w-9 rounded-lg border text-sm font-medium transition',
-                          notas[item.id] === n
-                            ? 'border-flow-500 bg-flow-500 text-white'
-                            : 'border-marmol-200 text-marmol-600 hover:border-flow-300'
-                        )}
-                      >
-                        {n}
-                      </button>
-                    ))}
+
+                  {bloque === 'roles_y_funciones' && (
+                    <input
+                      type="text"
+                      placeholder="Resultado real observado…"
+                      defaultValue={resultadosReales[item.id] ?? ''}
+                      onChange={(e) => setResultadosReales((prev) => ({ ...prev, [item.id]: e.target.value }))}
+                      onBlur={() => {
+                        if (nota) guardar(item.id, nota);
+                      }}
+                      className="mt-2.5 w-full rounded-lg border border-marmol-200 px-3 py-1.5 text-sm"
+                    />
+                  )}
+
+                  {/* Solo se muestra el criterio del nivel YA elegido — nunca los 5 a la vez */}
+                  {criterioSeleccionado && (
+                    <p className="mt-2.5 text-xs text-marmol-600 bg-flow-50 rounded-lg px-3 py-2">
+                      <span className="font-medium text-flow-700">Nivel {criterioSeleccionado.nivel}: </span>
+                      {criterioSeleccionado.criterio}
+                    </p>
+                  )}
+
+                  <div className="mt-2.5 flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setExpandido(estaExpandido ? null : item.id)}
+                      className="text-xs text-marmol-400 hover:text-flow-600"
+                    >
+                      {estaExpandido ? 'Ocultar observación' : 'Agregar observación'}
+                    </button>
+                    {guardados[item.id] && (
+                      <span className="text-xs text-alto flex items-center gap-1">
+                        <Check size={11} /> Guardado
+                      </span>
+                    )}
                   </div>
-                )}
 
-                {/* Observación: disponible en TODOS los ítems de TODOS los bloques */}
-                <textarea
-                  placeholder="Observación (opcional)…"
-                  defaultValue={observaciones[item.id] ?? ''}
-                  onChange={(e) => setObservaciones((prev) => ({ ...prev, [item.id]: e.target.value }))}
-                  onBlur={() => {
-                    const nota = notas[item.id];
-                    if (nota) guardar(item.id, nota);
-                  }}
-                  className="mt-3 w-full rounded-lg border border-marmol-200 p-2.5 text-sm"
-                  rows={2}
-                />
-
-                {guardados[item.id] && (
-                  <p className="mt-2 text-xs text-alto flex items-center gap-1">
-                    <Check size={12} /> Guardado — el resultado se recalculó en tiempo real
-                  </p>
-                )}
-              </div>
-            ))}
+                  {estaExpandido && (
+                    <textarea
+                      placeholder="Observación (opcional)…"
+                      defaultValue={observaciones[item.id] ?? ''}
+                      onChange={(e) => setObservaciones((prev) => ({ ...prev, [item.id]: e.target.value }))}
+                      onBlur={() => {
+                        if (nota) guardar(item.id, nota);
+                      }}
+                      className="mt-2 w-full rounded-lg border border-marmol-200 p-2.5 text-sm"
+                      rows={2}
+                      autoFocus
+                    />
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       ))}
