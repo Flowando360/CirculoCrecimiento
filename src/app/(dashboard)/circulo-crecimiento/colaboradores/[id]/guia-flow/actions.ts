@@ -52,7 +52,7 @@ export async function crearInvitacionGuiaFlow(input: z.infer<typeof InvitarSchem
 
   if (error) return { ok: false as const, error: error.message };
 
-  const baseUrl = process.env.GUIADELFLOW_URL ?? 'https://guia-del-flow-flow-ando360.vercel.app';
+  const baseUrl = process.env.GUIADELFLOW_URL ?? 'https://guia-del-flow.vercel.app';
   const link = `${baseUrl}/registro?invitacion=${data.token}`;
 
   revalidar(parsed.data.colaboradorId);

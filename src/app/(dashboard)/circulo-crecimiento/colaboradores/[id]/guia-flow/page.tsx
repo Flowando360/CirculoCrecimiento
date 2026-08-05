@@ -106,7 +106,7 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
       .maybeSingle();
 
     if (ultimaInvitacion) {
-      const baseUrl = process.env.GUIADELFLOW_URL ?? 'https://guia-del-flow-flow-ando360.vercel.app';
+      const baseUrl = process.env.GUIADELFLOW_URL ?? 'https://guia-del-flow.vercel.app';
       invitacionInicial = {
         link: `${baseUrl}/registro?invitacion=${ultimaInvitacion.token}`,
         creadaEl: ultimaInvitacion.created_at,
