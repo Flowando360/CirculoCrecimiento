@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { createClient } from '@/lib/supabase/server';
 import { StatCard } from '@/components/ui/stat-card';
-import { EmptyState } from '@/components/ui/empty-state';
 import { AlertaSeveridadDot, AlertaTipoBadge } from '@/components/alertas/alerta-badge';
+import { TareasPendientesEvaluacion, type TareaPendiente } from '@/components/circulo-crecimiento/tareas-pendientes-evaluacion';
 import { formatearFecha, nombreParaSaludo } from '@/lib/utils';
 import { Users, Target, ShieldAlert, TrendingUp, Bell, Compass, TrendingDown, Minus } from 'lucide-react';
 import { obtenerInformeHistorico } from '@/app/(dashboard)/informes/historico/data';
@@ -13,6 +13,28 @@ export default async function InicioPage() {
   if (!perfil) return null;
 
   const supabase = createClient();
+
+  // Tareas de valoración (Hacer/Deber) pendientes de la persona logueada,
+  // sin importar su rol en la app — cualquiera puede ser evaluador
+  // (autoevaluación, líder, par, colaborador a cargo) según el organigrama.
+  let tareasPendientes: TareaPendiente[] = [];
+  if (perfil.colaborador_id) {
+    const { data: tareasRaw } = await supabase
+      .from('evaluacion_tareas')
+      .select(
+        `id, evaluacion_id, tipo_evaluador,
+         evaluacion:evaluaciones!inner(colaborador:colaborador_evaluado_id(nombre_completo), ciclo:ciclos_evaluacion(nombre))`
+      )
+      .eq('evaluador_colaborador_id', perfil.colaborador_id)
+      .eq('completada', false);
+
+    tareasPendientes = ((tareasRaw ?? []) as any[]).map((t) => ({
+      evaluacionId: t.evaluacion_id,
+      tipoEvaluador: t.tipo_evaluador,
+      colaboradorEvaluado: t.evaluacion?.colaborador?.nombre_completo ?? '—',
+      cicloNombre: t.evaluacion?.ciclo?.nombre ?? '—',
+    }));
+  }
 
   const { data: identidad } = await supabase
     .from('empresa_identidad')
@@ -184,6 +206,8 @@ export default async function InicioPage() {
             </div>
           )}
         </div>
+
+        <TareasPendientesEvaluacion tareas={tareasPendientes} />
       </div>
     );
   }
@@ -229,6 +253,8 @@ export default async function InicioPage() {
             <p className="text-sm text-marmol-500">Seguimiento a los compromisos de cada colaborador.</p>
           </Link>
         </div>
+
+        <TareasPendientesEvaluacion tareas={tareasPendientes} />
       </div>
     );
   }
@@ -281,11 +307,7 @@ export default async function InicioPage() {
         </Link>
       </div>
 
-      <EmptyState
-        icon={Bell}
-        titulo="Sin Encuentros de Crecimiento pendientes por ahora"
-        descripcion="Cuando se abra un nuevo ciclo o tengas una autoevaluación pendiente, aparecerá aquí."
-      />
+      <TareasPendientesEvaluacion tareas={tareasPendientes} />
     </div>
   );
 }

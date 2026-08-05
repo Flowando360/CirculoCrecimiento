@@ -17,9 +17,11 @@ export const moduloGeneral: ModuloAyuda = {
         { nombre: 'Comparativo: ciclo actual vs. anterior', explicacion: 'Para admin_th y gerencia: promedio de Hacer y Deber del último ciclo, con la variación contra el ciclo anterior. Enlace a "Ver histórico completo".' },
         { nombre: 'Próximas alertas', explicacion: 'Las alertas de vencimiento más urgentes de toda la empresa, con enlace a "Ver todas".' },
         { nombre: 'Tarjetas de acceso rápido', explicacion: 'Para líder y colaborador: atajos a Mi equipo, Planes de Desarrollo, Mi Perfil y Formación.' },
+        { nombre: 'Encuentros de Crecimiento pendientes', explicacion: 'Lista, para cualquier rol, de las valoraciones que te faltan por hacer (autoevaluación, o valorar a tu líder, un par o un colaborador a cargo) — clic en cualquiera te lleva directo al formulario. Así es como se llega a "Valorar (Hacer/Deber)": no hay otro camino en el menú, siempre aparece desde acá.' },
       ],
       notas: [
         'Lo que ves aquí depende 100% de tu rol — no es una pantalla que se configure, se arma sola con datos reales.',
+        'Las fichas de valoración (con sus preguntas) se generan solas cuando admin_th abre un Encuentro de Crecimiento desde el detalle de un ciclo — incluyendo las del bloque "Roles y Funciones", que salen directo del perfil de cargo de cada persona. Si alguien no ve nada en "Encuentros de Crecimiento pendientes" después de que se generó el ciclo, revisa si le corresponde alguna tarea como evaluador en el organigrama.',
       ],
     },
     {
