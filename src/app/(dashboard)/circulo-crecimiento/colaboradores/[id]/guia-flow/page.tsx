@@ -39,6 +39,12 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
   const puedeVer = esAdminTh || esLider || esElPropioColaborador;
   if (!puedeVer) notFound();
 
+  // admin_th y el líder de este colaborador ven y hacen exactamente lo
+  // mismo acá: invitar, cargar puntajes de los 18 aspectos seguros y
+  // generar los informes. Ninguno de los dos gana acceso a los 12
+  // aspectos sensibles ni al PDF — eso sigue bloqueado por RLS aparte.
+  const puedeGestionar = esAdminTh || esLider;
+
   const { data: guia } = await supabase
     .from('guia_del_flow')
     .select(
@@ -50,14 +56,15 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
     .limit(1)
     .maybeSingle();
 
-  // El desglose por aspecto (para cargar puntajes) solo lo necesita admin_th,
-  // y solo de los 18 aspectos con relevancia laboral — los 12 psicológicos/
-  // íntimos ni siquiera se consultan aquí. Ni líder ni colaborador ven esto:
-  // ambos solo ven su informe sintetizado (informe_lider / informe_colaborador).
+  // El desglose por aspecto (para cargar puntajes) solo lo necesita quien
+  // gestiona (admin_th o el líder de este colaborador), y solo de los 18
+  // aspectos con relevancia laboral — los 12 psicológicos/íntimos ni
+  // siquiera se consultan aquí. El colaborador solo ve su informe
+  // sintetizado (informe_colaborador).
   let bloques: { titulo: string; aspectos: AspectoConDatos[] }[] = [];
   let comentarioGeneral: string | null = null;
 
-  if (guia && esAdminTh) {
+  if (guia && puedeGestionar) {
     const [{ data: aspectosRaw }, { data: puntajesRaw }] = await Promise.all([
       supabase
         .from('ser_aspectos')
@@ -96,7 +103,7 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
   }
 
   let invitacionInicial: { link: string; creadaEl: string; usadaEl: string | null } | null = null;
-  if (esAdminTh) {
+  if (puedeGestionar) {
     const { data: ultimaInvitacion } = await supabase
       .from('guia_del_flow_invitaciones')
       .select('token, created_at, usado_at')
@@ -137,13 +144,13 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
         )}
       </div>
 
-      {esAdminTh && <InvitacionGuiaFlow colaboradorId={params.id} invitacionInicial={invitacionInicial} />}
+      {puedeGestionar && <InvitacionGuiaFlow colaboradorId={params.id} invitacionInicial={invitacionInicial} />}
 
       {!guia ? (
         <div className="card flex flex-col items-center justify-center gap-3 py-16 text-center">
           <Sparkles size={28} className="text-marmol-300" />
           <p className="text-sm font-medium text-marmol-700">Sin Guía del Flow registrada todavía</p>
-          {esAdminTh && (
+          {puedeGestionar && (
             <>
               <p className="text-xs text-marmol-400 max-w-sm">
                 Crea la primera aplicación para empezar a cargar los puntajes y generar los informes.
@@ -158,7 +165,7 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
             <p className="text-xs text-marmol-500">Aplicación del {guia.fecha_aplicacion}</p>
           </div>
 
-          {esAdminTh && (
+          {puedeGestionar && (
             <>
               {bloques.map(({ titulo, aspectos }) => (
                 <div key={titulo} className="card p-5">
@@ -193,17 +200,6 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
                 )}
               </div>
             </>
-          )}
-
-          {esLider && (
-            <div className="card p-5 space-y-2">
-              <h2 className="font-display font-semibold text-secundario">Informe de enfoque de desarrollo</h2>
-              {guia.informe_lider ? (
-                <p className="text-sm text-marmol-700 whitespace-pre-wrap">{guia.informe_lider}</p>
-              ) : (
-                <p className="text-sm text-marmol-400">Talento Humano todavía no ha generado este informe.</p>
-              )}
-            </div>
           )}
 
           {esElPropioColaborador && (

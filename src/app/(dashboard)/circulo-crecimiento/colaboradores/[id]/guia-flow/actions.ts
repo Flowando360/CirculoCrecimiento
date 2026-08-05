@@ -5,18 +5,26 @@ import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
-async function esAdminThDeEsteColaborador(colaboradorId: string) {
+/**
+ * admin_th puede gestionar la Guía del Flow de cualquier colaborador de su
+ * empresa; el líder, solo la de su propio equipo (mismo alcance que ya
+ * tiene para ver el informe). Ninguno de los dos gana acceso a los 12
+ * aspectos sensibles ni al PDF — eso sigue bloqueado por RLS aparte.
+ */
+async function puedeGestionarGuiaFlow(colaboradorId: string) {
   const perfil = await getPerfilActual();
-  if (!perfil || perfil.rol !== 'admin_th') return null;
+  if (!perfil || (perfil.rol !== 'admin_th' && perfil.rol !== 'lider')) return null;
 
   const supabase = createClient();
   const { data: colaborador } = await supabase
     .from('colaboradores')
-    .select('id, empresa_id')
+    .select('id, empresa_id, lider_id')
     .eq('id', colaboradorId)
     .maybeSingle();
 
   if (!colaborador || colaborador.empresa_id !== perfil.empresa_id) return null;
+  if (perfil.rol === 'lider' && colaborador.lider_id !== perfil.colaborador_id) return null;
+
   return perfil;
 }
 
@@ -33,14 +41,14 @@ const InvitarSchema = z.object({ colaboradorId: z.string().uuid() });
  * con un token único, ya asociado a su colaborador_id exacto. Resuelve el
  * problema de emparejar por correo o por nombre (frágil: errores de
  * tipeo, correos personales, nombres repetidos entre colaboradores
- * reales): acá es admin_th quien decide explícitamente a quién le manda
- * el link, no el sistema quien adivina quién respondió.
+ * reales): acá es admin_th o el líder quien decide explícitamente a quién
+ * le manda el link, no el sistema quien adivina quién respondió.
  */
 export async function crearInvitacionGuiaFlow(input: z.infer<typeof InvitarSchema>) {
   const parsed = InvitarSchema.safeParse(input);
   if (!parsed.success) return { ok: false as const, error: 'Datos inválidos' };
 
-  const perfil = await esAdminThDeEsteColaborador(parsed.data.colaboradorId);
+  const perfil = await puedeGestionarGuiaFlow(parsed.data.colaboradorId);
   if (!perfil) return { ok: false as const, error: 'No autorizado' };
 
   const supabase = createClient();
@@ -61,12 +69,12 @@ export async function crearInvitacionGuiaFlow(input: z.infer<typeof InvitarSchem
 
 const CrearGuiaSchema = z.object({ colaboradorId: z.string().uuid() });
 
-/** Inicia una nueva aplicación de la Guía del Flow (admin_th). */
+/** Inicia una nueva aplicación de la Guía del Flow (admin_th o el líder de este colaborador). */
 export async function crearGuiaDelFlow(input: z.infer<typeof CrearGuiaSchema>) {
   const parsed = CrearGuiaSchema.safeParse(input);
   if (!parsed.success) return { ok: false as const, error: 'Datos inválidos' };
 
-  const perfil = await esAdminThDeEsteColaborador(parsed.data.colaboradorId);
+  const perfil = await puedeGestionarGuiaFlow(parsed.data.colaboradorId);
   if (!perfil) return { ok: false as const, error: 'No autorizado' };
 
   const supabase = createClient();
@@ -90,12 +98,12 @@ const PuntajeSchema = z.object({
   nota: z.string().trim().max(300).optional(),
 });
 
-/** Carga el puntaje oficial de un aspecto, y opcionalmente una nota corta que resuma el resultado (admin_th únicamente). */
+/** Carga el puntaje oficial de un aspecto, y opcionalmente una nota corta que resuma el resultado (admin_th o el líder de este colaborador). */
 export async function guardarPuntajeSer(input: z.infer<typeof PuntajeSchema>) {
   const parsed = PuntajeSchema.safeParse(input);
   if (!parsed.success) return { ok: false as const, error: 'Datos inválidos' };
 
-  const perfil = await esAdminThDeEsteColaborador(parsed.data.colaboradorId);
+  const perfil = await puedeGestionarGuiaFlow(parsed.data.colaboradorId);
   if (!perfil) return { ok: false as const, error: 'No autorizado' };
 
   const supabase = createClient();
@@ -209,13 +217,13 @@ async function pedirInformeAClaude(apiKey: string, system: string, listaAspectos
 /**
  * Genera (o regenera) los dos informes sintetizados de una aplicación de la
  * Guía del Flow, a partir de los puntajes ya cargados de los aspectos no
- * sensibles. admin_th únicamente.
+ * sensibles. admin_th o el líder de este colaborador.
  */
 export async function generarInformesSer(input: z.infer<typeof GenerarInformesSchema>) {
   const parsed = GenerarInformesSchema.safeParse(input);
   if (!parsed.success) return { ok: false as const, error: 'Datos inválidos' };
 
-  const perfil = await esAdminThDeEsteColaborador(parsed.data.colaboradorId);
+  const perfil = await puedeGestionarGuiaFlow(parsed.data.colaboradorId);
   if (!perfil) return { ok: false as const, error: 'No autorizado' };
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -228,8 +236,9 @@ export async function generarInformesSer(input: z.infer<typeof GenerarInformesSc
     .from('ser_puntajes')
     .select('puntaje, nota, ser_aspectos(nombre)')
     .eq('guia_del_flow_id', parsed.data.guiaDelFlowId);
-  // RLS de ser_puntajes ya excluye los aspectos sensibles para admin_th, así
-  // que esta lista solo puede traer los 18 con relevancia laboral.
+  // RLS de ser_puntajes ya excluye los aspectos sensibles para admin_th y
+  // líder por igual, así que esta lista solo puede traer los 18 con
+  // relevancia laboral.
 
   const aspectos = ((puntajesRaw ?? []) as any[])
     .filter((p) => p.ser_aspectos?.nombre)
