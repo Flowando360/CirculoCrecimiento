@@ -67,6 +67,7 @@ export default async function CicloDetallePage({ params }: { params: { id: strin
               <th className="px-4 py-3 font-medium">Avance</th>
               <th className="px-4 py-3 font-medium">Hacer</th>
               <th className="px-4 py-3 font-medium">Deber</th>
+              <th className="px-4 py-3 font-medium">Resultado</th>
               {(perfil?.rol === 'admin_th' || perfil?.rol === 'lider') && (
                 <>
                   <th className="px-4 py-3 font-medium">Brief</th>
@@ -94,6 +95,14 @@ export default async function CicloDetallePage({ params }: { params: { id: strin
                 </td>
                 <td className="px-4 py-3">
                   <SemaforoBadge nivel={e.resultado?.[0]?.semaforo_deber} />
+                </td>
+                <td className="px-4 py-3">
+                  <Link
+                    href={`/circulo-crecimiento/evaluaciones/${e.id}/resultado`}
+                    className="inline-flex items-center gap-1 text-xs text-flow-600 hover:text-flow-700"
+                  >
+                    Ver ficha
+                  </Link>
                 </td>
                 {(perfil?.rol === 'admin_th' || perfil?.rol === 'lider') && (
                   <>

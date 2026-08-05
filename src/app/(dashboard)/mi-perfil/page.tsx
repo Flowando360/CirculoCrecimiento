@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { createClient } from '@/lib/supabase/server';
 import { obtenerUrlFirmadaDocumentoColaborador } from '@/lib/supabase/storage';
@@ -45,7 +46,7 @@ export default async function MiPerfilPage() {
       .maybeSingle(),
     supabase
       .from('resultados_evaluacion')
-      .select('indice_hacer, indice_deber, semaforo_hacer, semaforo_deber, evaluacion:evaluaciones!inner(colaborador_evaluado_id)')
+      .select('indice_hacer, indice_deber, semaforo_hacer, semaforo_deber, evaluacion:evaluaciones!inner(id, colaborador_evaluado_id)')
       .eq('evaluacion.colaborador_evaluado_id', perfil.colaborador_id)
       .order('actualizado_en', { ascending: false })
       .limit(1)
@@ -85,6 +86,7 @@ export default async function MiPerfilPage() {
 
   const cargo = colaborador?.cargo as any;
   const lider = colaborador?.lider as any;
+  const evaluacionResultadoId = (resultado?.evaluacion as any)?.id as string | undefined;
 
   return (
     <div className="space-y-6 max-w-3xl">
@@ -117,14 +119,29 @@ export default async function MiPerfilPage() {
             {saber?.porcentaje_cumplimiento ? `${saber.porcentaje_cumplimiento}%` : '—'}
           </p>
         </div>
-        <div className="card p-4">
-          <p className="text-xs text-marmol-500 mb-1">HACER</p>
-          <SemaforoBadge nivel={resultado?.semaforo_hacer as any} />
-        </div>
-        <div className="card p-4">
-          <p className="text-xs text-marmol-500 mb-1">DEBER</p>
-          <SemaforoBadge nivel={resultado?.semaforo_deber as any} />
-        </div>
+        {evaluacionResultadoId ? (
+          <>
+            <Link href={`/circulo-crecimiento/evaluaciones/${evaluacionResultadoId}/resultado`} className="card p-4 hover:border-flow-300 transition">
+              <p className="text-xs text-marmol-500 mb-1">HACER</p>
+              <SemaforoBadge nivel={resultado?.semaforo_hacer as any} />
+            </Link>
+            <Link href={`/circulo-crecimiento/evaluaciones/${evaluacionResultadoId}/resultado`} className="card p-4 hover:border-flow-300 transition">
+              <p className="text-xs text-marmol-500 mb-1">DEBER</p>
+              <SemaforoBadge nivel={resultado?.semaforo_deber as any} />
+            </Link>
+          </>
+        ) : (
+          <>
+            <div className="card p-4">
+              <p className="text-xs text-marmol-500 mb-1">HACER</p>
+              <SemaforoBadge nivel={resultado?.semaforo_hacer as any} />
+            </div>
+            <div className="card p-4">
+              <p className="text-xs text-marmol-500 mb-1">DEBER</p>
+              <SemaforoBadge nivel={resultado?.semaforo_deber as any} />
+            </div>
+          </>
+        )}
       </div>
 
       {ser && (

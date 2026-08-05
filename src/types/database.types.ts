@@ -5669,6 +5669,10 @@ export type Database = {
         Args: never
         Returns: Database["public"]["Enums"]["rol_usuario"]
       }
+      fn_puedo_ver_respuestas_de: {
+        Args: { p_evaluacion_tarea_id: string }
+        Returns: boolean
+      }
       fn_recalcular_resultados_evaluacion: {
         Args: { p_evaluacion_id: string }
         Returns: undefined
