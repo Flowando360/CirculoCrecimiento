@@ -60,10 +60,11 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
         .eq('empresa_id', perfil.empresa_id)
         .eq('sensible', false)
         .order('orden'),
-      supabase.from('ser_puntajes').select('aspecto_id, puntaje').eq('guia_del_flow_id', guia.id),
+      supabase.from('ser_puntajes').select('aspecto_id, puntaje, nota').eq('guia_del_flow_id', guia.id),
     ]);
 
     const puntajePorAspecto = new Map(((puntajesRaw ?? []) as any[]).map((p) => [p.aspecto_id, p.puntaje as number]));
+    const notaPorAspecto = new Map(((puntajesRaw ?? []) as any[]).map((p) => [p.aspecto_id, p.nota as string | null]));
 
     bloques = BLOQUES.map(({ valor, titulo }) => ({
       titulo,
@@ -73,6 +74,7 @@ export default async function GuiaDelFlowPage({ params }: { params: { id: string
           id: a.id,
           nombre: a.nombre,
           puntaje: puntajePorAspecto.get(a.id) ?? null,
+          nota: notaPorAspecto.get(a.id) ?? null,
           comentario: null,
         })),
     })).filter((b) => b.aspectos.length > 0);

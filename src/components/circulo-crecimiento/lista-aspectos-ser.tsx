@@ -12,6 +12,7 @@ export interface AspectoConDatos {
   id: string;
   nombre: string;
   puntaje: number | null;
+  nota: string | null;
   comentario: string | null;
 }
 
@@ -32,10 +33,18 @@ export function ListaAspectosSer({
   const [guardados, setGuardados] = useState<Record<string, boolean>>({});
   const [, startTransition] = useTransition();
 
-  function guardarPuntaje(aspectoId: string, puntaje: number) {
+  function guardarPuntaje(aspectoId: string, puntaje: number, notaActual?: string) {
     setItems((prev) => prev.map((a) => (a.id === aspectoId ? { ...a, puntaje } : a)));
     startTransition(async () => {
-      await guardarPuntajeSer({ colaboradorId, guiaDelFlowId, aspectoId, puntaje });
+      await guardarPuntajeSer({ colaboradorId, guiaDelFlowId, aspectoId, puntaje, nota: notaActual });
+    });
+  }
+
+  function guardarNota(aspectoId: string, puntajeActual: number | null, nota: string) {
+    if (!puntajeActual) return; // la nota se guarda junto con el puntaje; sin puntaje aún no hay nada que asociar
+    setItems((prev) => prev.map((a) => (a.id === aspectoId ? { ...a, nota } : a)));
+    startTransition(async () => {
+      await guardarPuntajeSer({ colaboradorId, guiaDelFlowId, aspectoId, puntaje: puntajeActual, nota });
     });
   }
 
@@ -83,6 +92,17 @@ export function ListaAspectosSer({
               </span>
             )}
           </div>
+
+          {puedeEditarPuntaje && (
+            <input
+              type="text"
+              placeholder="Nota corta del resultado (opcional, mejora el informe generado)…"
+              defaultValue={a.nota ?? ''}
+              onBlur={(e) => guardarNota(a.id, a.puntaje, e.target.value)}
+              maxLength={300}
+              className="mt-2 w-full rounded-lg border border-marmol-200 px-2.5 py-1.5 text-xs"
+            />
+          )}
 
           {puedeComentar && (
             <div className="mt-2">

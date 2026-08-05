@@ -4647,6 +4647,7 @@ export type Database = {
           created_at: string
           guia_del_flow_id: string
           id: string
+          nota: string | null
           puntaje: number
           updated_at: string
         }
@@ -4655,6 +4656,7 @@ export type Database = {
           created_at?: string
           guia_del_flow_id: string
           id?: string
+          nota?: string | null
           puntaje: number
           updated_at?: string
         }
@@ -4663,6 +4665,7 @@ export type Database = {
           created_at?: string
           guia_del_flow_id?: string
           id?: string
+          nota?: string | null
           puntaje?: number
           updated_at?: string
         }

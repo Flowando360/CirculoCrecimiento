@@ -54,9 +54,10 @@ const PuntajeSchema = z.object({
   guiaDelFlowId: z.string().uuid(),
   aspectoId: z.string().uuid(),
   puntaje: z.number().int().min(1).max(5),
+  nota: z.string().trim().max(300).optional(),
 });
 
-/** Carga el puntaje oficial de un aspecto (admin_th únicamente). */
+/** Carga el puntaje oficial de un aspecto, y opcionalmente una nota corta que resuma el resultado (admin_th únicamente). */
 export async function guardarPuntajeSer(input: z.infer<typeof PuntajeSchema>) {
   const parsed = PuntajeSchema.safeParse(input);
   if (!parsed.success) return { ok: false as const, error: 'Datos inválidos' };
@@ -70,6 +71,7 @@ export async function guardarPuntajeSer(input: z.infer<typeof PuntajeSchema>) {
       guia_del_flow_id: parsed.data.guiaDelFlowId,
       aspecto_id: parsed.data.aspectoId,
       puntaje: parsed.data.puntaje,
+      ...(parsed.data.nota !== undefined ? { nota: parsed.data.nota || null } : {}),
       updated_at: new Date().toISOString(),
     },
     { onConflict: 'guia_del_flow_id,aspecto_id' }
@@ -191,14 +193,14 @@ export async function generarInformesSer(input: z.infer<typeof GenerarInformesSc
   const supabase = createClient();
   const { data: puntajesRaw } = await supabase
     .from('ser_puntajes')
-    .select('puntaje, ser_aspectos(nombre)')
+    .select('puntaje, nota, ser_aspectos(nombre)')
     .eq('guia_del_flow_id', parsed.data.guiaDelFlowId);
   // RLS de ser_puntajes ya excluye los aspectos sensibles para admin_th, así
   // que esta lista solo puede traer los 18 con relevancia laboral.
 
   const aspectos = ((puntajesRaw ?? []) as any[])
     .filter((p) => p.ser_aspectos?.nombre)
-    .map((p) => `${p.ser_aspectos.nombre}: ${p.puntaje}/5`);
+    .map((p) => (p.nota ? `${p.ser_aspectos.nombre}: ${p.nota} (${p.puntaje}/5)` : `${p.ser_aspectos.nombre}: ${p.puntaje}/5`));
 
   if (aspectos.length === 0) {
     return {

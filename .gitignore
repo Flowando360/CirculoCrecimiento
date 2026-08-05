@@ -40,5 +40,9 @@ next-env.d.ts
 # supabase
 supabase/.temp/
 
+# Guías del Flow reales de colaboradores — documento íntimo, nunca al repo
+# (público). Se usan una vez para cargar puntajes/notas y se descartan.
+docs/GuiaDelFlow_*.pdf
+
 .vercel
 .env*
