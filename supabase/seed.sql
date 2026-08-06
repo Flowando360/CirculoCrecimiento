@@ -499,3 +499,105 @@ insert into nexa_cursos (empresa_id, titulo, categoria, duracion_minutos, puntos
 
 -- Nota: usuarios de auth.users y perfiles_usuario se crean vía Supabase Auth
 -- (signup / invite), no por seed directo, para respetar el flujo de auth real.
+
+-- ── Perfil de cargo completo: Asistente Comercial (cargado 2026-08-06 desde
+--    "PERFIL DE CARGO ASISTENTE COMERCIAL QUICENO.xlsx", hoja "ASESOR COMERCIAL J",
+--    FORSST 61 v2. Completa los campos SG-SST que quedaron NULL en la carga
+--    inicial del 2026-07-30 y las tablas cargo_funciones_principales,
+--    cargo_factores_riesgo, cargo_examenes_medicos y cargo_epp, que hasta hoy
+--    estaban vacías para todos los cargos. ────────────────────────────────────
+update cargos set
+  tipo_area = 'administrativa',
+  edad_minima = 20,
+  edad_maxima = 40,
+  responsabilidad_bienes_servicios = 'alto',
+  responsabilidad_informacion = 'alto',
+  responsabilidad_relaciones_interpersonales = 'alto',
+  responsabilidad_direccion_coordinacion = 'bajo',
+  sgsst_responsabilidades_generales = '1. Procurar el cuidado integral de su salud.
+2. Suministrar información Clara, veraz y completa sobre su estado de salud
+3. Cumplir las normas, reglamentos e instrucciones del Sistema de Gestión de la Seguridad y Salud en el Trabajo de la empresa
+4. Informar oportunamente al empleador o contratante acerca de los peligros y riesgos latentes en su sitio de trabajo
+5. Participar en las actividades de capacitación en seguridad y salud en el trabajo definido en el plan de capacitación del SG-SST.
+6. Participar y contribuir al cumplimiento de los objetivos del Sistema de Gestión de la Seguridad y Salud en el Trabajo SG-SST.
+* Ejecutar las actividades asignadas bajo las condiciones de Seguridad.
+* Reportar y hacer seguimiento sobre el mantenimiento de las maquinas, equipos y actividades realizadas por parte de MYS.
+* Reportar condiciones y actos inseguros al personal de seguridad de la empresa (COPASST, Lider de Talento Humano y SST)
+* Participar en las auditorias e inspecciones que se programen y se requiera su presencia.
+* Identificar las necesidades y requerimientos de condiciones de seguridad de las areas en que participa MYS
+* Participar en la investigación de los incidentes que sucedan en MYS o a su personal a cargo.
+* Garantizar la salud y seguridad de las personas a su cargo.
+* Reportar de forma inmediata incidentes, accidentes, enfermedades laborales, actos, condiciones inseguras y situaciones de emergencia que se pueden presentar, proponiendo soluciones potenciales.
+* Asegurar el cumplimiento de los requisitos legales, reglamentarios, estandares y/o procedimientos designados para las actividades propias de MYS
+* Dar cumplimiento a las políticas del SG-SST, apoyar al cumplimiento de los objetivos y metas.',
+  sgsst_responsabilidades_campo = '1. Asegurarse en todo momento de que las herramientas, maquinaria, dispositivos y demás elementos que intervengan en la operación estén instalados correctamente y que su funcionamiento sea adecuado.
+2. No manejar ningún tipo de maquinaria o automóvil, ni desarrollar ningún procedimiento si no ha sido autorizado ni esta consciente de los riesgos que para el trabajador como para sus compañeros y para la operación en general se generen por esta causa.
+3. Participar activamente en las charlas de seguridad realizadas en campo.
+4. Identificar plenamente los riegos generales del trabajo, así como los específicos de la locación en donde se encuentre trabajando, definiendo las medidas necesarias para su control.',
+  sgsst_rendicion_cuentas = '* Rinde cuentas al Líder de SST en caso de reportar actos y condiciones inseguras en el comportamiento de los trabajadores, reportar quejas o reclamos en materia de SST, accidentes, incidentes, situaciones de emergencia.',
+  sgsst_autoridad = '* Suspender cualquier actividad que atente contra la seguridad del personal.
+* Exigir el uso adecuado de los elementos de protección personal EPP y adopción de actos y condiciones seguras, por parte de los trabajadores de MYS.
+* Exigir el cumplimiento de los requisitos legales, procedimientos, estándares, reglamentos aplicables y suscritos a todo el personal que labora en MYS',
+  recursos_seleccion = 'Examen médico, Entrevista, Hoja de vida, Prueba psicotécnica'
+where id = '20000000-0000-0000-0000-000000000011';
+
+insert into cargo_funciones_principales (cargo_id, proceso, funcion, tipo_phva, periodicidad, herramientas, orden) values
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Atender y recibir las solicitudes de los clientes con los que venía anteriormente, de forma presencial y telefónica (llamada o WhatsApp), brindando asesorías sobre nuestros servicios y productos, con un lenguaje verbal y físico adecuado', 'H', 'Diaria', 'Herramientas tecnológicas y personal humano.', 0),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Previo a brindar información sobre los productos, validar en el sistema y en la sede autopista la existencia del material requerido por el cliente.', 'H', 'Diaria', 'Herramientas tecnológicas y personal humano.', 1),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Realizar las cotizaciones solicitadas, con los datos indicados para el respectivo registro del potencial cliente que le corresponde atender, de tal forma que se tengan los datos correctos en el sistema de la compañía. Tener claridad y efectividad al realizarlas.', 'H', 'Diaria', 'Software de la compañía (Sistemas Kontrol) - hojas, impresiones - Teléfono celular', 2),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Entrega oportuna de las cotizaciones, realizar seguimiento y cierre de venta con clientes fijos.', 'H', 'Diaria', 'Software de la compañía (Sistemas Kontrol) - hojas, impresiones - Teléfono celular', 3),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Validar el pago oportuno de la venta: 50% para iniciar la gestión de producción, 50% para despachar.', 'V', 'Diaria', 'Software de la compañía (Sistemas Kontrol) - hojas, impresiones - Teléfono celular', 4),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Realizar recibos de caja de los clientes fijos y también de los clientes de su jefe inmediato.', 'V', 'Diaria', 'Software de la compañía (Sistemas Kontrol) - hojas, impresiones - Teléfono celular', 5),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Notificar al área de producción del contrato de suministro, enviar por correo electrónico dicho contrato con el soporte del pago del 50% de la venta, para que se pueda proceder con el servicio adquirido.', 'H', 'Diaria', 'Software de la compañía (Sistemas Kontrol) - Correo electrónico - Celular.', 6),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Trazabilidad de los contratos de suministro', 'H', 'Diaria', 'Ofimática y software de la compañía (Sistemas Kontrol, Softland)', 7),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Cuando la venta requiera de mano de obra e instalación, debe realizar la solicitud de toma de medidas y seguimiento a la misma, al área de producción.', 'H', 'Diaria', 'Formato lista de chequeo (Toma de medidas)', 8),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Verificar lugar disponible para las instalaciones: debe concertar con el cliente el requerimiento para realizar la toma de medidas, el despacho o la instalación.', 'H', 'Diaria', 'Software de la compañía (Sistemas Kontrol) - Correo electrónico - Celular.', 9),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Revisar actas de entrega y verificación de instalación', 'H', 'Diaria', 'Teléfono, celular, PC.', 10),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'En la atención de clientes que le corresponde, si requiere pasar a planta, hacerlos firmar el protocolo de seguridad; el cliente debe estar usando casco y zapatos cerrados. Todas las asesoras deben usar de manera permanente sus EPP (botas y casco) para el ingreso a esa área.', 'H', 'Diaria', 'Herramientas EPP y personal humano.', 11),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Cliente que pase a la planta debe estar bajo su acompañamiento, no dejarlos solos, para evitar accidentes.', 'H', 'Diaria', 'Herramientas EPP y personal humano.', 12),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Apoyar al área administrativa y de cartera: en lo relacionado al cobro proactivo de la cartera.', 'P', 'Mensual', 'Teléfono, celular, PC, correo corporativo, internet', 13),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Aseguramiento del ingreso, mantener al día formatos', 'H', 'Diaria', 'Teléfono, celular, PC, correo corporativo, internet', 14),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Mantener al día la lista de chequeo en atención a sus clientes y clientes de don Ernesto González y su jefe inmediata.', 'V', 'Diaria', 'Teléfono, celular, PC, correo corporativo, internet', 15),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Orden y aseo en el puesto de trabajo', 'H', 'Diaria', 'Teléfono, celular, PC, correo corporativo, internet', 16),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Verificar la satisfacción del cliente que le corresponde atender (ya sea de los anteriores o los de su jefe inmediato y de don Ernesto González)', 'V', 'Mensual', 'Teléfono, celular, PC, correo corporativo, internet', 17),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'La efectividad en el manejo del pipeline de la compañía.', 'V', 'Mensual', 'Teléfono, celular, PC, correo corporativo, internet', 18),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Ofrecer servicio posventa (mantenimiento preventivo a la instalación).', 'V', 'Mensual', 'Teléfono, celular, PC, correo corporativo, internet', 19),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Cumplir con las normatividades e indicaciones entregadas, entre las que se encuentran las políticas de la compañía, Reglamento Interno de Trabajo, Reglamento de Higiene y Seguridad Industrial, Política SST Mármoles & Servicios y otras funciones inherentes al cargo. Estas no son límite para otras asignadas por sus superiores.', 'V', 'Mensual', 'Teléfono, celular, PC, correo corporativo, internet', 20),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Atender clientes, realizar las cotizaciones, recibos de caja, contratos de suministro, facturas de los clientes de su jefe inmediato.', 'H', 'Diaria', 'Teléfono, celular, PC, correo corporativo, internet', 21),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Realizar las listas de chequeo de los clientes de su jefe inmediato.', 'H', 'Diaria', 'Teléfono, celular, PC, correo corporativo, internet', 22),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Atender los clientes de sala y de obras del señor Ernesto González cuando sea requerido. Además de gestionar la labor administrativa de cotizaciones, recibos de caja, contratos de suministro y facturas.', 'H', 'Ocasional', 'Teléfono, celular, PC, correo corporativo, internet', 23),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Elaborar y hacer seguimiento al pago de las cotizaciones ejecutadas.', 'H', 'Diaria', 'Teléfono, celular, PC, correo corporativo, internet', 24),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Visitar las obras en los casos que sea requerido', 'V', 'Mensual', 'Teléfono, celular, PC, correo corporativo, internet', 25),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Comunicarse con las obras a ejecutar de su jefe inmediato, para realizar toda la gestión necesaria para inicio, realización de cotizaciones, contratos de suministro, recibos de caja y facturas, y activar los procesos necesarios para que fluya la ejecución de la misma.', 'H', null, 'Teléfono, celular, PC, correo corporativo, internet', 26),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Revisar y atender los requerimientos de las obras para ser atendidos oportunamente.', 'V', 'Diaria', 'Teléfono, celular, PC, correo corporativo, internet', 27),
+('20000000-0000-0000-0000-000000000011', 'Comercial', 'Realizar la planeación de las entregas de los materiales a manera de control de obras', 'H', 'Diaria', 'Teléfono, celular, PC, correo corporativo, internet', 28);
+
+insert into cargo_factores_riesgo (cargo_id, factor, categoria, efectos_posibles, orden) values
+('20000000-0000-0000-0000-000000000011', 'QUÍMICO: presencia de material particulado en el ambiente.', 'quimico', 'Alergias respiratorias.', 0),
+('20000000-0000-0000-0000-000000000011', 'MECÁNICO: manipulación de puertas de estantes, oficinas, equipos de impresión, de cómputo.', 'mecanico', 'Heridas leves.', 1),
+('20000000-0000-0000-0000-000000000011', 'LOCATIVO: condiciones de orden y aseo.', 'locativo', 'Golpes, lesiones menores, dificultad ante la necesidad de evacuar.', 2),
+('20000000-0000-0000-0000-000000000011', 'ERGONÓMICO: posición sentado con inclinación de región cervical, movimientos repetitivos.', 'ergonomico', 'Fatiga osteomuscular a nivel cervical, lumbar o coccígeo. Síndromes en diferentes articulaciones empleadas al digitar.', 3),
+('20000000-0000-0000-0000-000000000011', 'PSICOSOCIAL: naturaleza de las funciones del cargo desempeñado', 'psicosocial', 'Trastornos de sueño, estrés, ansiedad.', 4),
+('20000000-0000-0000-0000-000000000011', 'FÍSICO: ruido proveniente de dispositivos de sonido o de la calle, radiación emitida por el PC.', 'fisico', 'Desconcentración, estrés, fatiga visual, golpes.', 5),
+('20000000-0000-0000-0000-000000000011', 'ELÉCTRICO: sobrecarga de tomacorrientes.', 'otro', 'Quemaduras de 1er, 2do o 3er grado, electrocución, shock, muerte.', 6),
+('20000000-0000-0000-0000-000000000011', 'BIOLÓGICO: exposición a enfermedades originadas por condiciones laborales (virus)', 'biologico', 'Enfermedades infectocontagiosas.', 7);
+
+insert into cargo_examenes_medicos (cargo_id, momento, nombre_examen, orden) values
+('20000000-0000-0000-0000-000000000011', 'ingreso', 'Examen médico con énfasis osteomuscular', 0),
+('20000000-0000-0000-0000-000000000011', 'ingreso', 'Detección drogas de abuso', 1),
+('20000000-0000-0000-0000-000000000011', 'ingreso', 'Paraclínicos: Visiometría, Audiometría, Espirometría, Glicemia, Perfil lipídico', 2),
+('20000000-0000-0000-0000-000000000011', 'ingreso', 'Mayores de 50 años: Electrocardiograma', 3),
+('20000000-0000-0000-0000-000000000011', 'periodico', 'Examen médico con énfasis osteomuscular', 0),
+('20000000-0000-0000-0000-000000000011', 'periodico', 'Detección drogas de abuso', 1),
+('20000000-0000-0000-0000-000000000011', 'periodico', 'Paraclínicos: Visiometría, Audiometría, Espirometría, Glicemia, Perfil lipídico', 2),
+('20000000-0000-0000-0000-000000000011', 'periodico', 'Mayores de 50 años: Electrocardiograma', 3),
+('20000000-0000-0000-0000-000000000011', 'retiro', 'Examen médico con énfasis osteomuscular', 0),
+('20000000-0000-0000-0000-000000000011', 'retiro', 'Detección drogas de abuso', 1),
+('20000000-0000-0000-0000-000000000011', 'retiro', 'Paraclínicos: Visiometría, Audiometría, Espirometría, Glicemia, Perfil lipídico', 2),
+('20000000-0000-0000-0000-000000000011', 'retiro', 'Mayores de 50 años: Electrocardiograma', 3);
+
+insert into cargo_epp (cargo_id, item, orden) values
+('20000000-0000-0000-0000-000000000011', 'Uniforme administrativo', 0),
+('20000000-0000-0000-0000-000000000011', 'Botas de seguridad punteras dieléctricas', 1),
+('20000000-0000-0000-0000-000000000011', 'Casco de seguridad', 2),
+('20000000-0000-0000-0000-000000000011', 'Protectores auditivos: inserción', 3);
