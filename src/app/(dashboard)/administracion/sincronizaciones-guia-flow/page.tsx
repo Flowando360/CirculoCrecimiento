@@ -25,9 +25,17 @@ export default async function SincronizacionesGuiaFlowPage() {
 
   const supabase = createClient();
 
+  // La policy de RLS de esta tabla ya solo deja ver a admin_th las filas sin
+  // empresa conocida (sin match) o las de su propia empresa (ver
+  // 0053_sincronizaciones_guia_flow.sql) — pero mientras BYPASS_AUTH esté
+  // activo (ver lib/supabase/server.ts), createClient() usa la service_role
+  // y se salta esa RLS por completo. Se repite el mismo filtro acá a mano
+  // para que, con o sin BYPASS_AUTH, nunca se vean intentos ya vinculados a
+  // colaboradores de OTRA empresa.
   const { data: intentos } = await supabase
     .from('guia_del_flow_sincronizaciones')
     .select('id, intentado_at, correo, nombre_flow, resultado, detalle, colaborador:colaborador_id(id, nombre_completo)')
+    .or(`empresa_id.is.null,empresa_id.eq.${perfil.empresa_id}`)
     .order('intentado_at', { ascending: false })
     .limit(200);
 
