@@ -32,6 +32,7 @@ import {
   HeartHandshake,
   RefreshCw,
   Send,
+  LayoutGrid,
 } from 'lucide-react';
 
 interface NavItem {
@@ -58,6 +59,7 @@ const NAV: NavGroup[] = [
     titulo: 'Círculo de Crecimiento 360°',
     items: [
       { href: '/circulo-crecimiento/colaboradores', label: 'Colaboradores', icon: Users, roles: ['admin_th', 'lider', 'gerencia'] },
+      { href: '/circulo-crecimiento/dimensiones', label: 'Dimensiones', icon: LayoutGrid, roles: ['admin_th', 'lider', 'gerencia'] },
       { href: '/circulo-crecimiento/ciclos', label: 'Ciclos de Crecimiento', icon: CalendarClock, roles: ['admin_th', 'lider'] },
       { href: '/circulo-crecimiento/pdi', label: 'Planes de Desarrollo', icon: Target, roles: ['admin_th', 'lider', 'colaborador'] },
       { href: '/circulo-crecimiento/organigrama', label: 'Organigrama', icon: Network, roles: ['admin_th', 'lider', 'gerencia'] },

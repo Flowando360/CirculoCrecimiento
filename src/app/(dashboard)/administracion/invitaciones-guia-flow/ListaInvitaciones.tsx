@@ -40,6 +40,10 @@ export function ListaInvitaciones({ colaboradores }: { colaboradores: FilaColabo
     });
   }
 
+  function seleccionarSinGuia() {
+    setSeleccionados(new Set(colaboradores.filter((c) => c.estado !== 'guia_generada').map((c) => c.id)));
+  }
+
   function generar() {
     setError(null);
     setLinks(null);
@@ -85,6 +89,16 @@ export function ListaInvitaciones({ colaboradores }: { colaboradores: FilaColabo
 
   return (
     <div className="space-y-4">
+      <div className="flex items-center gap-2 flex-wrap">
+        <button
+          type="button"
+          onClick={seleccionarSinGuia}
+          className="inline-flex items-center gap-1.5 rounded-lg border border-marmol-200 hover:border-flow-300 text-marmol-600 text-xs font-medium px-2.5 py-1.5 transition"
+        >
+          Seleccionar quienes no tienen Guía
+        </button>
+      </div>
+
       <div className="card overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
