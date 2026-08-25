@@ -116,7 +116,7 @@ export default async function MiPerfilPage() {
         <div className="card p-4">
           <p className="text-xs text-marmol-500 mb-1">SABER</p>
           <p className="text-lg font-display font-semibold">
-            {saber?.porcentaje_cumplimiento ? `${saber.porcentaje_cumplimiento}%` : '—'}
+            {saber?.porcentaje_cumplimiento != null ? `${saber.porcentaje_cumplimiento}%` : '—'}
           </p>
         </div>
         {evaluacionResultadoId ? (

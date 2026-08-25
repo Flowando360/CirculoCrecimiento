@@ -135,7 +135,7 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
             <GraduationCap size={14} className="text-saber" /> SABER
           </p>
           <p className="text-2xl font-display font-semibold text-secundario">
-            {saber?.porcentaje_cumplimiento ? `${saber.porcentaje_cumplimiento}%` : '—'}
+            {saber?.porcentaje_cumplimiento != null ? `${saber.porcentaje_cumplimiento}%` : '—'}
           </p>
           <p className="text-xs text-marmol-400">cumplimiento del perfil</p>
         </Link>

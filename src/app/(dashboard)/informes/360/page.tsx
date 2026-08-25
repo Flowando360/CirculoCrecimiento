@@ -139,7 +139,7 @@ export default async function Informe360Page({
                 <GraduationCap size={14} className="text-saber" /> SABER
               </p>
               <p className="text-2xl font-display font-semibold text-secundario">
-                {informe.saber?.porcentaje_cumplimiento ? `${informe.saber.porcentaje_cumplimiento}%` : '—'}
+                {informe.saber?.porcentaje_cumplimiento != null ? `${informe.saber.porcentaje_cumplimiento}%` : '—'}
               </p>
             </div>
             <div className="card p-4">
