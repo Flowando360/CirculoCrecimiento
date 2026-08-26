@@ -37,8 +37,29 @@ export async function iniciarSesion(input: { identificador: string; password: st
   if (!email) return { ok: false as const, error: MENSAJE_ERROR };
 
   const supabase = createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password: parsed.data.password });
+  const { data: sesion, error } = await supabase.auth.signInWithPassword({ email, password: parsed.data.password });
   if (error) return { ok: false as const, error: MENSAJE_ERROR };
+
+  // La contraseña es correcta, pero eso no basta: hace falta un perfil
+  // activo en perfiles_usuario para entrar al dashboard (lo exige
+  // getPerfilActual en cada página). Sin este chequeo, una cuenta de Auth
+  // sin perfil (o con perfil desactivado) generaba un loop de redirecciones
+  // infinito entre /login y /inicio -- el navegador lo mostraba como "la
+  // página no funciona" / "demasiadas redirecciones", sin ningún mensaje.
+  // Se corta acá, antes de redirigir, con un mensaje claro.
+  const { data: perfil } = await supabase
+    .from('perfiles_usuario')
+    .select('activo')
+    .eq('id', sesion.user.id)
+    .maybeSingle();
+
+  if (!perfil || perfil.activo === false) {
+    await supabase.auth.signOut();
+    return {
+      ok: false as const,
+      error: 'Tu cuenta no tiene un perfil activo en el sistema. Contacta a Talento Humano.',
+    };
+  }
 
   redirect('/inicio');
 }
