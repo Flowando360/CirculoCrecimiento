@@ -39,7 +39,7 @@ export default async function ColaboradoresPage() {
         </div>
         {perfil.rol === 'admin_th' && (
           <Link
-            href="/administracion/usuarios"
+            href="/circulo-crecimiento/colaboradores/nuevo"
             className="inline-flex items-center gap-1.5 rounded-lg bg-flow-500 hover:bg-flow-600 text-white text-sm font-medium px-3.5 py-2 transition"
           >
             <Plus size={16} /> Nuevo colaborador
