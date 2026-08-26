@@ -10,12 +10,17 @@ export default async function InvitacionesGuiaFlowPage() {
 
   const supabase = createClient();
 
+  // Incluye período de prueba además de activo -- alguien recién
+  // contratado necesita la Guía del Flow desde el inicio (es parte de la
+  // inducción), y el invitar de a uno desde la ficha del colaborador nunca
+  // tuvo esta restricción de estado. Quedan afuera inactivo/en proceso de
+  // salida: gente que ya no está o está por irse.
   const { data: colaboradores } = await supabase
     .from('colaboradores')
     .select('id, nombre_completo, email')
     .eq('empresa_id', perfil.empresa_id)
     .eq('es_externo', false)
-    .eq('estado', 'activo')
+    .in('estado', ['activo', 'periodo_prueba'])
     .order('nombre_completo');
 
   const colaboradorIds = (colaboradores ?? []).map((c) => c.id);
