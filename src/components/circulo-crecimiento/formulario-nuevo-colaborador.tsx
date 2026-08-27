@@ -23,10 +23,13 @@ const ESTADOS: { value: EstadoColaborador; label: string }[] = [
 export function FormularioNuevoColaborador({
   cargos,
   posiblesLideres,
+  cuentasSinFicha,
 }: {
   cargos: { id: string; nombre: string; proceso_area: string | null }[];
   posiblesLideres: { id: string; nombre_completo: string }[];
+  cuentasSinFicha: { id: string; nombre_completo: string; email: string | null }[];
 }) {
+  const [usuarioVinculadoId, setUsuarioVinculadoId] = useState('');
   const [nombreCompleto, setNombreCompleto] = useState('');
   const [numeroDocumento, setNumeroDocumento] = useState('');
   const [email, setEmail] = useState('');
@@ -45,10 +48,23 @@ export function FormularioNuevoColaborador({
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
+  // Al vincular una cuenta ya existente (creada antes desde Usuarios y
+  // roles, sin ficha), se sugiere su nombre y correo tal como quedaron
+  // registrados ahí -- se puede corregir igual, por si tenían un error.
+  function vincularCuenta(id: string) {
+    setUsuarioVinculadoId(id);
+    const cuenta = cuentasSinFicha.find((c) => c.id === id);
+    if (cuenta) {
+      setNombreCompleto(cuenta.nombre_completo);
+      setEmail(cuenta.email ?? '');
+    }
+  }
+
   function crear() {
     setError(null);
     startTransition(async () => {
       const res = await crearColaborador({
+        usuarioId: usuarioVinculadoId || undefined,
         nombreCompleto,
         numeroDocumento,
         email,
@@ -75,6 +91,25 @@ export function FormularioNuevoColaborador({
 
   return (
     <div className="card p-6 space-y-6 max-w-2xl">
+      {cuentasSinFicha.length > 0 && (
+        <section className="space-y-2">
+          <label className={label}>Vincular a una cuenta de acceso existente (opcional)</label>
+          <select value={usuarioVinculadoId} onChange={(e) => vincularCuenta(e.target.value)} className={campo}>
+            <option value="">No vincular — es una persona nueva sin cuenta todavía</option>
+            {cuentasSinFicha.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.nombre_completo}
+                {c.email ? ` · ${c.email}` : ''}
+              </option>
+            ))}
+          </select>
+          <p className="text-[11px] text-marmol-400">
+            Úsalo cuando ya le crearon el usuario para iniciar sesión desde Usuarios y roles, pero
+            todavía no tiene su ficha de colaborador.
+          </p>
+        </section>
+      )}
+
       <section className="space-y-4">
         <h2 className="font-display font-semibold text-secundario text-sm">Datos personales</h2>
         <div className="grid sm:grid-cols-2 gap-4">

@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 const CrearColaboradorSchema = z.object({
+  usuarioId: z.string().uuid().optional(),
   nombreCompleto: z.string().trim().min(1, 'El nombre es requerido'),
   numeroDocumento: z.string().trim().optional(),
   email: z.string().trim().email('Correo inválido').optional().or(z.literal('')),
@@ -26,9 +27,16 @@ const CrearColaboradorSchema = z.object({
  * Crea la ficha del colaborador (tabla `colaboradores`) con todos sus datos
  * asociados -- este era el hueco real: el botón "Nuevo colaborador" llevaba
  * a Usuarios y roles, que solo crea una CUENTA DE ACCESO (login), nunca la
- * ficha en sí. No crea cuenta de acceso aquí a propósito -- eso sigue
- * siendo un paso aparte en Usuarios y roles (vincular a este colaborador ya
- * creado), porque no toda persona con ficha necesita poder iniciar sesión.
+ * ficha en sí.
+ *
+ * `usuarioId` es opcional y sirve para el caso inverso: alguien ya le creó
+ * la cuenta de acceso a esta persona desde Usuarios y roles (sin ficha
+ * todavía) -- pasa exactamente igual con cualquier cuenta sin colaborador
+ * vinculado -- y ahora se le arma la ficha completa. Se valida que esa
+ * cuenta exista en la misma empresa y que de verdad no tenga ya una ficha --
+ * `colaboradores.usuario_id` no tiene restricción UNIQUE en la base de
+ * datos, así que sin este chequeo dos fichas podrían terminar apuntando a
+ * la misma cuenta de acceso sin que nada lo impidiera.
  */
 export async function crearColaborador(input: z.infer<typeof CrearColaboradorSchema>) {
   const perfil = await getPerfilActual();
@@ -46,10 +54,29 @@ export async function crearColaborador(input: z.infer<typeof CrearColaboradorSch
   }
 
   const supabase = createClient();
+
+  if (d.usuarioId) {
+    const { data: cuenta } = await supabase
+      .from('perfiles_usuario')
+      .select('id')
+      .eq('id', d.usuarioId)
+      .eq('empresa_id', perfil.empresa_id)
+      .maybeSingle();
+    if (!cuenta) return { ok: false as const, error: 'Esa cuenta de acceso no existe en tu empresa' };
+
+    const { data: yaVinculado } = await supabase
+      .from('colaboradores')
+      .select('id')
+      .eq('usuario_id', d.usuarioId)
+      .maybeSingle();
+    if (yaVinculado) return { ok: false as const, error: 'Esa cuenta ya tiene una ficha de colaborador' };
+  }
+
   const { data, error } = await supabase
     .from('colaboradores')
     .insert({
       empresa_id: perfil.empresa_id,
+      usuario_id: d.usuarioId || null,
       nombre_completo: d.nombreCompleto,
       numero_documento: d.numeroDocumento || null,
       email: d.email || null,

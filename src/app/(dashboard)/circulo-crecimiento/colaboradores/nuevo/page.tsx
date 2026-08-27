@@ -12,7 +12,7 @@ export default async function NuevoColaboradorPage() {
 
   const supabase = createClient();
 
-  const [{ data: cargos }, { data: colaboradores }] = await Promise.all([
+  const [{ data: cargos }, { data: colaboradores }, { data: cuentas }, { data: vinculadas }] = await Promise.all([
     supabase
       .from('cargos')
       .select('id, nombre, proceso_area')
@@ -24,7 +24,21 @@ export default async function NuevoColaboradorPage() {
       .eq('empresa_id', perfil.empresa_id)
       .eq('estado', 'activo')
       .order('nombre_completo'),
+    supabase
+      .from('perfiles_usuario')
+      .select('id, nombre_completo, email')
+      .eq('empresa_id', perfil.empresa_id)
+      .order('nombre_completo'),
+    supabase.from('colaboradores').select('usuario_id').eq('empresa_id', perfil.empresa_id).not('usuario_id', 'is', null),
   ]);
+
+  // Cuentas de acceso que alguien creó desde Usuarios y roles pero que
+  // quedaron sin ficha propia -- es justo el hueco que causó que un
+  // colaborador recién creado no apareciera en listados que sí dependen de
+  // `colaboradores` (Guía del Flow, informes, evaluaciones). Se ofrecen acá
+  // para vincularlas en vez de dejar la cuenta huérfana.
+  const idsVinculados = new Set((vinculadas ?? []).map((v) => v.usuario_id as string));
+  const cuentasSinFicha = (cuentas ?? []).filter((c) => !idsVinculados.has(c.id));
 
   return (
     <div className="space-y-6">
@@ -43,6 +57,15 @@ export default async function NuevoColaboradorPage() {
           podrás cargar también hoja de vida y certificaciones, inducción, documentos, incapacidades y
           fechas especiales — y si necesita acceso a la app, crear su cuenta desde Usuarios y roles.
         </p>
+        {cuentasSinFicha.length > 0 && (
+          <p className="text-xs text-medio bg-medio/10 border border-medio/20 rounded-lg px-3 py-2 mt-3">
+            Hay {cuentasSinFicha.length} cuenta{cuentasSinFicha.length > 1 ? 's' : ''} de acceso creada
+            {cuentasSinFicha.length > 1 ? 's' : ''} en Usuarios y roles sin una ficha de colaborador —
+            por eso no aparecen en la Guía del Flow ni en otros listados. Si vas a registrar a esa
+            persona ahora, selecciónala abajo en &quot;Vincular a una cuenta de acceso existente&quot; en
+            vez de crearla de cero.
+          </p>
+        )}
       </div>
 
       {!cargos || cargos.length === 0 ? (
@@ -51,7 +74,11 @@ export default async function NuevoColaboradorPage() {
           de registrar colaboradores, para poder asociarle su perfil.
         </div>
       ) : (
-        <FormularioNuevoColaborador cargos={cargos} posiblesLideres={colaboradores ?? []} />
+        <FormularioNuevoColaborador
+          cargos={cargos}
+          posiblesLideres={colaboradores ?? []}
+          cuentasSinFicha={cuentasSinFicha}
+        />
       )}
     </div>
   );
