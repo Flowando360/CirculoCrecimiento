@@ -19,7 +19,7 @@ export default async function AdminConfiguracionPage() {
   const { data: empresa } = await supabase
     .from('empresas')
     .select(
-      'nit, direccion, telefono, ciudad, firmante_nombre, firmante_cargo, clima_pregunta_enps, clima_pregunta_reconocimiento, clima_pregunta_liderazgo, clima_pregunta_desarrollo, clima_pregunta_comunicacion, clima_pregunta_condiciones, clima_pregunta_pertenencia, clima_umbral_tipo, clima_umbral_cantidad, clima_umbral_porcentaje'
+      'nit, direccion, telefono, ciudad, firmante_nombre, firmante_cargo, siglas, clima_pregunta_enps, clima_pregunta_reconocimiento, clima_pregunta_liderazgo, clima_pregunta_desarrollo, clima_pregunta_comunicacion, clima_pregunta_condiciones, clima_pregunta_pertenencia, clima_umbral_tipo, clima_umbral_cantidad, clima_umbral_porcentaje'
     )
     .eq('id', perfil.empresa_id)
     .maybeSingle();
@@ -68,6 +68,7 @@ export default async function AdminConfiguracionPage() {
           ciudad: empresa?.ciudad ?? '',
           firmanteNombre: empresa?.firmante_nombre ?? '',
           firmanteCargo: empresa?.firmante_cargo ?? '',
+          siglas: empresa?.siglas ?? '',
         }}
       />
 

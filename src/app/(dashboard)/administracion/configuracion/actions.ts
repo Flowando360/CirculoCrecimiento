@@ -76,11 +76,14 @@ const DatosEmpresaSchema = z.object({
   ciudad: z.string().trim().optional(),
   firmanteNombre: z.string().trim().optional(),
   firmanteCargo: z.string().trim().optional(),
+  siglas: z.string().trim().optional(),
 });
 
 /**
  * Guarda los datos legales de la empresa que usa el certificado laboral
- * (NIT, dirección, teléfono, ciudad y quién lo firma).
+ * (NIT, dirección, teléfono, ciudad y quién lo firma), más las siglas que
+ * usa Guía del Flow (proyecto hermano) para nombrar los PDF de su
+ * descarga masiva.
  */
 export async function guardarDatosEmpresa(input: z.infer<typeof DatosEmpresaSchema>) {
   const perfil = await getPerfilActual();
@@ -99,6 +102,7 @@ export async function guardarDatosEmpresa(input: z.infer<typeof DatosEmpresaSche
       ciudad: parsed.data.ciudad || null,
       firmante_nombre: parsed.data.firmanteNombre || null,
       firmante_cargo: parsed.data.firmanteCargo || null,
+      siglas: parsed.data.siglas || null,
     })
     .eq('id', perfil.empresa_id);
 

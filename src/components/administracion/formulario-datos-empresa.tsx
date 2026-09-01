@@ -11,6 +11,7 @@ export interface DatosEmpresaIniciales {
   ciudad: string;
   firmanteNombre: string;
   firmanteCargo: string;
+  siglas: string;
 }
 
 const CAMPOS: { key: keyof DatosEmpresaIniciales; label: string }[] = [
@@ -20,6 +21,7 @@ const CAMPOS: { key: keyof DatosEmpresaIniciales; label: string }[] = [
   { key: 'ciudad', label: 'Ciudad' },
   { key: 'firmanteNombre', label: 'Nombre de quien firma el certificado laboral' },
   { key: 'firmanteCargo', label: 'Cargo de quien firma' },
+  { key: 'siglas', label: 'Siglas (ej. "MyS") — las usa Guía del Flow para nombrar sus PDF' },
 ];
 
 export function FormularioDatosEmpresa({ inicial }: { inicial: DatosEmpresaIniciales }) {
