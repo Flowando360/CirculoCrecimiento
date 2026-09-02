@@ -54,6 +54,35 @@ export const moduloAdministracion: ModuloAyuda = {
       ],
     },
     {
+      slug: 'guias-flow-invitaciones',
+      ruta: '/administracion/guias-flow/invitaciones',
+      titulo: 'Guías del Flow · Invitaciones',
+      resumen:
+        'Genera los links de invitación al cuestionario de la Guía del Flow (guiadelflow) para tus colaboradores, uno o varios a la vez.',
+      camposYBotones: [
+        { nombre: 'Seleccionar quienes no tienen Guía', explicacion: 'Marca de una vez a todos los que todavía no tienen "Guía generada".' },
+        { nombre: 'Generar N links', explicacion: 'Crea una invitación nueva por cada persona seleccionada, cada una ligada a su colaborador_id exacto (no depende de que escriba bien su correo al registrarse).' },
+        { nombre: 'Estado', explicacion: '"Sin invitar", "Invitación pendiente" (link generado, todavía sin usar) o "Guía generada" (ya completó su cuestionario y quedó sincronizada acá).' },
+      ],
+      notas: ['Solo aparecen colaboradores internos activos o en período de prueba.'],
+    },
+    {
+      slug: 'guias-flow-seguimiento',
+      ruta: '/administracion/guias-flow/seguimiento',
+      titulo: 'Guías del Flow · Seguimiento',
+      resumen:
+        'Quiénes ya se registraron o respondieron su Guía del Flow, en qué estado está cada uno, qué documentos se le mandaron por correo y cuándo — solo de tu empresa.',
+      camposYBotones: [
+        { nombre: 'Estado', explicacion: 'Registrado sin terminar, generando documentos, error, entregada por correo, o un estado manual ("Entregada y gestionada" / "No aplica") cuando se resolvió por fuera del sistema.' },
+        { nombre: 'Documentos enviados', explicacion: 'Solo el nombre de lo que se mandó a su correo (Guía del Flow, Carta) — no se puede descargar desde acá.' },
+        { nombre: 'Fecha', explicacion: 'La fecha en la que se llegó al estado que tiene activo ahora (cuándo se envió el correo, cuándo se completó el cuestionario, o cuándo se marcó el estado manual, según el caso).' },
+      ],
+      notas: [
+        'A quien todavía no ha respondido nada se le hace seguimiento en la otra pestaña, Invitaciones.',
+        'El PDF completo de la Guía le llega a cada persona directo a su correo, por fuera de este sistema — acá solo se ve si se mandó y cuándo.',
+      ],
+    },
+    {
       slug: 'sincronizaciones-guia-flow',
       ruta: '/administracion/sincronizaciones-guia-flow',
       titulo: 'Sincronizaciones Guía del Flow',

@@ -50,15 +50,12 @@ export default async function InvitacionesGuiaFlowPage() {
   }));
 
   return (
-    <div className="space-y-6 max-w-4xl">
-      <div>
-        <h1 className="font-display text-2xl font-semibold text-secundario">Invitaciones a la Guía del Flow</h1>
-        <p className="text-sm text-marmol-500 mt-1">
-          Elige a quiénes de tu empresa les quieres mandar el cuestionario de la Guía del Flow y genera todos
-          sus links de una vez. Cada link queda ligado exactamente a esa persona (aunque no tenga correo
-          cargado), así que puedes copiarlos y mandarlos por donde prefieras — WhatsApp, correo personal, etc.
-        </p>
-      </div>
+    <div className="space-y-4">
+      <p className="text-sm text-marmol-500">
+        Elige a quiénes de tu empresa les quieres mandar el cuestionario de la Guía del Flow y genera todos
+        sus links de una vez. Cada link queda ligado exactamente a esa persona (aunque no tenga correo
+        cargado), así que puedes copiarlos y mandarlos por donde prefieras — WhatsApp, correo personal, etc.
+      </p>
 
       <ListaInvitaciones colaboradores={filas} />
     </div>

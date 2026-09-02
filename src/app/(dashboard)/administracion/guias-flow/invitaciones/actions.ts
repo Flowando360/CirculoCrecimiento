@@ -82,7 +82,8 @@ export async function crearInvitacionesMasivas(
     // Orden alfabético por nombre para que sea fácil de escanear al copiar.
     .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
 
-  revalidatePath('/administracion/invitaciones-guia-flow');
+  revalidatePath('/administracion/guias-flow/invitaciones');
+  revalidatePath('/administracion/guias-flow/seguimiento');
 
   return { ok: true, links };
 }
