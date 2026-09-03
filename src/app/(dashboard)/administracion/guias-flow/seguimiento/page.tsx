@@ -3,6 +3,7 @@ import { createClient, createAdminClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { cn, formatearFecha } from '@/lib/utils';
 import { CheckCircle2, Clock, AlertTriangle, FileText, ShieldOff } from 'lucide-react';
+import { BotonReintentar } from './BotonReintentar';
 
 /**
  * Catálogo de estados manuales (colaboradores cuya Guía se resolvió por
@@ -32,6 +33,15 @@ interface FilaSeguimiento {
   estadoTexto: string;
   documentosEnviados: string[];
   fecha: string | null;
+  /** id en flow_perfiles (guiadelflow) — solo presente si ya tiene cuenta
+   * allá. Necesario para el botón "Reintentar". */
+  usuarioFlowId: string | null;
+  /** Solo true cuando reintentar de verdad puede ayudar: la Guía y/o la
+   * Carta nunca se generaron o quedaron en error. Un correo que falló al
+   * mandarse (documentos ya listos) es otro problema — reintentar no lo
+   * arregla, así que ese caso no muestra el botón aunque la categoría sea
+   * "error". */
+  puedeReintentar: boolean;
 }
 
 const ESTILO_CATEGORIA: Record<CategoriaEstado, { clase: string; icono: typeof CheckCircle2 }> = {
@@ -137,6 +147,8 @@ export default async function SeguimientoGuiaFlowPage() {
         estadoTexto: (ETIQUETA_ESTADO_MANUAL[manual.estado] ?? manual.estado) + (manual.nota ? ` — ${manual.nota}` : ''),
         documentosEnviados: [],
         fecha: manual.actualizado_at ?? manual.creado_at,
+        usuarioFlowId: perfilFlow?.id ?? null,
+        puedeReintentar: false,
       });
       continue;
     }
@@ -158,6 +170,8 @@ export default async function SeguimientoGuiaFlowPage() {
         estadoTexto: 'Registrado, sin terminar el cuestionario',
         documentosEnviados: [],
         fecha: perfilFlow?.created_at ?? null,
+        usuarioFlowId: perfilFlow?.id ?? null,
+        puedeReintentar: false,
       };
     } else if (correoEnviado) {
       fila = {
@@ -168,6 +182,8 @@ export default async function SeguimientoGuiaFlowPage() {
         estadoTexto: 'Guía del Flow entregada por correo',
         documentosEnviados: docsListos.map((d) => ETIQUETA_DOCUMENTO[d.tipo] ?? d.tipo),
         fecha: cuestionario.correo_documentos_enviado_at,
+        usuarioFlowId: perfilFlow?.id ?? null,
+        puedeReintentar: false,
       };
     } else if (docsError.length > 0 || cuestionario.correo_documentos_error) {
       fila = {
@@ -180,6 +196,11 @@ export default async function SeguimientoGuiaFlowPage() {
           : 'Error generando sus documentos',
         documentosEnviados: docsListos.map((d) => ETIQUETA_DOCUMENTO[d.tipo] ?? d.tipo),
         fecha: docsError[0]?.generado_at ?? cuestionario.completado_at,
+        usuarioFlowId: perfilFlow?.id ?? null,
+        // Si el problema fue solo al mandar el correo (documentos ya
+        // listos), reintentar acá no ayuda -- eso se resuelve con
+        // "Reenviar correo" desde /panel de guiadelflow, no desde acá.
+        puedeReintentar: docsError.length > 0,
       };
     } else {
       fila = {
@@ -198,6 +219,12 @@ export default async function SeguimientoGuiaFlowPage() {
             : 'Cuestionario respondido, generando sus documentos',
         documentosEnviados: [],
         fecha: cuestionario.completado_at,
+        usuarioFlowId: perfilFlow?.id ?? null,
+        // Si ya hay documentos en camino ('pendiente'/'generando' de
+        // verdad, no simplemente ausentes), dejar que termine solo en vez
+        // de ofrecer reintentar y arriesgar una segunda generación en
+        // paralelo.
+        puedeReintentar: docs.length === 0,
       };
     }
 
@@ -232,6 +259,7 @@ export default async function SeguimientoGuiaFlowPage() {
               <th className="p-3 font-medium">Correo</th>
               <th className="p-3 font-medium">Documentos enviados</th>
               <th className="p-3 font-medium">Fecha</th>
+              <th className="p-3 font-medium">Acción</th>
             </tr>
           </thead>
           <tbody>
@@ -264,6 +292,13 @@ export default async function SeguimientoGuiaFlowPage() {
                     )}
                   </td>
                   <td className="p-3 text-marmol-500 whitespace-nowrap">{f.fecha ? formatearFecha(f.fecha) : '—'}</td>
+                  <td className="p-3">
+                    {f.puedeReintentar && f.usuarioFlowId ? (
+                      <BotonReintentar usuarioFlowId={f.usuarioFlowId} />
+                    ) : (
+                      <span className="text-marmol-400">—</span>
+                    )}
+                  </td>
                 </tr>
               );
             })}
