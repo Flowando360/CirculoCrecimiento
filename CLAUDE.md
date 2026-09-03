@@ -56,7 +56,7 @@ Datos como salario, EPS/ARL/AFP/caja de compensación o incapacidades sí se \*\
 
 \- Supabase: proyecto ya vinculado con `supabase link`, Reference ID \*\*zmpggzrmsuudxyjtobzy\*\*
 
-\- Vercel: pendiente de configurar (instalar CLI y hacer `vercel link`) — este es el único de los 4 proyectos que sí se despliega en Vercel, así que es el primero que conviene configurar
+\- Vercel: ya configurado (confirmado 2026-09-03) — el proyecto está enlazado (`.vercel/project.json` presente, proyecto `circulo-crecimiento` en el team `flow-ando360`), y el CLI funciona con `npx vercel` (no hace falta instalarlo global — el aviso de "Vercel CLI no instalado" que a veces aparece se refiere solo a la instalación global). Sesión activa como cuenta `flowando360`. El repo de GitHub está conectado a Vercel: cada `git push` a `main` dispara un deploy de producción automático, no hace falta correr `vercel deploy` a mano salvo para forzar un redeploy sin cambios de código (por ejemplo, tras cambiar una variable de entorno).
 
 
 
