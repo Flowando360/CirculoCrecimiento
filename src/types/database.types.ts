@@ -65,6 +65,7 @@ export type Database = {
           created_at: string
           descripcion: string | null
           dias_anticipacion: number
+          dotacion_entrega_id: string | null
           empresa_id: string
           estado: Database["public"]["Enums"]["estado_alerta"]
           fecha_especial_id: string | null
@@ -84,6 +85,7 @@ export type Database = {
           created_at?: string
           descripcion?: string | null
           dias_anticipacion?: number
+          dotacion_entrega_id?: string | null
           empresa_id: string
           estado?: Database["public"]["Enums"]["estado_alerta"]
           fecha_especial_id?: string | null
@@ -103,6 +105,7 @@ export type Database = {
           created_at?: string
           descripcion?: string | null
           dias_anticipacion?: number
+          dotacion_entrega_id?: string | null
           empresa_id?: string
           estado?: Database["public"]["Enums"]["estado_alerta"]
           fecha_especial_id?: string | null
@@ -181,6 +184,13 @@ export type Database = {
             referencedColumns: ["par_id"]
           },
           {
+            foreignKeyName: "alertas_dotacion_entrega_id_fkey"
+            columns: ["dotacion_entrega_id"]
+            isOneToOne: false
+            referencedRelation: "dotacion_entregas"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "alertas_empresa_id_fkey"
             columns: ["empresa_id"]
             isOneToOne: false
@@ -251,6 +261,56 @@ export type Database = {
             columns: ["evaluacion_id"]
             isOneToOne: true
             referencedRelation: "evaluaciones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidatos: {
+        Row: {
+          correo: string | null
+          created_at: string
+          empresa_id: string
+          hoja_vida_url: string | null
+          id: string
+          linkedin_url: string | null
+          nombre_completo: string
+          notas: string | null
+          numero_documento: string | null
+          origen: string
+          telefono: string | null
+        }
+        Insert: {
+          correo?: string | null
+          created_at?: string
+          empresa_id: string
+          hoja_vida_url?: string | null
+          id?: string
+          linkedin_url?: string | null
+          nombre_completo: string
+          notas?: string | null
+          numero_documento?: string | null
+          origen?: string
+          telefono?: string | null
+        }
+        Update: {
+          correo?: string | null
+          created_at?: string
+          empresa_id?: string
+          hoja_vida_url?: string | null
+          id?: string
+          linkedin_url?: string | null
+          nombre_completo?: string
+          notas?: string | null
+          numero_documento?: string | null
+          origen?: string
+          telefono?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidatos_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
             referencedColumns: ["id"]
           },
         ]
@@ -1587,6 +1647,137 @@ export type Database = {
           },
         ]
       }
+      dotacion_entregas: {
+        Row: {
+          cantidad: number
+          categoria: Database["public"]["Enums"]["categoria_dotacion"]
+          colaborador_id: string
+          created_at: string
+          empresa_id: string
+          entregado_por: string | null
+          estado: Database["public"]["Enums"]["estado_dotacion"]
+          fecha_devolucion: string | null
+          fecha_entrega: string
+          fecha_vencimiento: string | null
+          firma_confirmada: boolean
+          firmado_en: string | null
+          id: string
+          nombre_elemento: string
+          observaciones: string | null
+          talla: string | null
+          updated_at: string
+        }
+        Insert: {
+          cantidad?: number
+          categoria: Database["public"]["Enums"]["categoria_dotacion"]
+          colaborador_id: string
+          created_at?: string
+          empresa_id: string
+          entregado_por?: string | null
+          estado?: Database["public"]["Enums"]["estado_dotacion"]
+          fecha_devolucion?: string | null
+          fecha_entrega?: string
+          fecha_vencimiento?: string | null
+          firma_confirmada?: boolean
+          firmado_en?: string | null
+          id?: string
+          nombre_elemento: string
+          observaciones?: string | null
+          talla?: string | null
+          updated_at?: string
+        }
+        Update: {
+          cantidad?: number
+          categoria?: Database["public"]["Enums"]["categoria_dotacion"]
+          colaborador_id?: string
+          created_at?: string
+          empresa_id?: string
+          entregado_por?: string | null
+          estado?: Database["public"]["Enums"]["estado_dotacion"]
+          fecha_devolucion?: string | null
+          fecha_entrega?: string
+          fecha_vencimiento?: string | null
+          firma_confirmada?: boolean
+          firmado_en?: string | null
+          id?: string
+          nombre_elemento?: string
+          observaciones?: string | null
+          talla?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dotacion_entregas_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dotacion_entregas_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_alineacion_talento_rol"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "dotacion_entregas_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_indicadores_equipo"
+            referencedColumns: ["lider_id"]
+          },
+          {
+            foreignKeyName: "dotacion_entregas_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_lideres_de_linea_sin_lider_interno"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "dotacion_entregas_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_a_cargo_id"]
+          },
+          {
+            foreignKeyName: "dotacion_entregas_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "dotacion_entregas_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "dotacion_entregas_colaborador_id_fkey"
+            columns: ["colaborador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["par_id"]
+          },
+          {
+            foreignKeyName: "dotacion_entregas_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dotacion_entregas_entregado_por_fkey"
+            columns: ["entregado_por"]
+            isOneToOne: false
+            referencedRelation: "perfiles_usuario"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       empresa_identidad: {
         Row: {
           declaracion_creencias: string | null
@@ -1759,6 +1950,103 @@ export type Database = {
           telefono?: string | null
         }
         Relationships: []
+      }
+      entrevistas: {
+        Row: {
+          created_at: string
+          entrevistador_id: string | null
+          estado: Database["public"]["Enums"]["estado_entrevista"]
+          fecha_hora: string
+          id: string
+          modalidad: Database["public"]["Enums"]["modalidad_entrevista"]
+          notas: string | null
+          postulacion_id: string
+        }
+        Insert: {
+          created_at?: string
+          entrevistador_id?: string | null
+          estado?: Database["public"]["Enums"]["estado_entrevista"]
+          fecha_hora: string
+          id?: string
+          modalidad?: Database["public"]["Enums"]["modalidad_entrevista"]
+          notas?: string | null
+          postulacion_id: string
+        }
+        Update: {
+          created_at?: string
+          entrevistador_id?: string | null
+          estado?: Database["public"]["Enums"]["estado_entrevista"]
+          fecha_hora?: string
+          id?: string
+          modalidad?: Database["public"]["Enums"]["modalidad_entrevista"]
+          notas?: string | null
+          postulacion_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "entrevistas_entrevistador_id_fkey"
+            columns: ["entrevistador_id"]
+            isOneToOne: false
+            referencedRelation: "colaboradores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "entrevistas_entrevistador_id_fkey"
+            columns: ["entrevistador_id"]
+            isOneToOne: false
+            referencedRelation: "v_alineacion_talento_rol"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "entrevistas_entrevistador_id_fkey"
+            columns: ["entrevistador_id"]
+            isOneToOne: false
+            referencedRelation: "v_indicadores_equipo"
+            referencedColumns: ["lider_id"]
+          },
+          {
+            foreignKeyName: "entrevistas_entrevistador_id_fkey"
+            columns: ["entrevistador_id"]
+            isOneToOne: false
+            referencedRelation: "v_lideres_de_linea_sin_lider_interno"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "entrevistas_entrevistador_id_fkey"
+            columns: ["entrevistador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_a_cargo_id"]
+          },
+          {
+            foreignKeyName: "entrevistas_entrevistador_id_fkey"
+            columns: ["entrevistador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_colaboradores_a_cargo"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "entrevistas_entrevistador_id_fkey"
+            columns: ["entrevistador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["colaborador_id"]
+          },
+          {
+            foreignKeyName: "entrevistas_entrevistador_id_fkey"
+            columns: ["entrevistador_id"]
+            isOneToOne: false
+            referencedRelation: "v_organigrama_pares"
+            referencedColumns: ["par_id"]
+          },
+          {
+            foreignKeyName: "entrevistas_postulacion_id_fkey"
+            columns: ["postulacion_id"]
+            isOneToOne: false
+            referencedRelation: "postulaciones"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       entrevistas_salida: {
         Row: {
@@ -4746,6 +5034,60 @@ export type Database = {
           },
         ]
       }
+      postulaciones: {
+        Row: {
+          calificacion: number | null
+          candidato_id: string
+          created_at: string
+          descartado_motivo: string | null
+          etapa: Database["public"]["Enums"]["etapa_postulacion"]
+          id: string
+          notas: string | null
+          orden: number
+          updated_at: string
+          vacante_id: string
+        }
+        Insert: {
+          calificacion?: number | null
+          candidato_id: string
+          created_at?: string
+          descartado_motivo?: string | null
+          etapa?: Database["public"]["Enums"]["etapa_postulacion"]
+          id?: string
+          notas?: string | null
+          orden?: number
+          updated_at?: string
+          vacante_id: string
+        }
+        Update: {
+          calificacion?: number | null
+          candidato_id?: string
+          created_at?: string
+          descartado_motivo?: string | null
+          etapa?: Database["public"]["Enums"]["etapa_postulacion"]
+          id?: string
+          notas?: string | null
+          orden?: number
+          updated_at?: string
+          vacante_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "postulaciones_candidato_id_fkey"
+            columns: ["candidato_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "postulaciones_vacante_id_fkey"
+            columns: ["vacante_id"]
+            isOneToOne: false
+            referencedRelation: "vacantes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       procesos_gestion: {
         Row: {
           area_proceso: string
@@ -4846,6 +5188,60 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "v_organigrama_pares"
             referencedColumns: ["par_id"]
+          },
+        ]
+      }
+      referencias_candidato: {
+        Row: {
+          candidato_id: string
+          created_at: string
+          id: string
+          nombre_referencia: string
+          notas: string | null
+          relacion: string | null
+          telefono_referencia: string | null
+          verificada: boolean
+          verificado_en: string | null
+          verificado_por: string | null
+        }
+        Insert: {
+          candidato_id: string
+          created_at?: string
+          id?: string
+          nombre_referencia: string
+          notas?: string | null
+          relacion?: string | null
+          telefono_referencia?: string | null
+          verificada?: boolean
+          verificado_en?: string | null
+          verificado_por?: string | null
+        }
+        Update: {
+          candidato_id?: string
+          created_at?: string
+          id?: string
+          nombre_referencia?: string
+          notas?: string | null
+          relacion?: string | null
+          telefono_referencia?: string | null
+          verificada?: boolean
+          verificado_en?: string | null
+          verificado_por?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referencias_candidato_candidato_id_fkey"
+            columns: ["candidato_id"]
+            isOneToOne: false
+            referencedRelation: "candidatos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referencias_candidato_verificado_por_fkey"
+            columns: ["verificado_por"]
+            isOneToOne: false
+            referencedRelation: "perfiles_usuario"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -5128,6 +5524,67 @@ export type Database = {
             columns: ["guia_del_flow_id"]
             isOneToOne: false
             referencedRelation: "guia_del_flow"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vacantes: {
+        Row: {
+          cargo_id: string
+          creado_por: string | null
+          created_at: string
+          descripcion: string | null
+          empresa_id: string
+          estado: Database["public"]["Enums"]["estado_vacante"]
+          fecha_apertura: string
+          fecha_cierre: string | null
+          id: string
+          titulo: string
+        }
+        Insert: {
+          cargo_id: string
+          creado_por?: string | null
+          created_at?: string
+          descripcion?: string | null
+          empresa_id: string
+          estado?: Database["public"]["Enums"]["estado_vacante"]
+          fecha_apertura?: string
+          fecha_cierre?: string | null
+          id?: string
+          titulo: string
+        }
+        Update: {
+          cargo_id?: string
+          creado_por?: string | null
+          created_at?: string
+          descripcion?: string | null
+          empresa_id?: string
+          estado?: Database["public"]["Enums"]["estado_vacante"]
+          fecha_apertura?: string
+          fecha_cierre?: string | null
+          id?: string
+          titulo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vacantes_cargo_id_fkey"
+            columns: ["cargo_id"]
+            isOneToOne: false
+            referencedRelation: "cargos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vacantes_creado_por_fkey"
+            columns: ["creado_por"]
+            isOneToOne: false
+            referencedRelation: "perfiles_usuario"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vacantes_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
             referencedColumns: ["id"]
           },
         ]
@@ -5842,6 +6299,7 @@ export type Database = {
         | "pertenencia_compromiso"
         | "desafios"
       canal_notificacion: "email" | "whatsapp" | "in_app"
+      categoria_dotacion: "elemento_personal" | "equipo_trabajo"
       categoria_induccion:
         | "proposito_organizacional"
         | "funciones"
@@ -5873,11 +6331,22 @@ export type Database = {
         | "en_curso"
         | "completado"
         | "vencido"
+      estado_dotacion: "entregado" | "devuelto" | "perdido" | "danado"
+      estado_entrevista: "programada" | "realizada" | "cancelada"
       estado_pdi: "pendiente" | "en_curso" | "cumplido" | "vencido"
       estado_ronda_clima: "abierta" | "cerrada"
+      estado_vacante: "abierta" | "pausada" | "cerrada"
       estado_verificacion: "cumple" | "cumple_parcial" | "no_cumple_pendiente"
+      etapa_postulacion:
+        | "recibido"
+        | "entrevista"
+        | "prueba"
+        | "oferta"
+        | "contratado"
+        | "descartado"
       flow_documento_estado: "pendiente" | "generando" | "listo" | "error"
       flow_documento_tipo: "guia" | "carta"
+      modalidad_entrevista: "presencial" | "virtual" | "telefonica"
       nivel_esperado: "bajo" | "medio" | "alto"
       nivel_riesgo_cargo: "alto" | "medio" | "bajo"
       origen_item_evaluacion: "competencia" | "funcion_cargo"
@@ -5905,6 +6374,7 @@ export type Database = {
         | "aniversario_bodas"
         | "baby_shower"
         | "fecha_especial"
+        | "dotacion_vencimiento"
       tipo_contrato:
         | "indefinido"
         | "fijo"
@@ -6076,6 +6546,7 @@ export const Constants = {
         "desafios",
       ],
       canal_notificacion: ["email", "whatsapp", "in_app"],
+      categoria_dotacion: ["elemento_personal", "equipo_trabajo"],
       categoria_induccion: [
         "proposito_organizacional",
         "funciones",
@@ -6112,11 +6583,23 @@ export const Constants = {
         "completado",
         "vencido",
       ],
+      estado_dotacion: ["entregado", "devuelto", "perdido", "danado"],
+      estado_entrevista: ["programada", "realizada", "cancelada"],
       estado_pdi: ["pendiente", "en_curso", "cumplido", "vencido"],
       estado_ronda_clima: ["abierta", "cerrada"],
+      estado_vacante: ["abierta", "pausada", "cerrada"],
       estado_verificacion: ["cumple", "cumple_parcial", "no_cumple_pendiente"],
+      etapa_postulacion: [
+        "recibido",
+        "entrevista",
+        "prueba",
+        "oferta",
+        "contratado",
+        "descartado",
+      ],
       flow_documento_estado: ["pendiente", "generando", "listo", "error"],
       flow_documento_tipo: ["guia", "carta"],
+      modalidad_entrevista: ["presencial", "virtual", "telefonica"],
       nivel_esperado: ["bajo", "medio", "alto"],
       nivel_riesgo_cargo: ["alto", "medio", "bajo"],
       origen_item_evaluacion: ["competencia", "funcion_cargo"],
@@ -6145,6 +6628,7 @@ export const Constants = {
         "aniversario_bodas",
         "baby_shower",
         "fecha_especial",
+        "dotacion_vencimiento",
       ],
       tipo_contrato: [
         "indefinido",

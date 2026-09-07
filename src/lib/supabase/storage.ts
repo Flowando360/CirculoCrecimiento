@@ -36,3 +36,20 @@ export async function obtenerUrlFirmadaDocumentoColaborador(path: string | null)
   if (error || !data) return null;
   return data.signedUrl;
 }
+
+/**
+ * Hoja de vida de un candidato de Reclutamiento y Selección (bucket privado
+ * "hojas-vida-candidatos"). Solo admin_th tiene policy de lectura — ver
+ * 0066_reclutamiento.sql.
+ */
+export async function obtenerUrlFirmadaHojaVidaCandidato(path: string | null): Promise<string | null> {
+  if (!path) return null;
+
+  const supabase = createClient();
+  const { data, error } = await supabase.storage
+    .from('hojas-vida-candidatos')
+    .createSignedUrl(path, UNA_HORA_EN_SEGUNDOS);
+
+  if (error || !data) return null;
+  return data.signedUrl;
+}

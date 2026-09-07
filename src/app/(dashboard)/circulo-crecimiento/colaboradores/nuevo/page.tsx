@@ -5,7 +5,11 @@ import { redirect } from 'next/navigation';
 import { FormularioNuevoColaborador } from '@/components/circulo-crecimiento/formulario-nuevo-colaborador';
 import { ArrowLeft, UserPlus } from 'lucide-react';
 
-export default async function NuevoColaboradorPage() {
+export default async function NuevoColaboradorPage({
+  searchParams,
+}: {
+  searchParams?: { nombre?: string; correo?: string; telefono?: string; cargoId?: string };
+}) {
   const perfil = await getPerfilActual();
   if (!perfil) return null;
   if (perfil.rol !== 'admin_th') redirect('/inicio');
@@ -78,6 +82,16 @@ export default async function NuevoColaboradorPage() {
           cargos={cargos}
           posiblesLideres={colaboradores ?? []}
           cuentasSinFicha={cuentasSinFicha}
+          datosIniciales={
+            searchParams?.nombre
+              ? {
+                  nombreCompleto: searchParams.nombre,
+                  correo: searchParams.correo ?? '',
+                  telefono: searchParams.telefono ?? '',
+                  cargoId: searchParams.cargoId ?? '',
+                }
+              : undefined
+          }
         />
       )}
     </div>

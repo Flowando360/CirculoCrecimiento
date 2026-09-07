@@ -4,7 +4,7 @@ import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { SemaforoBadge } from '@/components/circulo-crecimiento/semaforo-badge';
 import { formatearFecha } from '@/lib/utils';
 import { notFound } from 'next/navigation';
-import { GraduationCap, Briefcase, Sparkles, ShieldCheck, Target, Clock, History, FolderLock, CalendarHeart, HeartPulse } from 'lucide-react';
+import { GraduationCap, Briefcase, Sparkles, ShieldCheck, Target, Clock, History, FolderLock, CalendarHeart, HeartPulse, Shirt } from 'lucide-react';
 
 export default async function FichaColaboradorPage({ params }: { params: { id: string } }) {
   const perfil = await getPerfilActual();
@@ -54,6 +54,13 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
   // colaborador las administra desde Mi Perfil, no desde aquí.
   const puedeVerFechasEspeciales =
     perfil.rol === 'admin_th' || (perfil.rol === 'lider' && colaborador.lider_id === perfil.colaborador_id);
+
+  // Dotación: mismo criterio que hoja_vida_formacion (admin_th todo, líder de
+  // su equipo, colaborador lo propio) — ver 0067_dotacion.sql.
+  const puedeVerDotacion =
+    perfil.rol === 'admin_th' ||
+    (perfil.rol === 'lider' && colaborador.lider_id === perfil.colaborador_id) ||
+    (perfil.rol === 'colaborador' && perfil.colaborador_id === colaborador.id);
 
   const [{ data: ultimoResultado }, { data: saber }, { data: ser }, { data: pdi }, { data: hojaVida }, { data: induccionItems }] =
     await Promise.all([
@@ -294,7 +301,24 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
             <span className="text-sm font-medium text-marmol-800">Fechas especiales</span>
           </Link>
         )}
+
+        {puedeVerDotacion && (
+          <Link
+            href={`/dotacion?colaborador_id=${params.id}`}
+            className="card p-5 flex items-center gap-2 hover:border-flow-300 transition"
+          >
+            <Shirt size={16} className="text-flow-600" />
+            <span className="text-sm font-medium text-marmol-800">Dotación</span>
+          </Link>
+        )}
       </div>
+
+      {colaborador.estado === 'en_proceso_salida' && puedeVerDotacion && (
+        <p className="text-xs text-medio bg-medio/10 border border-medio/20 rounded-lg px-3 py-2">
+          Esta persona está en proceso de salida — revisa en Dotación que no queden equipos ni elementos
+          pendientes de devolución.
+        </p>
+      )}
     </div>
   );
 }

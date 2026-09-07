@@ -53,7 +53,11 @@ export async function middleware(request: NextRequest) {
 
   const isAuthRoute = request.nextUrl.pathname.startsWith('/login');
   const isPublicAsset = request.nextUrl.pathname.startsWith('/_next') ||
-    request.nextUrl.pathname.startsWith('/api');
+    request.nextUrl.pathname.startsWith('/api') ||
+    // Formulario público de postulación (Reclutamiento y Selección): lo abre
+    // un candidato externo que nunca ha iniciado sesión, así que no puede
+    // exigir usuario autenticado como el resto del dashboard.
+    request.nextUrl.pathname.startsWith('/postular');
 
   if (!user && !isAuthRoute && !isPublicAsset) {
     const redirectUrl = request.nextUrl.clone();

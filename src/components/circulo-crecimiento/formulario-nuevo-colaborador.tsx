@@ -24,17 +24,20 @@ export function FormularioNuevoColaborador({
   cargos,
   posiblesLideres,
   cuentasSinFicha,
+  datosIniciales,
 }: {
   cargos: { id: string; nombre: string; proceso_area: string | null }[];
   posiblesLideres: { id: string; nombre_completo: string }[];
   cuentasSinFicha: { id: string; nombre_completo: string; email: string | null }[];
+  /** Prellenado al llegar desde Reclutamiento y Selección (candidato ya contratado) — evita recapturar los datos. */
+  datosIniciales?: { nombreCompleto: string; correo: string; telefono: string; cargoId: string };
 }) {
   const [usuarioVinculadoId, setUsuarioVinculadoId] = useState('');
-  const [nombreCompleto, setNombreCompleto] = useState('');
+  const [nombreCompleto, setNombreCompleto] = useState(datosIniciales?.nombreCompleto ?? '');
   const [numeroDocumento, setNumeroDocumento] = useState('');
-  const [email, setEmail] = useState('');
-  const [telefono, setTelefono] = useState('');
-  const [cargoId, setCargoId] = useState('');
+  const [email, setEmail] = useState(datosIniciales?.correo ?? '');
+  const [telefono, setTelefono] = useState(datosIniciales?.telefono ?? '');
+  const [cargoId, setCargoId] = useState(datosIniciales?.cargoId ?? '');
   const [liderId, setLiderId] = useState('');
   const [fechaIngreso, setFechaIngreso] = useState(() => new Date().toISOString().slice(0, 10));
   const [tipoContrato, setTipoContrato] = useState<TipoContrato>('indefinido');
@@ -91,6 +94,11 @@ export function FormularioNuevoColaborador({
 
   return (
     <div className="card p-6 space-y-6 max-w-2xl">
+      {datosIniciales && (
+        <p className="text-xs text-flow-700 bg-flow-50 border border-flow-100 rounded-lg px-3 py-2">
+          Datos prellenados desde Reclutamiento y Selección — puedes corregirlos antes de guardar.
+        </p>
+      )}
       {cuentasSinFicha.length > 0 && (
         <section className="space-y-2">
           <label className={label}>Vincular a una cuenta de acceso existente (opcional)</label>

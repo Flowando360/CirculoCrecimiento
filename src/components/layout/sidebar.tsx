@@ -33,6 +33,8 @@ import {
   RefreshCw,
   Send,
   LayoutGrid,
+  UserSearch,
+  Shirt,
 } from 'lucide-react';
 
 interface NavItem {
@@ -64,6 +66,13 @@ const NAV: NavGroup[] = [
       { href: '/circulo-crecimiento/pdi', label: 'Planes de Desarrollo', icon: Target, roles: ['admin_th', 'lider', 'colaborador'] },
       { href: '/circulo-crecimiento/organigrama', label: 'Organigrama', icon: Network, roles: ['admin_th', 'lider', 'gerencia'] },
       { href: '/circulo-crecimiento/indicadores', label: 'Indicadores', icon: BarChart3, roles: ['admin_th', 'lider', 'gerencia'] },
+    ],
+  },
+  {
+    titulo: 'Reclutamiento y Dotación',
+    items: [
+      { href: '/reclutamiento', label: 'Reclutamiento y Selección', icon: UserSearch, roles: ['admin_th', 'lider'] },
+      { href: '/dotacion', label: 'Gestión de Dotaciones', icon: Shirt, roles: ['admin_th', 'lider', 'colaborador'] },
     ],
   },
   {
