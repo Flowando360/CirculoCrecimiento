@@ -62,7 +62,7 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
     (perfil.rol === 'lider' && colaborador.lider_id === perfil.colaborador_id) ||
     (perfil.rol === 'colaborador' && perfil.colaborador_id === colaborador.id);
 
-  const [{ data: ultimoResultado }, { data: saber }, { data: ser }, { data: pdi }, { data: hojaVida }, { data: induccionItems }] =
+  const [{ data: ultimoResultado }, { data: saber }, { data: ser }, { data: serPromedio }, { data: pdi }, { data: hojaVida }, { data: induccionItems }] =
     await Promise.all([
       supabase
         .from('resultados_evaluacion')
@@ -74,11 +74,12 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
       supabase.from('v_saber_cumplimiento').select('*').eq('colaborador_id', params.id).maybeSingle(),
       supabase
         .from('guia_del_flow')
-        .select('*')
+        .select('id')
         .eq('colaborador_id', params.id)
         .order('fecha_aplicacion', { ascending: false })
         .limit(1)
         .maybeSingle(),
+      supabase.from('v_ser_promedio').select('promedio_ser, total_aspectos_calificados').eq('colaborador_id', params.id).maybeSingle(),
       supabase
         .from('planes_desarrollo')
         .select('*')
@@ -143,9 +144,16 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
           <p className="text-xs font-medium text-marmol-500 mb-2 flex items-center gap-1.5">
             <Sparkles size={14} className="text-ser" /> SER
           </p>
-          <p className="text-sm text-marmol-700">
-            {ser ? 'Guía del Flow completada' : 'Pendiente por completar'}
-          </p>
+          {serPromedio?.promedio_ser != null ? (
+            <>
+              <p className="text-2xl font-display font-semibold text-secundario">{serPromedio.promedio_ser} / 5</p>
+              <p className="text-xs text-marmol-400">
+                promedio de {serPromedio.total_aspectos_calificados} aspecto{serPromedio.total_aspectos_calificados === 1 ? '' : 's'}
+              </p>
+            </>
+          ) : (
+            <p className="text-sm text-marmol-700">{ser ? 'Guía del Flow completada, cargando puntajes…' : 'Pendiente por completar'}</p>
+          )}
         </Link>
         <Link href={`/circulo-crecimiento/colaboradores/${params.id}/saber`} className="card p-4 hover:border-flow-300 transition">
           <p className="text-xs font-medium text-marmol-500 mb-2 flex items-center gap-1.5">
