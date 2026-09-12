@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import Link from 'next/link';
 import {
   DndContext,
@@ -79,6 +79,15 @@ export function TableroPostulaciones({
   const [postulaciones, setPostulaciones] = useState(postulacionesIniciales);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [, startTransition] = useTransition();
+
+  // AgregarCandidato (y cualquier otro cambio que no pase por un callback
+  // local de este componente, como postular uno nuevo) solo actualiza la
+  // base de datos y pide un revalidatePath — sin este efecto, el estado
+  // local (useState) seguiría mostrando la lista vieja para siempre, porque
+  // React no vuelve a leer postulacionesIniciales después del montaje.
+  useEffect(() => {
+    setPostulaciones(postulacionesIniciales);
+  }, [postulacionesIniciales]);
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
