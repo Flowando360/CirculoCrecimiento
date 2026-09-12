@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { TableroPostulaciones } from '@/components/reclutamiento/tablero-postulaciones';
 import { EnlacePostulacion } from '@/components/reclutamiento/enlace-postulacion';
 import { SelectorEstadoVacante } from '@/components/reclutamiento/selector-estado-vacante';
+import { EditarVacante } from '@/components/reclutamiento/editar-vacante';
 import { ArrowLeft, Briefcase } from 'lucide-react';
 
 export default async function DetalleVacantePage({ params }: { params: { id: string } }) {
@@ -22,7 +23,7 @@ export default async function DetalleVacantePage({ params }: { params: { id: str
 
   if (!vacante || vacante.empresa_id !== perfil.empresa_id) notFound();
 
-  const [{ data: postulaciones }, { data: colaboradores }, { data: candidatosEmpresa }] = await Promise.all([
+  const [{ data: postulaciones }, { data: colaboradores }, { data: candidatosEmpresa }, { data: cargos }] = await Promise.all([
     supabase
       .from('postulaciones')
       .select(
@@ -43,6 +44,7 @@ export default async function DetalleVacantePage({ params }: { params: { id: str
       .select('id, nombre_completo, correo')
       .eq('empresa_id', perfil.empresa_id)
       .order('nombre_completo'),
+    supabase.from('cargos').select('id, nombre').eq('empresa_id', perfil.empresa_id).order('nombre'),
   ]);
 
   const idsYaPostulados = new Set((postulaciones ?? []).map((p: any) => p.candidato.id));
@@ -63,6 +65,19 @@ export default async function DetalleVacantePage({ params }: { params: { id: str
               Cargo: {(vacante.cargo as any)?.nombre ?? 'Sin cargo'} · Abierta el {vacante.fecha_apertura}
             </p>
             {vacante.descripcion && <p className="text-sm text-marmol-600 mt-2 max-w-2xl">{vacante.descripcion}</p>}
+            {perfil.rol === 'admin_th' && (
+              <div className="mt-2">
+                <EditarVacante
+                  vacanteId={vacante.id}
+                  cargos={cargos ?? []}
+                  datosIniciales={{
+                    titulo: vacante.titulo,
+                    descripcion: vacante.descripcion ?? '',
+                    cargoId: (vacante.cargo as any)?.id ?? '',
+                  }}
+                />
+              </div>
+            )}
           </div>
           {perfil.rol === 'admin_th' && <SelectorEstadoVacante vacanteId={vacante.id} estadoActual={vacante.estado} />}
         </div>

@@ -62,6 +62,34 @@ export async function actualizarEstadoVacante(id: string, estado: 'abierta' | 'p
   return { ok: true as const };
 }
 
+const EditarVacanteSchema = z.object({
+  vacanteId: z.string().uuid(),
+  cargoId: z.string().uuid('Selecciona un cargo'),
+  titulo: z.string().trim().min(1, 'El título es requerido'),
+  descripcion: z.string().trim().optional(),
+});
+
+/** Edita título, descripción y cargo de una vacante ya creada (admin_th). */
+export async function actualizarVacante(input: z.infer<typeof EditarVacanteSchema>) {
+  const perfil = await requerirAdminTh();
+  if (!perfil) return { ok: false as const, error: 'No autorizado' };
+
+  const parsed = EditarVacanteSchema.safeParse(input);
+  if (!parsed.success) return { ok: false as const, error: parsed.error.issues[0]?.message ?? 'Datos inválidos' };
+
+  const supabase = createClient();
+  const { error } = await supabase
+    .from('vacantes')
+    .update({ cargo_id: parsed.data.cargoId, titulo: parsed.data.titulo, descripcion: parsed.data.descripcion || null })
+    .eq('id', parsed.data.vacanteId)
+    .eq('empresa_id', perfil.empresa_id);
+
+  if (error) return { ok: false as const, error: error.message };
+  revalidatePath(RUTA);
+  revalidatePath(`${RUTA}/vacantes/${parsed.data.vacanteId}`);
+  return { ok: true as const };
+}
+
 // ── Candidatos (alta manual desde el panel — la postulación pública tiene su
 // propia acción en src/app/postular/[vacanteId]/actions.ts, con service_role) ──
 const CandidatoSchema = z.object({
