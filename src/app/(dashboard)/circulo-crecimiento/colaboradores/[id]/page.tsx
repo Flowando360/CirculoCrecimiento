@@ -4,7 +4,7 @@ import { getPerfilActual } from '@/lib/supabase/get-perfil-actual';
 import { SemaforoBadge } from '@/components/circulo-crecimiento/semaforo-badge';
 import { formatearFecha } from '@/lib/utils';
 import { notFound } from 'next/navigation';
-import { GraduationCap, Briefcase, Sparkles, ShieldCheck, Target, Clock, History, FolderLock, CalendarHeart, HeartPulse, Shirt } from 'lucide-react';
+import { GraduationCap, Briefcase, Sparkles, ShieldCheck, Target, Clock, History, FolderLock, CalendarHeart, HeartPulse, Shirt, Pencil } from 'lucide-react';
 
 export default async function FichaColaboradorPage({ params }: { params: { id: string } }) {
   const perfil = await getPerfilActual();
@@ -122,9 +122,19 @@ export default async function FichaColaboradorPage({ params }: { params: { id: s
             </p>
           </div>
         </div>
-        <span className="inline-flex items-center rounded-full bg-marmol-100 px-3 py-1 text-xs font-medium text-marmol-600 capitalize">
-          {colaborador.estado.replace(/_/g, ' ')}
-        </span>
+        <div className="flex items-center gap-3 shrink-0">
+          <span className="inline-flex items-center rounded-full bg-marmol-100 px-3 py-1 text-xs font-medium text-marmol-600 capitalize">
+            {colaborador.estado.replace(/_/g, ' ')}
+          </span>
+          {perfil.rol === 'admin_th' && (
+            <Link
+              href={`/circulo-crecimiento/colaboradores/${params.id}/editar`}
+              className="inline-flex items-center gap-1 rounded-lg border border-marmol-200 hover:border-flow-300 text-marmol-600 hover:text-flow-600 text-xs font-medium px-2.5 py-1.5 transition"
+            >
+              <Pencil size={12} /> Editar
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* Las cuatro dimensiones, de un vistazo */}

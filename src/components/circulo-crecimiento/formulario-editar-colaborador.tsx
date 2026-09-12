@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { crearColaborador } from '@/app/(dashboard)/circulo-crecimiento/colaboradores/nuevo/actions';
+import { actualizarColaborador } from '@/app/(dashboard)/circulo-crecimiento/colaboradores/actions';
 import { CargaHojaVidaIA } from '@/components/circulo-crecimiento/carga-hoja-vida-ia';
 import type { EstadoColaborador, TipoContrato } from '@/types/colaborador';
 
@@ -21,54 +21,56 @@ const ESTADOS: { value: EstadoColaborador; label: string }[] = [
   { value: 'en_proceso_salida', label: 'En proceso de salida' },
 ];
 
-export function FormularioNuevoColaborador({
+export interface DatosIniciales {
+  id: string;
+  nombreCompleto: string;
+  numeroDocumento: string;
+  email: string;
+  telefono: string;
+  cargoId: string;
+  liderId: string;
+  fechaIngreso: string;
+  tipoContrato: TipoContrato;
+  estado: EstadoColaborador;
+  salario: string;
+  eps: string;
+  arl: string;
+  afp: string;
+  cajaCompensacion: string;
+}
+
+export function FormularioEditarColaborador({
   cargos,
   posiblesLideres,
-  cuentasSinFicha,
-  datosIniciales,
+  datosIniciales: d,
 }: {
   cargos: { id: string; nombre: string; proceso_area: string | null }[];
   posiblesLideres: { id: string; nombre_completo: string }[];
-  cuentasSinFicha: { id: string; nombre_completo: string; email: string | null }[];
-  /** Prellenado al llegar desde Reclutamiento y Selección (candidato ya contratado) — evita recapturar los datos. */
-  datosIniciales?: { nombreCompleto: string; correo: string; telefono: string; cargoId: string };
+  datosIniciales: DatosIniciales;
 }) {
-  const [usuarioVinculadoId, setUsuarioVinculadoId] = useState('');
-  const [nombreCompleto, setNombreCompleto] = useState(datosIniciales?.nombreCompleto ?? '');
-  const [numeroDocumento, setNumeroDocumento] = useState('');
-  const [email, setEmail] = useState(datosIniciales?.correo ?? '');
-  const [telefono, setTelefono] = useState(datosIniciales?.telefono ?? '');
-  const [cargoId, setCargoId] = useState(datosIniciales?.cargoId ?? '');
-  const [liderId, setLiderId] = useState('');
-  const [fechaIngreso, setFechaIngreso] = useState(() => new Date().toISOString().slice(0, 10));
-  const [tipoContrato, setTipoContrato] = useState<TipoContrato>('indefinido');
-  const [estado, setEstado] = useState<EstadoColaborador>('periodo_prueba');
-  const [salario, setSalario] = useState('');
-  const [eps, setEps] = useState('');
-  const [arl, setArl] = useState('');
-  const [afp, setAfp] = useState('');
-  const [cajaCompensacion, setCajaCompensacion] = useState('');
+  const [nombreCompleto, setNombreCompleto] = useState(d.nombreCompleto);
+  const [numeroDocumento, setNumeroDocumento] = useState(d.numeroDocumento);
+  const [email, setEmail] = useState(d.email);
+  const [telefono, setTelefono] = useState(d.telefono);
+  const [cargoId, setCargoId] = useState(d.cargoId);
+  const [liderId, setLiderId] = useState(d.liderId);
+  const [fechaIngreso, setFechaIngreso] = useState(d.fechaIngreso);
+  const [tipoContrato, setTipoContrato] = useState<TipoContrato>(d.tipoContrato);
+  const [estado, setEstado] = useState<EstadoColaborador>(d.estado);
+  const [salario, setSalario] = useState(d.salario);
+  const [eps, setEps] = useState(d.eps);
+  const [arl, setArl] = useState(d.arl);
+  const [afp, setAfp] = useState(d.afp);
+  const [cajaCompensacion, setCajaCompensacion] = useState(d.cajaCompensacion);
 
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
-  // Al vincular una cuenta ya existente (creada antes desde Usuarios y
-  // roles, sin ficha), se sugiere su nombre y correo tal como quedaron
-  // registrados ahí -- se puede corregir igual, por si tenían un error.
-  function vincularCuenta(id: string) {
-    setUsuarioVinculadoId(id);
-    const cuenta = cuentasSinFicha.find((c) => c.id === id);
-    if (cuenta) {
-      setNombreCompleto(cuenta.nombre_completo);
-      setEmail(cuenta.email ?? '');
-    }
-  }
-
-  function crear() {
+  function guardar() {
     setError(null);
     startTransition(async () => {
-      const res = await crearColaborador({
-        usuarioId: usuarioVinculadoId || undefined,
+      const res = await actualizarColaborador({
+        colaboradorId: d.id,
         nombreCompleto,
         numeroDocumento,
         email,
@@ -84,8 +86,8 @@ export function FormularioNuevoColaborador({
         afp,
         cajaCompensacion,
       });
-      // Si la creación fue exitosa, la acción redirige a la ficha del
-      // colaborador y este componente se desmonta antes de llegar aquí.
+      // Si la actualización fue exitosa, la acción redirige a la ficha y
+      // este componente se desmonta antes de llegar aquí.
       if (res && !res.ok) setError(res.error);
     });
   }
@@ -95,30 +97,6 @@ export function FormularioNuevoColaborador({
 
   return (
     <div className="card p-6 space-y-6 max-w-2xl">
-      {datosIniciales && (
-        <p className="text-xs text-flow-700 bg-flow-50 border border-flow-100 rounded-lg px-3 py-2">
-          Datos prellenados desde Reclutamiento y Selección — puedes corregirlos antes de guardar.
-        </p>
-      )}
-      {cuentasSinFicha.length > 0 && (
-        <section className="space-y-2">
-          <label className={label}>Vincular a una cuenta de acceso existente (opcional)</label>
-          <select value={usuarioVinculadoId} onChange={(e) => vincularCuenta(e.target.value)} className={campo}>
-            <option value="">No vincular — es una persona nueva sin cuenta todavía</option>
-            {cuentasSinFicha.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.nombre_completo}
-                {c.email ? ` · ${c.email}` : ''}
-              </option>
-            ))}
-          </select>
-          <p className="text-[11px] text-marmol-400">
-            Úsalo cuando ya le crearon el usuario para iniciar sesión desde Usuarios y roles, pero
-            todavía no tiene su ficha de colaborador.
-          </p>
-        </section>
-      )}
-
       <section className="space-y-4">
         <h2 className="font-display font-semibold text-secundario text-sm">Datos personales</h2>
         <CargaHojaVidaIA
@@ -146,7 +124,7 @@ export function FormularioNuevoColaborador({
             <label className={label}>Correo</label>
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="correo@marmolesyservicios.com" className={campo} />
             <p className="text-[11px] text-marmol-400 mt-1">
-              Este es el correo de contacto de la persona. La cuenta para iniciar sesión se crea aparte, en Usuarios y roles.
+              Este es el correo de contacto de la persona. La cuenta para iniciar sesión se edita aparte, en Usuarios y roles.
             </p>
           </div>
         </div>
@@ -166,6 +144,9 @@ export function FormularioNuevoColaborador({
                 </option>
               ))}
             </select>
+            <p className="text-[11px] text-marmol-400 mt-1">
+              Al cambiar el cargo, la tarjeta &quot;Perfil de cargo&quot; de la ficha se actualiza sola con los datos del cargo nuevo.
+            </p>
           </div>
           <div>
             <label className={label}>Líder directo</label>
@@ -197,6 +178,9 @@ export function FormularioNuevoColaborador({
                 </option>
               ))}
             </select>
+            <p className="text-[11px] text-marmol-400 mt-1">
+              Para registrar una salida, usa &quot;Salida&quot; en el Historial de la persona en vez de cambiar el estado aquí — eso además retira su cuenta de acceso.
+            </p>
           </div>
           <div>
             <label className={label}>Tipo de contrato</label>
@@ -252,10 +236,10 @@ export function FormularioNuevoColaborador({
       <button
         type="button"
         disabled={pending || !nombreCompleto.trim() || !cargoId || !fechaIngreso}
-        onClick={crear}
+        onClick={guardar}
         className="rounded-lg bg-flow-500 hover:bg-flow-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium px-4 py-2 transition"
       >
-        {pending ? 'Creando…' : 'Crear colaborador'}
+        {pending ? 'Guardando…' : 'Guardar cambios'}
       </button>
     </div>
   );
