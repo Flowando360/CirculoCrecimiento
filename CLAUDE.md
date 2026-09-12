@@ -120,3 +120,27 @@ Esto reemplaza los pasos de aprobación previa que tenía este proyecto anterior
 
 \- \[Pendiente: pídele a Claude Code que liste los roles que encuentre en el código (RRHH vs. líderes de área)]
 
+<!-- BEGIN: actualiza-memoria-control-intervencion -->
+## Actualizar Control_Intervencion_Diaria.xlsx ("Actualiza Memoria")
+
+Cuando el usuario diga **"Actualiza Memoria"** (o "actualiza memoria") en esta sesión, además de
+guardar la memoria de la sesión como normalmente lo harías:
+
+1. Resume en 1-2 líneas qué se hizo en la sesión (será la "Actividad realizada").
+2. Define el "Estado tras la intervención": uno de "Al día", "Pendiente", "Atrasado", "Pausado", "Finalizado".
+3. Si aplica, define el "Próximo paso" (y opcionalmente una fecha para ese próximo paso).
+4. Verifica que `C:\mis_apps\Control_Intervencion_Diaria.xlsx` no esté abierto en Excel (si lo está, pide al usuario que lo cierre y no sigas intentando en loop).
+5. Ejecuta en terminal:
+
+   ```
+   node C:\mis_apps\excel-tools\log-intervencion.js --proyecto "CirculoCrecimiento" --actividad "<resumen>" --estado "<estado>" --proximo "<próximo paso>"
+   ```
+
+   El nombre de proyecto de ESTA carpeta en la hoja "Proyectos" de Control_Intervencion_Diaria.xlsx es
+   exactamente: **"CirculoCrecimiento"** (no lo cambies ni lo traduzcas).
+
+Nunca edites ese xlsx directamente con ExcelJS ni otro script por tu cuenta: usa siempre
+`log-intervencion.js` (ya valida el proyecto/estado, encuentra la fila libre, guarda, y repara
+automáticamente unas extensiones de Excel que ExcelJS rompe si se tocan a mano — ver
+`C:\mis_apps\excel-tools\fix-extlst.js`).
+<!-- END: actualiza-memoria-control-intervencion -->

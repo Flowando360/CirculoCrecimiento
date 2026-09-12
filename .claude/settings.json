@@ -1,11 +1,30 @@
 {
+  "skipDangerousModePermissionPrompt": true,
   "permissions": {
+    "defaultMode": "bypassPermissions",
     "allow": [
-      "Bash(git fetch *)",
-      "Bash(npx tsc --noEmit *)",
-      "Bash(vercel ls *)",
-      "Bash(npm run typecheck *)",
-      "Bash(tasklist *)"
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(curl -s \"$SUPABASE_URL/rest/v1/* *)",
+      "Bash(git rev-list *)",
+      "Bash(git push *)",
+      "Bash(npx supabase db dump *)",
+      "Bash(supabase db dump *)",
+      "Bash(npx supabase db query *)",
+      "Bash(supabase db query *)",
+      "Bash(npx supabase db push *)",
+      "Bash(supabase db push *)"
+    ]
+  },
+  "autoMode": {
+    "allow": [
+      "$defaults",
+      "Bash(npx supabase db dump *)",
+      "Bash(supabase db dump *)",
+      "Bash(npx supabase db query *)",
+      "Bash(supabase db query *)",
+      "Bash(npx supabase db push *)",
+      "Bash(supabase db push *)"
     ]
   }
 }

@@ -50,3 +50,6 @@ docs/Captura de pantalla*.png
 
 .vercel
 .env*
+
+# Token personal de Supabase (nunca subir)
+.supabase-token
