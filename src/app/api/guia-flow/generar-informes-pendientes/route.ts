@@ -16,8 +16,11 @@ import { generarInformesParaGuia } from '@/lib/guia-flow/generar-informes';
  * termina generando el informe de todas formas, sin que nadie tenga que
  * acordarse de dar clic en "Generar informes con IA".
  *
- * Configurado en vercel.json. Protegido con CRON_SECRET (mismo patrón que
- * api/alertas/check) para que no cualquiera pueda invocarlo.
+ * Configurado en vercel.json, una vez al día (el plan Hobby de Vercel no
+ * permite crons más frecuentes que eso — si se pasa a Pro, vale la pena
+ * subir la frecuencia para que el retraso máximo no sea de casi 24h).
+ * Protegido con CRON_SECRET (mismo patrón que api/alertas/check) para que
+ * no cualquiera pueda invocarlo.
  */
 export async function GET(req: NextRequest) {
   const authHeader = req.headers.get('authorization');

@@ -6,7 +6,7 @@
     },
     {
       "path": "/api/guia-flow/generar-informes-pendientes",
-      "schedule": "*/15 * * * *"
+      "schedule": "0 9 * * *"
     }
   ]
 }
